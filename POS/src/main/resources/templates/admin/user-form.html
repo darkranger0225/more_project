@@ -1,0 +1,115 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title th:text="${user.id} ? '编辑员工' : '添加员工'">员工管理</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/admin/dashboard}"><i class="bi bi-speedometer2"></i> 管理后台</a></li>
+            <li><a th:href="@{/admin/users}" class="active"><i class="bi bi-people"></i> 员工管理</a></li>
+            <li><a th:href="@{/admin/categories}"><i class="bi bi-tags"></i> 分类管理</a></li>
+            <li><a th:href="@{/admin/dishes}"><i class="bi bi-cup-hot"></i> 菜品管理</a></li>
+            <li><a th:href="@{/admin/tables}"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/admin/orders}"><i class="bi bi-receipt"></i> 订单管理</a></li>
+            <li><a th:href="@{/admin/statistics}"><i class="bi bi-graph-up"></i> 营业统计</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-person"></i> <span th:text="${user.id} ? '编辑员工' : '添加员工'"></span></h4>
+        </div>
+
+        <div class="card" style="max-width: 600px;">
+            <div class="card-header"><i class="bi bi-person-fill"></i> 员工信息</div>
+            <div class="card-body">
+                <form id="userForm" onsubmit="return saveUser(event)">
+                    <input type="hidden" id="userId" th:value="${user.id}">
+                    
+                    <div class="form-group">
+                        <label>用户名 *</label>
+                        <input type="text" id="username" class="form-control" th:value="${user.username}" required 
+                               th:disabled="${user.id != null}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label th:text="${user.id} ? '密码 (留空则不修改)' : '密码 *'"></label>
+                        <input type="password" id="password" class="form-control" th:required="${user.id == null}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>姓名</label>
+                        <input type="text" id="realName" class="form-control" th:value="${user.realName}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>电话</label>
+                        <input type="text" id="phone" class="form-control" th:value="${user.phone}">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>角色 *</label>
+                        <select id="role" class="form-control" required>
+                            <option value="CASHIER" th:selected="${user.role != null && user.role.name() == 'CASHIER'}">收银员</option>
+                            <option value="ADMIN" th:selected="${user.role != null && user.role.name() == 'ADMIN'}">管理员</option>
+                        </select>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a th:href="@{/admin/users}" class="btn btn-primary">返回</a>
+                        <button type="submit" class="btn btn-success">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        async function saveUser(event) {
+            event.preventDefault();
+            
+            const userId = document.getElementById('userId').value;
+            const userData = {
+                username: document.getElementById('username').value,
+                password: document.getElementById('password').value,
+                realName: document.getElementById('realName').value,
+                phone: document.getElementById('phone').value,
+                role: document.getElementById('role').value
+            };
+
+            try {
+                let result;
+                if (userId) {
+                    result = await apiPut('/api/admin/users/' + userId, userData);
+                } else {
+                    result = await apiPost('/api/admin/users', userData);
+                }
+                
+                if (result.code === 200) {
+                    showAlert('保存成功', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/admin/users';
+                    }, 1500);
+                } else {
+                    showAlert(result.message || '保存失败', 'error');
+                }
+            } catch (error) {
+                showAlert('网络错误，请重试', 'error');
+            }
+            return false;
+        }
+    </script>
+</body>
+</html>

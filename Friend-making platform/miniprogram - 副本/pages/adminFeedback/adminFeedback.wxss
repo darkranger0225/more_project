@@ -1,0 +1,175 @@
+/* pages/adminFeedback/adminFeedback.wxss */
+.container {
+  padding: 30rpx;
+}
+
+.title {
+  font-size: 36rpx;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30rpx;
+}
+
+.filter {
+  width: 680rpx;
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 40rpx;
+  background: #f6f6f6;
+  padding: 20rpx 0;
+  border-radius: 8rpx;
+}
+
+.filter-item {
+  padding: 10rpx 20rpx;
+  font-size: 28rpx;
+  border-radius: 30rpx;
+}
+
+.filter-item.active {
+  background: #1989fa;
+  color: #fff;
+}
+
+.feedback-list {
+  margin-bottom: 40rpx;
+}
+
+.feedback-item {
+  width: 620rpx;
+  background: #fff;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+  padding: 20rpx;
+  margin-bottom: 30rpx;
+}
+
+.feedback-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+  flex-wrap: wrap;
+}
+
+.user-info {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.feedback-type {
+  font-size: 26rpx;
+  background: #f2f2f2;
+  padding: 6rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+.feedback-status {
+  font-size: 24rpx;
+  padding: 6rpx 12rpx;
+  border-radius: 4rpx;
+}
+
+.status-resolved {
+  background: #e8f5e9;
+  color: #4caf50;
+}
+
+.status-processing {
+  background: #e3f2fd;
+  color: #2196f3;
+}
+
+.status-pending {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.feedback-content {
+  font-size: 30rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #eee;
+}
+
+.feedback-time {
+  font-size: 24rpx;
+  color: #999;
+  margin: 15rpx 0;
+}
+
+.admin-response {
+  background: #f9f9f9;
+  padding: 15rpx;
+  border-radius: 6rpx;
+  margin-top: 20rpx;
+}
+
+.response-header {
+  font-size: 26rpx;
+  font-weight: bold;
+  color: #1989fa;
+}
+
+.response-content {
+  font-size: 28rpx;
+  padding: 10rpx 0;
+}
+
+.response-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.reply-form {
+  margin-top: 20rpx;
+}
+
+.reply-input {
+  width: 100%;
+  height: 200rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 6rpx;
+  padding: 15rpx;
+  box-sizing: border-box;
+  font-size: 28rpx;
+  margin-bottom: 15rpx;
+}
+
+.btn-group {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-group button {
+  margin-left: 96rpx;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  font-size: 28rpx;
+  margin-top: 100rpx;
+}
+
+.toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+}
+
+.toast-content {
+  padding: 20rpx 30rpx;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  color: #fff;
+}
+
+.toast-content.success {
+  background: rgba(76, 175, 80, 0.9);
+}
+
+.toast-content.error {
+  background: rgba(244, 67, 54, 0.9);
+} 

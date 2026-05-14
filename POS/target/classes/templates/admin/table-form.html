@@ -1,0 +1,93 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title th:text="${table.id} ? '编辑桌台' : '添加桌台'">桌台管理</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/admin/dashboard}"><i class="bi bi-speedometer2"></i> 管理后台</a></li>
+            <li><a th:href="@{/admin/users}"><i class="bi bi-people"></i> 员工管理</a></li>
+            <li><a th:href="@{/admin/categories}"><i class="bi bi-tags"></i> 分类管理</a></li>
+            <li><a th:href="@{/admin/dishes}"><i class="bi bi-cup-hot"></i> 菜品管理</a></li>
+            <li><a th:href="@{/admin/tables}" class="active"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/admin/orders}"><i class="bi bi-receipt"></i> 订单管理</a></li>
+            <li><a th:href="@{/admin/statistics}"><i class="bi bi-graph-up"></i> 营业统计</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-grid-3x3-gap"></i> <span th:text="${table.id} ? '编辑桌台' : '添加桌台'"></span></h4>
+        </div>
+
+        <div class="card" style="max-width: 600px;">
+            <div class="card-header"><i class="bi bi-grid-fill"></i> 桌台信息</div>
+            <div class="card-body">
+                <form id="tableForm" onsubmit="return saveTable(event)">
+                    <input type="hidden" id="tableId" th:value="${table.id}">
+                    <div class="form-group">
+                        <label>桌号 *</label>
+                        <input type="text" id="tableNo" class="form-control" th:value="${table.tableNo}" required th:disabled="${table.id != null}">
+                    </div>
+                    <div class="form-group">
+                        <label>名称</label>
+                        <input type="text" id="name" class="form-control" th:value="${table.name}" placeholder="如：靠窗 1 号桌">
+                    </div>
+                    <div class="form-group">
+                        <label>容纳人数 *</label>
+                        <input type="number" id="capacity" class="form-control" min="1" th:value="${table.capacity} ?: 4" required>
+                    </div>
+                    <div class="form-group">
+                        <label>区域</label>
+                        <input type="text" id="area" class="form-control" th:value="${table.area}" placeholder="如：大厅、包厢">
+                    </div>
+                    <div class="form-group">
+                        <label>排序</label>
+                        <input type="number" id="sortOrder" class="form-control" th:value="${table.sortOrder} ?: 0">
+                    </div>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a th:href="@{/admin/tables}" class="btn btn-primary">返回</a>
+                        <button type="submit" class="btn btn-success">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        async function saveTable(event) {
+            event.preventDefault();
+            const tableId = document.getElementById('tableId').value;
+            const data = {
+                tableNo: document.getElementById('tableNo').value,
+                name: document.getElementById('name').value,
+                capacity: parseInt(document.getElementById('capacity').value),
+                area: document.getElementById('area').value,
+                sortOrder: parseInt(document.getElementById('sortOrder').value) || 0
+            };
+            try {
+                let result;
+                if (tableId) { result = await apiPut('/api/admin/tables/' + tableId, data); }
+                else { result = await apiPost('/api/admin/tables', data); }
+                if (result.code === 200) {
+                    showAlert('保存成功', 'success');
+                    setTimeout(() => { window.location.href = '/admin/tables'; }, 1500);
+                } else { showAlert(result.message || '保存失败', 'error'); }
+            } catch (error) { showAlert('网络错误，请重试', 'error'); }
+            return false;
+        }
+    </script>
+</body>
+</html>

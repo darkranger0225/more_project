@@ -1,0 +1,117 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>订单查询 - 餐饮收银系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/cashier/dashboard}"><i class="bi bi-speedometer2"></i> 收银台</a></li>
+            <li><a th:href="@{/cashier/tables}"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/cashier/order}"><i class="bi bi-cart-plus"></i> 点餐下单</a></li>
+            <li><a th:href="@{/cashier/orders}" class="active"><i class="bi bi-receipt"></i> 订单查询</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-receipt"></i> 订单查询</h4>
+            <span sec:authorize="isAuthenticated()"><i class="bi bi-person-circle"></i> <span sec:authentication="name"></span></span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-list"></i> 订单查询
+            </div>
+            <div class="card-body">
+                <div style="margin-bottom: 20px; display: flex; gap: 15px; flex-wrap: wrap; align-items: flex-end;">
+                    <div>
+                        <label style="color: #666; font-size: 12px; display: block; margin-bottom: 5px;">订单号</label>
+                        <input type="text" id="searchOrderNo" class="form-control" placeholder="请输入订单号" style="width: 200px;">
+                    </div>
+                    <div>
+                        <label style="color: #666; font-size: 12px; display: block; margin-bottom: 5px;">下单日期</label>
+                        <input type="date" id="searchDate" class="form-control" style="width: 180px;">
+                    </div>
+                    <div>
+                        <button class="btn btn-primary" onclick="searchOrders()"><i class="bi bi-search"></i> 查询</button>
+                        <button class="btn btn-secondary" onclick="resetSearch()"><i class="bi bi-arrow-counterclockwise"></i> 重置</button>
+                    </div>
+                </div>
+
+                <table class="table" th:if="${not #lists.isEmpty(orders)}">
+                    <thead>
+                        <tr>
+                            <th>订单号</th>
+                            <th>桌台</th>
+                            <th>金额</th>
+                            <th>状态</th>
+                            <th>支付方式</th>
+                            <th>下单时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${orders}">
+                            <td th:text="${order.orderNo}"></td>
+                            <td th:text="${order.table.name} ?: ${order.table.tableNo}"></td>
+                            <td style="color: #e74c3c; font-weight: bold;" th:text="'¥' + ${#numbers.formatDecimal(order.totalAmount, 0, 2)}"></td>
+                            <td>
+                                <span th:class="'badge ' + ${order.status.name() == 'PAID' ? 'badge-success' : order.status.name() == 'CANCELLED' ? 'badge-danger' : order.status.name() == 'PENDING' ? 'badge-warning' : 'badge-info'}"
+                                      th:text="${order.status.name() == 'PENDING' ? '待处理' : order.status.name() == 'COOKING' ? '制作中' : order.status.name() == 'SERVED' ? '已上菜' : order.status.name() == 'PAID' ? '已支付' : '已取消'}">
+                                </span>
+                            </td>
+                            <td th:text="${order.payMethod != null ? (order.payMethod.name() == 'CASH' ? '现金' : order.payMethod.name() == 'WECHAT' ? '微信' : '支付宝') : '-'}"></td>
+                            <td th:text="${#temporals.format(order.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+                            <td>
+                                <a th:href="@{/cashier/order/detail/{id}(id=${order.id})}" class="btn btn-primary btn-sm">详情</a>
+                                <a th:if="${order.status.name() != 'PAID' && order.status.name() != 'CANCELLED'}" 
+                                   th:href="@{/cashier/checkout/{id}(id=${order.id})}" 
+                                   class="btn btn-success btn-sm">结账</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${#lists.isEmpty(orders)}" style="text-align: center; padding: 40px; color: #666;">
+                    <i class="bi bi-inbox" style="font-size: 48px;"></i>
+                    <p>暂无订单</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        function searchOrders() {
+            const orderNo = document.getElementById('searchOrderNo').value.trim();
+            const searchDate = document.getElementById('searchDate').value;
+
+            let params = new URLSearchParams();
+            if (orderNo) params.append('orderNo', orderNo);
+            if (searchDate) params.append('date', searchDate);
+
+            window.location.href = '/cashier/orders?' + params.toString();
+        }
+
+        function resetSearch() {
+            document.getElementById('searchOrderNo').value = '';
+            document.getElementById('searchDate').value = '';
+            window.location.href = '/cashier/orders';
+        }
+
+        document.getElementById('searchOrderNo').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') searchOrders();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>桌台管理 - 餐饮收银系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/cashier/dashboard}"><i class="bi bi-speedometer2"></i> 收银台</a></li>
+            <li><a th:href="@{/cashier/tables}" class="active"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/cashier/order}"><i class="bi bi-cart-plus"></i> 点餐下单</a></li>
+            <li><a th:href="@{/cashier/orders}"><i class="bi bi-receipt"></i> 订单查询</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-grid-3x3-gap"></i> 桌台管理</h4>
+            <span sec:authorize="isAuthenticated()"><i class="bi bi-person-circle"></i> <span sec:authentication="name"></span></span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-grid-3x3-gap"></i> 桌台列表
+                <span style="float: right;">
+                    <span class="badge badge-success"><i class="bi bi-circle-fill"></i> 空闲</span>
+                    <span class="badge badge-danger"><i class="bi bi-circle-fill"></i> 占用</span>
+                </span>
+            </div>
+            <div class="card-body">
+                <div class="table-grid">
+                    <div th:each="table : ${tables}" 
+                         th:class="'table-item ' + ${table.status.name() == 'FREE' ? 'free' : 'occupied'}"
+                         th:onclick="selectTable([[${table.id}]], [[${table.status.name()}]], [[${table.name} ?: ${table.tableNo}]])">
+                        <div class="table-no" th:text="${table.tableNo}"></div>
+                        <div th:text="${table.name}" style="color: #666; font-size: 12px;"></div>
+                        <div class="table-status" th:text="${table.status.name() == 'FREE' ? '空闲' : '占用'}"></div>
+                        <div style="font-size: 11px; color: #999; margin-top: 5px;">
+                            <span th:text="${table.capacity}"></span>人桌 
+                            <span th:if="${table.area}" th:text="'|' + ${table.area}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        function selectTable(tableId, status, tableName) {
+            if (status === 'FREE') {
+                showConfirm('是否选择桌台 ' + tableName + ' 进行点餐?', () => {
+                    window.location.href = '/cashier/order?tableId=' + tableId;
+                });
+            } else {
+                showConfirm('桌台 ' + tableName + ' 已被占用，是否查看订单?', () => {
+                    window.location.href = '/cashier/table/order/' + tableId;
+                });
+            }
+        }
+    </script>
+</body>
+</html>

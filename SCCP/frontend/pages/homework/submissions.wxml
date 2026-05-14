@@ -1,0 +1,49 @@
+<view class="container">
+  <view class="homework-info">
+    <text class="homework-title">{{homeworkTitle}}</text>
+    <view class="submit-stats">
+      <text class="stats-text">提交进度: {{submitCount}}/{{totalCount}}</text>
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{submitRate}}%"></view>
+      </view>
+    </view>
+  </view>
+
+  <view class="submissions-list">
+    <block wx:if="{{submissions.length > 0}}">
+      <view class="submission-item" wx:for="{{submissions}}" wx:key="id">
+        <view class="student-info">
+          <text class="student-name">{{item.studentName}}</text>
+          <text class="submit-time" wx:if="{{item.submitTime}}">{{item.submitTime}}</text>
+          <text class="unsubmit-tag" wx:else>未提交</text>
+        </view>
+        
+        <view class="submission-content" wx:if="{{item.content}}">
+          <text class="content-text">{{item.content}}</text>
+        </view>
+        
+        <view class="submission-images" wx:if="{{item.imageList && item.imageList.length > 0}}">
+          <text class="images-label">提交图片:</text>
+          <view class="image-list">
+            <image wx:for="{{item.imageList}}" wx:key="index" wx:for-item="imgUrl" src="{{imgUrl}}" mode="aspectFill" bindtap="previewImage" data-url="{{imgUrl}}" data-urls="{{item.attachmentUrl}}"></image>
+          </view>
+        </view>
+        
+        <view class="grade-section" wx:if="{{item.submitTime}}">
+          <view class="grade-info" wx:if="{{item.score !== null}}">
+            <text class="score">得分: {{item.score}}</text>
+            <text class="comment" wx:if="{{item.comment}}">评语: {{item.comment}}</text>
+          </view>
+          <button class="btn btn-primary grade-btn" wx:else bindtap="showGradeDialog" data-id="{{item.id}}" data-student="{{item.studentName}}">
+            批改
+          </button>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-text">暂无提交记录</text>
+      </view>
+    </block>
+  </view>
+</view>

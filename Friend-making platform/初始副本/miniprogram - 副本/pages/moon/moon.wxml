@@ -1,0 +1,57 @@
+<!--pages/moon/moon.wxml-->
+<view class="moon-container">
+  <view class="moon-header">
+    <text class="moon-tip">听说站得高更容易找到喜欢的人哦</text>
+  </view>
+  <view class="focus-timer {{isRunning ? 'timer--running' : ''}} {{timerType === 'rest' ? 'timer-type-rest' : ''}} {{completed ? 'timer-completed' : ''}}">
+    <view class="timer-main">
+      <view class="timer-circle">
+        <view class="progress-ring">
+          <view class="progress-ring__bg"></view>
+          <view class="progress-ring__progress {{timerType === 'rest' ? 'progress-ring__progress--rest' : ''}} {{completed ? 'progress-ring__progress--completed' : ''}}" 
+            style="transform: rotate({{progress}}deg)"
+          ></view>
+          <view class="progress-ring__mask"></view>
+        </view>
+        <view class="timer-content">
+          <text class="timer-time">{{remainTimeText}}</text>
+          <text class="timer-status">{{taskName || '准备开始'}}</text>
+        </view>
+      </view>
+      <input 
+        wx:if="{{!isRunning && !completed}}" 
+        class="timer-input" 
+        placeholder="输入任务名称" 
+        value="{{taskName}}"
+        bindinput="onTaskNameInput"
+      />
+    </view>
+    
+    <view class="timer-controls">
+      <view 
+        wx:if="{{!isRunning && !completed}}" 
+        class="timer-btn work-btn" 
+        bindtap="onStartWork"
+      >开始工作</view>
+      <view 
+        wx:if="{{isRunning}}" 
+        class="timer-btn stop-btn" 
+        bindtap="stopTimer"
+      >停止</view>
+      <view 
+        wx:if="{{!isRunning && completed}}" 
+        class="timer-btn reset-btn" 
+        bindtap="resetTimer"
+      >重置</view>
+      <view 
+        wx:if="{{!isRunning && !completed}}" 
+        class="timer-btn rest-btn" 
+        bindtap="onStartRest"
+      >开始休息</view>
+    </view>
+  </view>
+  <view class="moon-settings-btn" bindtap="navigateToSettings">
+    <image class="settings-icon" src="/icon/moon/moon1.png" mode="aspectFit"></image>
+    <text>月球配置</text>
+  </view>
+</view>

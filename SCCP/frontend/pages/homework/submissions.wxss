@@ -1,0 +1,158 @@
+.container {
+  padding: 30rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.homework-info {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.homework-title {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.submit-stats {
+  display: flex;
+  align-items: center;
+}
+
+.stats-text {
+  font-size: 28rpx;
+  color: #666;
+  margin-right: 20rpx;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 16rpx;
+  background: #e0e0e0;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #4CAF50;
+  border-radius: 8rpx;
+  transition: width 0.3s;
+}
+
+.submissions-list {
+  margin-top: 20rpx;
+}
+
+.submission-item {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+}
+
+.student-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.student-name {
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #333;
+}
+
+.submit-time {
+  font-size: 26rpx;
+  color: #4CAF50;
+}
+
+.unsubmit-tag {
+  font-size: 26rpx;
+  color: #999;
+  background: #f5f5f5;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+.submission-content {
+  margin-bottom: 20rpx;
+}
+
+.content-text {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.submission-images {
+  margin-bottom: 20rpx;
+}
+
+.images-label {
+  font-size: 26rpx;
+  color: #666;
+  margin-bottom: 12rpx;
+  display: block;
+}
+
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.image-list image {
+  width: 180rpx;
+  height: 180rpx;
+  border-radius: 12rpx;
+}
+
+.grade-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.grade-info {
+  flex: 1;
+}
+
+.score {
+  font-size: 30rpx;
+  color: #4CAF50;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.comment {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.grade-btn {
+  padding: 12rpx 32rpx;
+  font-size: 26rpx;
+}
+
+.empty-state {
+  padding: 100rpx 0;
+  text-align: center;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}

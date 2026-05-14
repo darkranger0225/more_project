@@ -1,0 +1,191 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>订单结算 - 餐饮收银系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/cashier/dashboard}"><i class="bi bi-speedometer2"></i> 收银台首页</a></li>
+            <li><a th:href="@{/cashier/tables}"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/cashier/order}"><i class="bi bi-cart-plus"></i> 点餐下单</a></li>
+            <li><a th:href="@{/cashier/orders}"><i class="bi bi-receipt"></i> 订单查询</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-cash-coin"></i> 订单结算</h4>
+            <span sec:authorize="isAuthenticated()"><i class="bi bi-person-circle"></i> <span sec:authentication="name"></span></span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 400px; gap: 20px;">
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-receipt"></i> 订单信息
+                    </div>
+                    <div class="card-body">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                            <div>
+                                <label style="color: #666; font-size: 12px;">订单号</label>
+                                <div style="font-weight: 600;" th:text="${order.orderNo}"></div>
+                            </div>
+                            <div>
+                                <label style="color: #666; font-size: 12px;">桌台</label>
+                                <div style="font-weight: 600;" th:text="${order.table.name} ?: ${order.table.tableNo}"></div>
+                            </div>
+                            <div>
+                                <label style="color: #666; font-size: 12px;">用餐人数</label>
+                                <div style="font-weight: 600;" th:text="${order.personCount} + '人'"></div>
+                            </div>
+                            <div>
+                                <label style="color: #666; font-size: 12px;">下单时间</label>
+                                <div style="font-weight: 600;" th:text="${#temporals.format(order.createTime, 'yyyy-MM-dd HH:mm')}"></div>
+                            </div>
+                        </div>
+
+                        <h5 style="margin: 20px 0 10px 0;"><i class="bi bi-list-ul"></i> 订单明细</h5>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>菜品</th>
+                                    <th>单价</th>
+                                    <th>数量</th>
+                                    <th>小计</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="item : ${order.items}">
+                                    <td th:text="${item.dishName}"></td>
+                                    <td th:text="'¥' + ${#numbers.formatDecimal(item.dishPrice, 0, 2)}"></td>
+                                    <td th:text="${item.quantity}"></td>
+                                    <td th:text="'¥' + ${#numbers.formatDecimal(item.subtotal, 0, 2)}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-cash-coin"></i> 结算
+                    </div>
+                    <div class="card-body">
+                        <div style="text-align: center; padding: 20px 0;">
+                            <div style="font-size: 14px; color: #666;">应付金额</div>
+                            <div style="font-size: 36px; font-weight: bold; color: #e74c3c;" th:text="'¥' + ${#numbers.formatDecimal(order.totalAmount, 0, 2)}"></div>
+                        </div>
+
+                        <div style="margin: 20px 0;">
+                            <label style="display: block; margin-bottom: 10px; font-weight: 600;">选择支付方式</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                                <button onclick="selectPayMethod('CASH')" id="btn-cash" class="btn" style="padding: 15px; text-align: center;">
+                                    <i class="bi bi-cash-stack" style="font-size: 24px; display: block; margin-bottom: 5px;"></i>
+                                    现金
+                                </button>
+                                <button onclick="selectPayMethod('WECHAT')" id="btn-wechat" class="btn" style="padding: 15px; text-align: center;">
+                                    <i class="bi bi-wechat" style="font-size: 24px; display: block; margin-bottom: 5px;"></i>
+                                    微信
+                                </button>
+                                <button onclick="selectPayMethod('ALIPAY')" id="btn-alipay" class="btn" style="padding: 15px; text-align: center;">
+                                    <i class="bi bi-alipay" style="font-size: 24px; display: block; margin-bottom: 5px;"></i>
+                                    支付宝
+                                </button>
+                            </div>
+                        </div>
+
+                        <button onclick="processPayment()" class="btn btn-success" style="width: 100%; padding: 15px; font-size: 16px;">
+                            <i class="bi bi-check-circle"></i> 确认收银台付款
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="qrModal" class="qr-modal">
+        <div class="qr-content">
+            <h4><i class="bi bi-qr-code"></i> 扫码支付</h4>
+            <div class="qr-code">
+                <i class="bi bi-qr-code" style="font-size: 100px; color: #333;"></i>
+            </div>
+            <p style="color: #666;">请使用<span id="payMethodName">微信</span>扫一扫</p>
+            <p style="color: #e74c3c; font-size: 24px; font-weight: bold;" th:text="'¥' + ${#numbers.formatDecimal(order.totalAmount, 0, 2)}"></p>
+            <p style="color: #999; font-size: 12px;">支付将在 3 秒后自动完成...</p>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script th:inline="javascript">
+        let selectedPayMethod = 'CASH';
+        const orderId = [[${order.id}]];
+
+        function selectPayMethod(method) {
+            selectedPayMethod = method;
+            document.querySelectorAll('[id^="btn-"]').forEach(btn => {
+                btn.style.background = '#f5f5f5';
+                btn.style.color = '#333';
+            });
+            document.getElementById('btn-' + method.toLowerCase()).style.background = '#667eea';
+            document.getElementById('btn-' + method.toLowerCase()).style.color = 'white';
+        }
+
+        selectPayMethod('CASH');
+
+        function processPayment() {
+            if (selectedPayMethod === 'CASH') {
+                confirmCashPayment();
+            } else {
+                showQRCode();
+            }
+        }
+
+        function showQRCode() {
+            const modal = document.getElementById('qrModal');
+            const methodName = selectedPayMethod === 'WECHAT' ? '微信' : '支付宝';
+            document.getElementById('payMethodName').textContent = methodName;
+            modal.classList.add('show');
+
+            setTimeout(() => {
+                modal.classList.remove('show');
+                confirmPayment();
+            }, 3000);
+        }
+
+        function confirmCashPayment() {
+            showConfirm('确认收到现金并完成付款吗?', () => {
+                confirmPayment();
+            });
+        }
+
+        async function confirmPayment() {
+            try {
+                const result = await apiPost('/api/orders/' + orderId + '/pay', { payMethod: selectedPayMethod });
+                if (result.code === 200) {
+                    showAlert('支付成功', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/cashier/dashboard';
+                    }, 1500);
+                } else {
+                    showAlert(result.message || '支付失败', 'error');
+                }
+            } catch (error) {
+                showAlert('网络错误，请重试', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

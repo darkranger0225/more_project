@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout ('窗口列表', ~{::main})}">
+<main>
+    <div class="container mt-4">
+        <h2 class="mb-4">食堂窗口</h2>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><i class="bi bi-1-circle"></i> 一楼窗口</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3" th:each="window : ${firstFloorWindows}">
+                                <div class="card window-card h-100" th:onclick="'location.href=\'/window/' + ${window.id} + '\''">
+                                    <img th:src="@{/images/image_834149526092132.png}" class="card-img-top" alt="窗口图片" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title" th:text="${window.name}">窗口名称</h6>
+                                        <p class="card-text small text-muted" th:text="${window.description}">描述</p>
+                                        <span class="badge" th:classappend="${window.status == 1} ? 'bg-success' : 'bg-secondary'"
+                                              th:text="${window.status == 1} ? '营业中' : '休息中'">状态</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="bi bi-2-circle"></i> 二楼窗口</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3" th:each="window : ${secondFloorWindows}">
+                                <div class="card window-card h-100" th:onclick="'location.href=\'/window/' + ${window.id} + '\''">
+                                    <img th:src="@{/images/image_834149526092132.png}" class="card-img-top" alt="窗口图片" style="height: 150px; object-fit: cover;">
+                                    <div class="card-body">
+                                        <h6 class="card-title" th:text="${window.name}">窗口名称</h6>
+                                        <p class="card-text small text-muted" th:text="${window.description}">描述</p>
+                                        <span class="badge" th:classappend="${window.status == 1} ? 'bg-success' : 'bg-secondary'"
+                                              th:text="${window.status == 1} ? '营业中' : '休息中'">状态</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</html>

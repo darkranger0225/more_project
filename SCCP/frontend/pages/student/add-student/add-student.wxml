@@ -1,0 +1,59 @@
+<view class="container">
+  <view class="form-card">
+    <!-- 学生姓名 -->
+    <view class="form-item">
+      <text class="label">学生姓名 <text class="required">*</text></text>
+      <input 
+        type="text" 
+        placeholder="请输入学生姓名" 
+        value="{{studentName}}"
+        bindinput="onStudentNameInput"
+        class="input"
+      />
+    </view>
+
+    <!-- 学号 -->
+    <view class="form-item">
+      <text class="label">学号</text>
+      <input 
+        type="text" 
+        placeholder="请输入学号（可选）" 
+        value="{{studentNo}}"
+        bindinput="onStudentNoInput"
+        class="input"
+      />
+    </view>
+
+    <!-- 班级选择 -->
+    <view class="form-item">
+      <text class="label">所在班级</text>
+      <picker bindchange="onClassChange" value="{{classIndex}}" range="{{classArray}}" range-key="className">
+        <view class="picker {{selectedClass ? '' : 'placeholder'}}">
+          {{selectedClass ? selectedClass.className : '请选择班级（可选）'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 性别 -->
+    <view class="form-item">
+      <text class="label">性别</text>
+      <picker bindchange="onGenderChange" value="{{genderIndex}}" range="{{genderArray}}">
+        <view class="picker {{gender !== null ? '' : 'placeholder'}}">
+          {{gender !== null ? genderArray[genderIndex] : '请选择性别（可选）'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 出生日期 -->
+    <view class="form-item">
+      <text class="label">出生日期</text>
+      <picker mode="date" bindchange="onBirthDateChange" value="{{birthDate}}">
+        <view class="picker {{birthDate ? '' : 'placeholder'}}">
+          {{birthDate || '请选择出生日期（可选）'}}
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <button class="btn btn-primary save-btn" bindtap="saveStudent">{{isEdit ? '保存修改' : '添加孩子'}}</button>
+</view>

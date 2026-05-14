@@ -1,0 +1,164 @@
+<view class="container">
+  <!-- 页面标题 -->
+  <view class="page-title">用户注册</view>
+  
+  <!-- 表单容器 -->
+  <view class="form-container">
+    <!-- 必填字段 -->
+    <view class="form-item">
+      <label>姓名 <text class="required-mark">*</text></label>
+      <input 
+        type="text" 
+        data-field="name" 
+        bindinput="bindInput" 
+        placeholder="请输入您的姓名" 
+        class="form-input"
+        value="{{formData.name}}"
+      />
+    </view>
+    
+    <view class="form-item">
+      <label>手机号 <text class="required-mark">*</text></label>
+      <input 
+        type="number" 
+        data-field="phone" 
+        bindinput="bindInput" 
+        placeholder="请输入手机号码" 
+        class="form-input"
+        value="{{formData.phone}}"
+        maxlength="11"
+      />
+      <view class="error-container">
+        <text class="error-message">{{phoneError}}</text> <!-- 错误提示 -->
+      </view>
+    </view>
+    
+    <view class="form-item">
+      <label>密码 <text class="required-mark">*</text></label>
+      <input 
+        type="password" 
+        data-field="passWord" 
+        bindinput="bindInput" 
+        placeholder="请设置密码（最少6位）" 
+        class="form-input"
+        value="{{formData.passWord}}"
+      />
+      <view class="error-container">
+        <text class="error-message">{{passwordError}}</text> <!-- 错误提示 -->
+      </view>
+    </view>
+    
+    <view class="form-item">
+      <label>生日 <text class="required-mark">*</text></label>
+      <view class="form-picker-wrapper">
+        <picker 
+          mode="date" 
+          value="{{formData.birthday || '2000-01-01'}}" 
+          bindchange="onBirthdayChange"
+          start="1950-01-01"
+          end="2020-12-31"
+          fields="day"
+        >
+          <view class="picker-content">{{formData.birthday || '请选择生日'}}</view>
+        </picker>
+      </view>
+    </view>
+    
+    <view class="form-item">
+      <label>地址 <text class="required-mark">*</text></label>
+      <view class="form-picker-wrapper">
+        <picker 
+          mode="region" 
+          value="{{addressDisplay || []}}" 
+          bindchange="onAddressChange"
+          custom-item=""
+        >
+          <view class="picker-content">{{addressText || '请选择省/市/区县'}}</view>
+        </picker>
+      </view>
+    </view>
+    
+    <view class="form-item">
+      <label>性别 <text class="required-mark">*</text></label>
+      <view class="form-picker-wrapper">
+        <picker 
+          mode="selector" 
+          range="{{sexOptions}}" 
+          value="{{sexIndex}}" 
+          bindchange="onSexChange"
+        >
+          <view class="picker-content">{{formData.sex || sexOptions[sexIndex]}}</view>
+        </picker>
+      </view>
+    </view>
+    
+    <!-- 分隔线 -->
+    <view class="form-divider"></view>
+    
+    <!-- 可选字段 -->
+    <view class="form-item">
+      <label>学校</label>
+      <input 
+        type="text" 
+        data-field="school" 
+        bindinput="bindInput" 
+        placeholder="请输入您的学校（选填）" 
+        class="form-input"
+        value="{{formData.school}}"
+      />
+    </view>
+    
+    <view class="form-item">
+      <label>QQ号</label>
+      <input 
+        type="number" 
+        data-field="qq" 
+        bindinput="bindInput" 
+        placeholder="请输入您的QQ号（选填）" 
+        class="form-input"
+        value="{{formData.qq}}"
+      />
+    </view>
+    
+    <view class="form-item">
+      <label>微信号</label>
+      <input 
+        type="text" 
+        data-field="wechat" 
+        bindinput="bindInput" 
+        placeholder="请输入您的微信号（选填）" 
+        class="form-input"
+        value="{{formData.wechat}}"
+      />
+    </view>
+    
+    <!-- 个人简介 -->
+    <view class="bio-container">
+      <label>个人简介</label>
+      <textarea 
+        bindinput="onBioInput" 
+        placeholder="请简单介绍一下自己吧（选填）" 
+        class="form-textarea"
+        value="{{formData.bio}}"
+        maxlength="200"
+      />
+      <text class="textarea-hint">{{formData.bio.length || 0}}/200</text>
+    </view>
+  </view>
+  
+  <!-- 按钮区域 -->
+  <view class="button-area">
+    <!-- 注册按钮 -->
+    <button class="submit-btn" bindtap="register" disabled="{{loading}}">
+      {{loading ? '注册中...' : '注册'}}
+    </button>
+    
+    <!-- 提示信息 -->
+    <view class="tips">
+    <view class="tips-item">注册即表示您同意我们的</view>
+    <view class="tips-item link-text">用户协议</view>
+    <view class="tips-item">和</view>
+    <view class="tips-item link-text">隐私政策</view>
+  </view>
+  </view>
+</view>

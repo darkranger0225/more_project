@@ -1,0 +1,72 @@
+<view class="container">
+  <view class="form-card">
+    <!-- 考试名称 -->
+    <view class="form-item">
+      <text class="label">考试名称 <text class="required">*</text></text>
+      <input 
+        type="text" 
+        placeholder="如：期中考试、月考" 
+        value="{{examName}}"
+        bindinput="onExamNameInput"
+        class="input"
+      />
+    </view>
+
+    <!-- 科目 -->
+    <view class="form-item">
+      <text class="label">科目 <text class="required">*</text></text>
+      <picker bindchange="onSubjectChange" value="{{subjectIndex}}" range="{{subjectArray}}">
+        <view class="picker {{subject ? '' : 'placeholder'}}">
+          {{subject || '请选择科目'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 班级 -->
+    <view class="form-item">
+      <text class="label">班级 <text class="required">*</text></text>
+      <picker bindchange="onClassChange" value="{{classIndex}}" range="{{classArray}}" range-key="className" bindchange="onClassChange">
+        <view class="picker {{selectedClass ? '' : 'placeholder'}}">
+          {{selectedClass ? selectedClass.className : '请选择班级'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 考试日期 -->
+    <view class="form-item">
+      <text class="label">考试日期 <text class="required">*</text></text>
+      <picker mode="date" bindchange="onExamDateChange" value="{{examDate}}">
+        <view class="picker {{examDate ? '' : 'placeholder'}}">
+          {{examDate || '请选择考试日期'}}
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <!-- 学生成绩列表 -->
+  <view class="student-scores-card" wx:if="{{selectedClass}}">
+    <view class="card-header">
+      <text class="card-title">学生成绩</text>
+      <text class="card-subtitle">已录入 {{studentScores.length}} 人</text>
+    </view>
+    
+    <block wx:if="{{studentList.length > 0}}">
+      <view class="student-score-item" wx:for="{{studentList}}" wx:key="id">
+        <text class="student-name">{{item.studentName}}</text>
+        <input 
+          type="digit" 
+          placeholder="分数" 
+          value="{{studentScores[item.id]}}"
+          data-studentid="{{item.id}}"
+          bindinput="onScoreInput"
+          class="score-input"
+        />
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-tip">该班级暂无学生</view>
+    </block>
+  </view>
+
+  <button class="btn btn-primary save-btn" bindtap="saveScores">保存成绩</button>
+</view>

@@ -1,0 +1,103 @@
+<view class="container">
+  <!-- 统计卡片 -->
+  <view class="stats-card">
+    <view class="stats-item">
+      <text class="stats-number">{{pendingCount}}</text>
+      <text class="stats-label">待处理</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-number">{{processingCount}}</text>
+      <text class="stats-label">处理中</text>
+    </view>
+    <view class="stats-item">
+      <text class="stats-number">{{completedCount}}</text>
+      <text class="stats-label">已完成</text>
+    </view>
+  </view>
+
+  <!-- 筛选标签 -->
+  <view class="filter-tabs">
+    <view class="tab {{currentTab === 0 ? 'active' : ''}}" bindtap="switchTab" data-index="0">
+      <text>全部</text>
+    </view>
+    <view class="tab {{currentTab === 1 ? 'active' : ''}}" bindtap="switchTab" data-index="1">
+      <text>待处理</text>
+    </view>
+    <view class="tab {{currentTab === 2 ? 'active' : ''}}" bindtap="switchTab" data-index="2">
+      <text>处理中</text>
+    </view>
+    <view class="tab {{currentTab === 3 ? 'active' : ''}}" bindtap="switchTab" data-index="3">
+      <text>已完成</text>
+    </view>
+  </view>
+
+  <!-- 报修列表 -->
+  <view class="repair-list">
+    <block wx:if="{{repairList.length > 0}}">
+      <view class="repair-item" wx:for="{{repairList}}" wx:key="id">
+        <view class="repair-header">
+          <text class="repair-title">{{item.title}}</text>
+          <view class="status-badge {{item.status === 0 ? 'status-pending' : item.status === 1 ? 'status-processing' : 'status-completed'}}">
+            <text>{{item.status === 0 ? '待处理' : item.status === 1 ? '处理中' : '已完成'}}</text>
+          </view>
+        </view>
+        <view class="repair-content">
+          <text>{{item.content}}</text>
+        </view>
+        <view class="repair-info">
+          <view class="info-row">
+            <text class="info-label">报修人：</text>
+            <text class="info-value">{{item.studentName || '未知'}}</text>
+          </view>
+          <view class="info-row">
+            <text class="info-label">报修时间：</text>
+            <text class="info-value">{{item.createTime}}</text>
+          </view>
+        </view>
+        <!-- 图片展示 -->
+        <view class="image-list" wx:if="{{item.image}}">
+          <image class="repair-image" src="{{item.image}}" mode="aspectFill" bindtap="previewImage" data-url="{{item.image}}"></image>
+        </view>
+        <!-- 处理信息 -->
+        <view class="handle-info" wx:if="{{item.status !== 0}}">
+          <view class="info-row">
+            <text class="info-label">处理人：</text>
+            <text class="info-value">{{item.handlerName || '管理员'}}</text>
+          </view>
+          <view class="info-row" wx:if="{{item.handleTime}}">
+            <text class="info-label">处理时间：</text>
+            <text class="info-value">{{item.handleTime}}</text>
+          </view>
+          <view class="reply-content" wx:if="{{item.reply}}">
+            <text class="reply-label">处理回复：</text>
+            <text class="reply-text">{{item.reply}}</text>
+          </view>
+        </view>
+        <!-- 操作按钮 -->
+        <view class="action-buttons" wx:if="{{item.status !== 2}}">
+          <button class="btn-primary btn-small" bindtap="handleRepair" data-id="{{item.id}}" data-status="{{item.status}}">
+            {{item.status === 0 ? '开始处理' : '完成处理'}}
+          </button>
+        </view>
+      </view>
+    </block>
+    <view class="empty-tip" wx:else>
+      <text>暂无报修记录</text>
+    </view>
+  </view>
+</view>
+
+<!-- 处理弹窗 -->
+<view class="modal" wx:if="{{showModal}}">
+  <view class="modal-mask" bindtap="closeModal"></view>
+  <view class="modal-content">
+    <view class="modal-title">{{modalTitle}}</view>
+    <view class="modal-body">
+      <textarea class="reply-input" placeholder="请输入处理回复（可选）" value="{{replyContent}}" bindinput="onReplyInput"></textarea>
+    </view>
+    <view class="modal-footer">
+      <button class="btn-cancel" bindtap="closeModal">取消</button>
+      <button class="btn-confirm" bindtap="confirmHandle">确认</button>
+    </view>
+  </view>
+</view>

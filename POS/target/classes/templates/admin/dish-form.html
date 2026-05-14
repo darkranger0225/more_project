@@ -1,0 +1,177 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title th:text="${dish.id} ? '编辑菜品' : '添加菜品'">菜品管理</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/admin/dashboard}"><i class="bi bi-speedometer2"></i> 管理后台</a></li>
+            <li><a th:href="@{/admin/users}"><i class="bi bi-people"></i> 员工管理</a></li>
+            <li><a th:href="@{/admin/categories}"><i class="bi bi-tags"></i> 分类管理</a></li>
+            <li><a th:href="@{/admin/dishes}" class="active"><i class="bi bi-cup-hot"></i> 菜品管理</a></li>
+            <li><a th:href="@{/admin/tables}"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/admin/orders}"><i class="bi bi-receipt"></i> 订单管理</a></li>
+            <li><a th:href="@{/admin/statistics}"><i class="bi bi-graph-up"></i> 营业统计</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-cup-hot"></i> <span th:text="${dish.id} ? '编辑菜品' : '添加菜品'"></span></h4>
+        </div>
+
+        <div class="card" style="max-width: 600px;">
+            <div class="card-header"><i class="bi bi-cup-hot-fill"></i> 菜品信息</div>
+            <div class="card-body">
+                <form id="dishForm" onsubmit="return saveDish(event)">
+                    <input type="hidden" id="dishId" th:value="${dish.id}">
+                    <div class="form-group">
+                        <label>菜品名称 *</label>
+                        <input type="text" id="name" class="form-control" th:value="${dish.name}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>所属分类 *</label>
+                        <select id="categoryId" class="form-control" required>
+                            <option value="">请选择分类</option>
+                            <option th:each="cat : ${categories}" th:value="${cat.id}" th:text="${cat.name}" th:selected="${dish.category != null && dish.category.id == cat.id}"></option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>价格 *</label>
+                        <input type="number" id="price" class="form-control" step="0.01" min="0" th:value="${dish.price}" required>
+                    </div>
+                    <div class="form-group">
+                        <label>图片</label>
+                        <div style="display: flex; gap: 10px; align-items: flex-start;">
+                            <input type="text" id="image" class="form-control" th:value="${dish.image}" placeholder="输入图片URL或上传图片" style="flex: 1;">
+                            <label class="btn btn-secondary" style="margin: 0; cursor: pointer;">
+                                <i class="bi bi-upload"></i> 上传
+                                <input type="file" id="imageFile" accept="image/*" style="display: none;" onchange="uploadImage(this)">
+                            </label>
+                        </div>
+                        <div id="imagePreview" style="margin-top: 10px;">
+                            <img th:if="${dish.image}" th:src="${dish.image}" style="max-width: 200px; max-height: 150px; border-radius: 4px;" id="previewImg">
+                            <img th:unless="${dish.image}" id="previewImg" style="max-width: 200px; max-height: 150px; border-radius: 4px; display: none;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>描述</label>
+                        <textarea id="description" class="form-control" rows="3" th:text="${dish.description}"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>排序</label>
+                        <input type="number" id="sortOrder" class="form-control" th:value="${dish.sortOrder} ?: 0">
+                    </div>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a th:href="@{/admin/dishes}" class="btn btn-primary">返回</a>
+                        <button type="submit" class="btn btn-success">保存</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const previewImg = document.getElementById('previewImg');
+            const imageInput = document.getElementById('image');
+            if (previewImg && previewImg.getAttribute('src')) {
+                previewImg.style.display = 'block';
+            }
+            imageInput.addEventListener('input', function() {
+                updatePreview(this.value);
+            });
+        });
+
+        function updatePreview(src) {
+            const previewImg = document.getElementById('previewImg');
+            if (src && src.trim()) {
+                previewImg.src = src;
+                previewImg.style.display = 'block';
+            } else {
+                previewImg.style.display = 'none';
+            }
+        }
+
+        async function uploadImage(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+            if (!allowedTypes.includes(file.type)) {
+                showAlert('只支持 jpg, png, gif, webp 格式的图片', 'error');
+                return;
+            }
+
+            if (file.size > 5 * 1024 * 1024) {
+                showAlert('图片大小不能超过5MB', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                const csrfToken = document.querySelector('meta[name="_csrf"]').content;
+                const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
+
+                const response = await fetch('/api/upload/image', {
+                    method: 'POST',
+                    headers: {
+                        [csrfHeader]: csrfToken
+                    },
+                    body: formData
+                });
+
+                const result = await response.json();
+                if (result.code === 200) {
+                    document.getElementById('image').value = result.data;
+                    updatePreview(result.data);
+                    showAlert('图片上传成功', 'success');
+                } else {
+                    showAlert(result.message || '上传失败', 'error');
+                }
+            } catch (error) {
+                showAlert('上传失败，请重试', 'error');
+            }
+
+            input.value = '';
+        }
+
+        async function saveDish(event) {
+            event.preventDefault();
+            const dishId = document.getElementById('dishId').value;
+            const data = {
+                name: document.getElementById('name').value,
+                category: { id: parseInt(document.getElementById('categoryId').value) },
+                price: parseFloat(document.getElementById('price').value),
+                image: document.getElementById('image').value,
+                description: document.getElementById('description').value,
+                sortOrder: parseInt(document.getElementById('sortOrder').value) || 0
+            };
+            try {
+                let result;
+                if (dishId) { result = await apiPut('/api/admin/dishes/' + dishId, data); }
+                else { result = await apiPost('/api/admin/dishes', data); }
+                if (result.code === 200) {
+                    showAlert('保存成功', 'success');
+                    setTimeout(() => { window.location.href = '/admin/dishes'; }, 1500);
+                } else { showAlert(result.message || '保存失败', 'error'); }
+            } catch (error) { showAlert('网络错误，请重试', 'error'); }
+            return false;
+        }
+    </script>
+</body>
+</html>

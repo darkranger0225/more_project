@@ -1,0 +1,179 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding-bottom: 120rpx;
+}
+
+/* 角色切换标签 */
+.role-tabs {
+  display: flex;
+  background: #fff;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 28rpx;
+  color: #666;
+  position: relative;
+}
+
+.tab.active {
+  color: #1976d2;
+  font-weight: 500;
+}
+
+.tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60rpx;
+  height: 4rpx;
+  background: #1976d2;
+  border-radius: 2rpx;
+}
+
+/* 通知列表 */
+.notice-list {
+  padding: 20rpx;
+}
+
+.notice-item {
+  background: #fff;
+  border-radius: 12rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.06);
+}
+
+.notice-item.unread {
+  border-left: 6rpx solid #1976d2;
+}
+
+.notice-item.read {
+  border-left: 6rpx solid #e0e0e0;
+}
+
+.notice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.notice-title {
+  display: flex;
+  align-items: center;
+  flex: 1;
+}
+
+.priority-tag {
+  background: #ff5252;
+  color: #fff;
+  font-size: 22rpx;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  margin-right: 12rpx;
+}
+
+.title-text {
+  font-size: 32rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.unread-dot {
+  width: 16rpx;
+  height: 16rpx;
+  background: #ff5252;
+  border-radius: 50%;
+  margin-left: 16rpx;
+}
+
+.notice-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20rpx;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.notice-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.publisher {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.target-info {
+  display: flex;
+  align-items: center;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.target-type {
+  font-size: 22rpx;
+  color: #1976d2;
+  background: #e3f2fd;
+  padding: 4rpx 12rpx;
+  border-radius: 6rpx;
+  margin-right: 12rpx;
+}
+
+.target-names {
+  font-size: 24rpx;
+  color: #666;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 100rpx 0;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 发布按钮 */
+.fab-btn {
+  position: fixed;
+  right: 40rpx;
+  bottom: 60rpx;
+  width: 100rpx;
+  height: 100rpx;
+  background: #1976d2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(25, 118, 210, 0.4);
+}
+
+.fab-icon {
+  font-size: 48rpx;
+  color: #fff;
+}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title, content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title} + ' - 校园食堂评价系统'">校园食堂评价系统</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+    <style>
+        .navbar-brand { font-weight: bold; }
+        .star-rating { color: #ffc107; }
+        .dish-card { transition: transform 0.2s; }
+        .dish-card:hover { transform: translateY(-5px); }
+        .window-card { cursor: pointer; }
+        .review-item { border-left: 3px solid #0d6efd; padding-left: 15px; margin-bottom: 20px; }
+        .anonymous-badge { background-color: #6c757d; color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .footer { margin-top: 50px; padding: 20px 0; background-color: #f8f9fa; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i class="bi bi-shop"></i> 校园食堂评价系统
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/">首页</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dishes">菜品</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/windows">窗口</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav" th:if="${session.user == null}">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">登录</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/register">注册</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav" th:if="${session.user != null}">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-person-circle"></i> <span th:text="${session.user.username}">用户</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/profile">个人资料</a></li>
+                            <li><a class="dropdown-item" href="/password">修改密码</a></li>
+                            <li th:if="${session.user.role == 1}"><a class="dropdown-item" href="/admin">管理后台</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main th:replace="${content}"></main>
+
+    <footer class="footer">
+        <div class="container text-center">
+            <p class="text-muted">&copy; 2026 校园食堂评价系统 - 为学生提供便捷的菜品评价平台</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function logout() {
+            fetch('/api/auth/logout', { method: 'POST' })
+                .then(() => window.location.href = '/');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,50 @@
+{
+  "pages": [
+    "pages/home/home",
+    "pages/moon/moon",
+    "pages/moon-settings/moon-settings",
+    "pages/me/me",
+    "pages/login/login",
+    "pages/matchResult/matchResult",
+    "pages/register/register",
+    "pages/Preferences/Preferences",
+    "pages/fuzzyMatchResult/fuzzyMatchResult",
+    "pages/accountManagement/accountManagement",
+    "pages/user-edit/user-edit",
+    "pages/activity/activity",
+    "pages/guide/guide",
+    "pages/adminPanel/adminPanel",
+    "pages/feedback/feedback",
+    "pages/adminFeedback/adminFeedback",
+    "pages/forgot-password/forgot-password"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#ff6600",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/home/home",
+        "text": "首页",
+        "iconPath": "icon/tabbar/Sy.png",
+        "selectedIconPath": "icon/tabbar/Sys.png"
+      },
+      {
+        "pagePath": "pages/moon/moon",
+        "text": "月球",
+        "iconPath": "icon/tabbar/Moon.png",
+        "selectedIconPath": "icon/tabbar/Moons.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "icon/tabbar/My.png",
+        "selectedIconPath": "icon/tabbar/Mys.png"
+      }
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+<view class="container">
+  <view class="header-section">
+    <text class="page-title">班级管理</text>
+    <button class="btn btn-primary add-btn" bindtap="addClass">
+      <text class="add-icon">+</text>
+      <text>添加班级</text>
+    </button>
+  </view>
+
+  <view class="class-list">
+    <block wx:if="{{classList.length > 0}}">
+      <view class="class-card" wx:for="{{classList}}" wx:key="id">
+        <view class="class-header">
+          <text class="class-name">{{item.className}}</text>
+          <text class="grade-tag">{{item.grade}}</text>
+        </view>
+        <view class="class-info">
+          <text class="info-item" wx:if="{{item.headTeacherName}}">班主任: {{item.headTeacherName}}</text>
+          <text class="info-item" wx:if="{{item.description}}">{{item.description}}</text>
+        </view>
+        <view class="class-actions">
+          <text class="action-btn edit" bindtap="editClass" data-id="{{item.id}}">编辑</text>
+          <text class="action-btn delete" bindtap="deleteClass" data-id="{{item.id}}">删除</text>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-icon">🏫</text>
+        <text class="empty-text">暂无班级</text>
+        <text class="empty-tip">点击上方按钮添加班级</text>
+      </view>
+    </block>
+  </view>
+</view>

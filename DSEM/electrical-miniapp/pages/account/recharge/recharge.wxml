@@ -1,0 +1,70 @@
+<view class="container">
+  <view class="balance-card">
+    <text class="balance-label">当前余额</text>
+    <text class="balance-amount">¥{{balance}}</text>
+  </view>
+
+  <view class="recharge-section">
+    <text class="section-title">充值金额</text>
+    
+    <view class="amount-input-wrapper">
+      <text class="currency">¥</text>
+      <input class="amount-input" type="digit" placeholder="请输入充值金额" value="{{amount}}" bindinput="onAmountInput" />
+    </view>
+
+    <view class="quick-amounts">
+      <view class="amount-btn {{amount == '50' ? 'active' : ''}}" bindtap="selectAmount" data-amount="50">50元</view>
+      <view class="amount-btn {{amount == '100' ? 'active' : ''}}" bindtap="selectAmount" data-amount="100">100元</view>
+      <view class="amount-btn {{amount == '200' ? 'active' : ''}}" bindtap="selectAmount" data-amount="200">200元</view>
+      <view class="amount-btn {{amount == '500' ? 'active' : ''}}" bindtap="selectAmount" data-amount="500">500元</view>
+    </view>
+
+    <button class="btn-recharge" bindtap="createRechargeOrder">立即充值</button>
+  </view>
+
+  <!-- 支付确认弹窗 -->
+  <view class="pay-modal" wx:if="{{showQRCode}}">
+    <view class="modal-mask" bindtap="closeQRCode"></view>
+    <view class="modal-content">
+      <view class="pay-header">
+        <text class="pay-title">确认充值</text>
+        <view class="close-btn" bindtap="closeQRCode">×</view>
+      </view>
+      
+      <view class="pay-body">
+        <view class="pay-amount-section">
+          <text class="pay-label">充值金额</text>
+          <text class="pay-amount">¥{{amount}}</text>
+        </view>
+        
+        <view class="pay-info-section">
+          <view class="pay-info-item">
+            <text class="info-label">订单编号</text>
+            <text class="info-value">{{rechargeNo}}</text>
+          </view>
+          <view class="pay-info-item">
+            <text class="info-label">支付方式</text>
+            <text class="info-value">模拟支付</text>
+          </view>
+          <view class="pay-info-item">
+            <text class="info-label">当前余额</text>
+            <text class="info-value">¥{{balance}}</text>
+          </view>
+        </view>
+        
+        <view class="pay-timer">
+          <view class="timer-circle">
+            <text class="timer-number">{{countdown}}</text>
+            <text class="timer-text">秒后自动确认</text>
+          </view>
+        </view>
+      </view>
+      
+      <view class="pay-footer">
+        <button class="btn-confirm-pay" bindtap="confirmRecharge">
+          <text class="btn-text">立即支付 ¥{{amount}}</text>
+        </button>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout ('菜品详情', ~{::main})}">
+<main>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-6">
+                <img th:src="${dish.image != null ? dish.image : '/images/0bcf54afa59f479785fece74b89767ae.jpeg'}" 
+                     class="img-fluid rounded" alt="菜品图片" style="max-height: 400px; width: 100%; object-fit: cover;">
+            </div>
+            <div class="col-md-6">
+                <h2 th:text="${dish.name}">菜品名称</h2>
+                <p class="text-muted" th:text="${dish.category}">分类</p>
+                <div class="mb-3">
+                    <span class="text-danger fs-3 fw-bold">¥<span th:text="${dish.price}">0</span></span>
+                </div>
+                <div class="mb-3">
+                    <span class="star-rating fs-4">
+                        <i class="bi bi-star-fill"></i>
+                        <span th:text="${#numbers.formatDecimal(dish.averageRating, 1, 1)}">0.0</span>
+                    </span>
+                    <span class="text-muted ms-2">(<span th:text="${dish.reviewCount}">0</span> 条评价)</span>
+                </div>
+                <div class="mb-3">
+                    <span th:each="tag : ${tags}" class="badge bg-primary me-2" th:text="${tag.name}">标签</span>
+                </div>
+                <p class="text-muted" th:text="${dish.description}">菜品描述</p>
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                        <i class="bi bi-pencil-square"></i> 写评价
+                    </button>
+                    <button class="btn btn-outline-secondary" id="favoriteBtn" onclick="toggleFavorite()">
+                        <i class="bi bi-heart"></i> 收藏
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <h3 class="mb-4">用户评价</h3>
+        <div id="reviewsContainer">
+        </div>
+    </div>
+
+    <div class="modal fade" id="reviewModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">发表评价</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="reviewForm">
+                        <div class="mb-3">
+                            <label class="form-label">评分</label>
+                            <div class="star-rating-input">
+                                <i class="bi bi-star fs-4" data-rating="1" onclick="setRating(1)"></i>
+                                <i class="bi bi-star fs-4" data-rating="2" onclick="setRating(2)"></i>
+                                <i class="bi bi-star fs-4" data-rating="3" onclick="setRating(3)"></i>
+                                <i class="bi bi-star fs-4" data-rating="4" onclick="setRating(4)"></i>
+                                <i class="bi bi-star fs-4" data-rating="5" onclick="setRating(5)"></i>
+                            </div>
+                            <input type="hidden" id="rating" name="rating" value="5">
+                        </div>
+                        <div class="mb-3">
+                            <label for="content" class="form-label">评价内容</label>
+                            <textarea class="form-control" id="content" rows="3" maxlength="200"></textarea>
+                            <div class="form-text">最多200字</div>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="isAnonymous">
+                            <label class="form-check-label" for="isAnonymous">匿名评价</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="submitReview()">提交评价</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 消息提示框 -->
+    <div class="position-fixed top-50 start-50 translate-middle z-50 d-none" id="messageToast">
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body" id="messageToastBody">
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const dishId = [[${dish.id}]];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadReviews();
+            checkFavoriteStatus();
+        });
+
+        function loadReviews() {
+            fetch(`/api/reviews/dish/${dishId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        renderReviews(data.data);
+                    }
+                });
+        }
+
+        function renderReviews(reviews) {
+            const container = document.getElementById('reviewsContainer');
+            if (reviews.length === 0) {
+                container.innerHTML = '<p class="text-muted text-center">暂无评价，快来发表第一条评价吧！</p>';
+                return;
+            }
+            
+            container.innerHTML = reviews.map(review => `
+                <div class="review-item">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <div class="d-flex align-items-center mb-2">
+                                <img src="${review.userAvatar || '/images/default-avatar.png'}" 
+                                     class="rounded-circle me-2" width="40" height="40">
+                                <div>
+                                    <span class="fw-bold">${review.isAnonymous === 1 ? '匿名用户' : review.username}</span>
+                                    ${review.isAnonymous === 1 ? '<span class="anonymous-badge ms-2">匿名</span>' : ''}
+                                </div>
+                            </div>
+                            <div class="star-rating mb-2">
+                                ${generateStars(review.rating)}
+                            </div>
+                            <p>${review.content || ''}</p>
+                            ${review.image ? `<img src="${review.image}" class="img-fluid rounded mb-2" style="max-height: 200px;">` : ''}
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm" onclick="likeReview(${review.id})">
+                            <i class="bi bi-hand-thumbs-up"></i> ${review.likeCount}
+                        </button>
+                    </div>
+                    <small class="text-muted">${new Date(review.createTime).toLocaleString()}</small>
+                </div>
+            `).join('');
+        }
+
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '<i class="bi bi-star-fill"></i>';
+                } else if (i - 0.5 <= rating) {
+                    stars += '<i class="bi bi-star-half"></i>';
+                } else {
+                    stars += '<i class="bi bi-star"></i>';
+                }
+            }
+            return stars;
+        }
+
+        function setRating(rating) {
+            document.getElementById('rating').value = rating;
+            document.querySelectorAll('.star-rating-input i').forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('bi-star');
+                    star.classList.add('bi-star-fill');
+                } else {
+                    star.classList.remove('bi-star-fill');
+                    star.classList.add('bi-star');
+                }
+            });
+        }
+
+        function showMessage(message, type = 'success') {
+            const toast = document.getElementById('messageToast');
+            const toastBody = document.getElementById('messageToastBody');
+            
+            toastBody.textContent = message;
+            toastBody.className = 'toast-body';
+            
+            if (type === 'success') {
+                toastBody.classList.add('bg-success', 'text-white');
+            } else if (type === 'error') {
+                toastBody.classList.add('bg-danger', 'text-white');
+            } else if (type === 'warning') {
+                toastBody.classList.add('bg-warning', 'text-dark');
+            }
+            
+            toast.classList.remove('d-none');
+            
+            setTimeout(() => {
+                toast.classList.add('d-none');
+            }, 3000);
+        }
+
+        function submitReview() {
+            const rating = document.getElementById('rating').value;
+            const content = document.getElementById('content').value;
+            const isAnonymous = document.getElementById('isAnonymous').checked ? 1 : 0;
+
+            fetch('/api/reviews', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    dishId: dishId,
+                    rating: parseFloat(rating),
+                    content: content,
+                    isAnonymous: isAnonymous
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    showMessage('评价成功！');
+                    document.getElementById('reviewForm').reset();
+                    setRating(5);
+                    bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
+                    loadReviews();
+                } else if (data.code === 401) {
+                    showMessage('请先登录', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1500);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            });
+        }
+
+        function likeReview(reviewId) {
+            fetch(`/api/reviews/${reviewId}/like`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    loadReviews();
+                }
+            });
+        }
+
+        function checkFavoriteStatus() {
+            fetch(`/favorite/check?targetType=1&targetId=${dishId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        const isFavorite = data.data;
+                        updateFavoriteButton(isFavorite);
+                    }
+                });
+        }
+
+        function toggleFavorite() {
+            const favoriteBtn = document.getElementById('favoriteBtn');
+            const isFavorite = favoriteBtn.classList.contains('btn-danger');
+            
+            const url = isFavorite ? '/favorite/remove' : '/favorite/add';
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `targetType=1&targetId=${dishId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    showMessage(data.message);
+                    updateFavoriteButton(!isFavorite);
+                } else if (data.code === 401) {
+                    showMessage('请先登录', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1500);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            });
+        }
+
+        function updateFavoriteButton(isFavorite) {
+            const favoriteBtn = document.getElementById('favoriteBtn');
+            const icon = favoriteBtn.querySelector('i');
+            
+            if (isFavorite) {
+                favoriteBtn.classList.remove('btn-outline-secondary');
+                favoriteBtn.classList.add('btn-danger');
+                icon.classList.remove('bi-heart');
+                icon.classList.add('bi-heart-fill');
+                favoriteBtn.innerHTML = '<i class="bi bi-heart-fill"></i> 已收藏';
+            } else {
+                favoriteBtn.classList.remove('btn-danger');
+                favoriteBtn.classList.add('btn-outline-secondary');
+                icon.classList.remove('bi-heart-fill');
+                icon.classList.add('bi-heart');
+                favoriteBtn.innerHTML = '<i class="bi bi-heart"></i> 收藏';
+            }
+        }
+    </script>
+</main>
+</html>

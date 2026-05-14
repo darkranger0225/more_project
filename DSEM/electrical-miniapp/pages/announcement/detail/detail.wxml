@@ -1,0 +1,19 @@
+<view class="container">
+  <view class="announcement-card">
+    <view class="announcement-header">
+      <text class="announcement-title">{{announcement.title}}</text>
+      <view class="announcement-meta">
+        <text class="publisher" wx:if="{{announcement.publisherName}}">发布人：{{announcement.publisherName}}</text>
+        <text class="time">{{announcement.createTime}}</text>
+      </view>
+    </view>
+    
+    <view class="announcement-content">
+      <text>{{announcement.content}}</text>
+    </view>
+    
+    <view class="image-container" wx:if="{{announcement.image}}">
+      <image class="announcement-image" src="{{announcement.image}}" mode="widthFix" bindtap="previewImage"></image>
+    </view>
+  </view>
+</view>

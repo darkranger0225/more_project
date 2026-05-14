@@ -1,0 +1,127 @@
+<view class="home-container">
+  <!-- 错误信息提示 -->
+  <view class="error-message {{showError ? 'show' : ''}}" wx:if="{{showError}}">
+    <view class="error-content">
+      <image class="error-icon" src="/image/login/error.png" mode="aspectFit"/>
+      <text class="error-text">{{errorMessage}}</text>
+    </view>
+  </view>
+
+  <!-- 顶部导航栏 -->
+  <view class="navbar">
+    <view class="nav-content">
+      <view class="nav-title-wrapper">
+        <text class="nav-title">友圈</text>
+        <text class="nav-subtitle">FRIENDS</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 中部功能区 -->
+  <view class="main-content">
+    <!-- 欢迎语 -->
+    <view class="welcome-section">
+      <text class="welcome-text">欢迎回来</text>
+      <text class="sub-text">今天也要元气满满哦</text>
+    </view>
+
+    <!-- 功能卡片区域 -->
+    <view class="function-section">
+      <view class="function-card precise-match" bindtap="goToPreciseMatch">
+        <view class="card-content">
+          <image class="card-image" src="/image/login/love.png" mode="aspectFit"/>
+          <text class="card-title">精准匹配</text>
+          <text class="card-desc">找到志同道合的朋友</text>
+        </view>
+        <view class="card-arrow">
+          <text class="arrow-icon">→</text>
+        </view>
+      </view>
+
+      <view class="function-card random-match" bindtap="goToRandomMatch">
+        <view class="card-content">
+          <image class="card-image" src="/image/login/love.png" mode="aspectFit"/>
+          <text class="card-title">散落匹配</text>
+          <text class="card-desc">遇见不一样的惊喜</text>
+        </view>
+        <view class="card-arrow">
+          <text class="arrow-icon">→</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 推荐用户展示 -->
+    <view class="recommend-section">
+      <view class="section-header">
+        <text class="section-title">推荐用户</text>
+        <text class="more-link" bindtap="refreshRecommendUsers">换一批</text>
+      </view>
+      <block wx:if="{{recommendUsers.length > 0}}">
+        <scroll-view scroll-x="true" class="recommend-scroll" enhanced="true" show-scrollbar="false">
+          <view class="user-card {{item.isFlipped ? 'flipped' : ''}}" 
+                wx:for="{{recommendUsers}}" 
+                wx:key="id"
+                bindtap="flipCard"
+                data-index="{{index}}">
+            <view class="card-inner">
+              <view class="card-front">
+                <image class="user-avatar" src="{{item.avatar}}" mode="aspectFill"/>
+                <text class="user-name">{{item.name}}</text>
+              </view>
+              <view class="card-back">
+                <view class="match-info">
+                  <text class="match-label">匹配度</text>
+                  <text class="match-score">{{item.matchScore || '0.00'}}%</text>
+                </view>
+                <view class="common-interests" wx:if="item.commonInterests">
+                  <text class="interests-label">爱好</text>
+                  <text class="interests-content">{{item.commonInterests}}</text>
+                </view>
+                <button class="contact-btn" size="mini" type="primary">打招呼</button>
+              </view>
+            </view>
+          </view>
+        </scroll-view>
+      </block>
+      <view class="empty-recommend" wx:else>
+        <image class="empty-image" src="/image/login/search-friends.png" mode="aspectFit"/>
+        <text class="empty-text">快去散落匹配寻找新朋友吧</text>
+        <text class="empty-subtext">点击上方"散落匹配"开始探索</text>
+      </view>
+    </view>
+
+    <!-- 最新活动 -->
+    <view class="activity-section">
+      <view class="section-header">
+        <text class="section-title">最新活动</text>
+        <text class="more-link">更多活动</text>
+      </view>
+      <swiper class="activity-swiper" 
+              autoplay="{{true}}" 
+              interval="3000" 
+              circular="{{true}}" 
+              indicator-dots="{{true}}"
+              indicator-color="rgba(255, 255, 255, 0.6)"
+              indicator-active-color="#5ab9c1">
+        <swiper-item bindtap="goToActivity">
+          <view class="activity-card">
+            <image class="activity-bg" src="/image/login/spring.png" mode="aspectFill"/>
+            <view class="activity-content">
+              <text class="activity-title">{{latestActivity.title}}</text>
+              <text class="activity-time">{{latestActivity.time}}</text>
+            </view>
+          </view>
+        </swiper-item>
+        <swiper-item bindtap="goToGuide">
+          <view class="activity-card">
+            <image class="activity-bg" src="/image/login/guide.png" mode="aspectFill"/>
+            <view class="activity-content">
+              <text class="activity-title">欢迎加入交友之旅</text>
+              <text class="activity-time">小程序使用说明</text>
+            </view>
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+  </view>
+</view>

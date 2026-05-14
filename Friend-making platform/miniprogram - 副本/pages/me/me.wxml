@@ -1,0 +1,78 @@
+<!-- pages/me/me.wxml -->
+
+<view class="container">
+  <!-- 顶部展示图 -->
+  <view class="top-show">
+    <image
+      mode="widthFix"
+      class="top-show-img"
+      src="/image/login/topshow.png"
+    ></image>
+  </view>
+
+  <view class="bottom-show">
+    <!-- 动态显示用户信息 -->
+    <view class="user-container section" bindtap="toLoginPage">
+      <view class="avatar-container">
+        <image class="avatar" src="/image/login/user.png"></image>
+        <view class="user-info">
+          <block wx:if="{{isLoggedIn}}">
+            <text class="username ellipsis">{{userName}}</text>
+            <text class="subtitle">点击进入个人中心</text>
+          </block>
+          <block wx:else>
+            <text class="username ellipsis">未登录</text>
+            <text class="subtitle">点击授权登录</text>
+          </block>
+        </view>
+      </view>
+    </view>
+
+    <!-- 账号管理 -->
+    <view class="account-management section" bindtap="toAccountManagementPage">
+      <view class="account-title-wrap">
+        <text class="title">账号管理</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+
+    <!-- 意见反馈 -->
+    <view class="account-management section" bindtap="toFeedbackPage">
+      <view class="account-title-wrap">
+        <text class="title">意见反馈</text>
+        <text class="arrow">></text>
+      </view>
+    </view>
+
+    <!-- 关于本程序面板 -->
+    <view class="about-section section">
+      <view class="section-header">
+        <text class="title">关于本程序</text>
+      </view>
+
+      <view class="about-content">
+        <view class="about-item">
+          <image class="icon" src="/image/login/love.png"></image>
+          <text>可添加客服联系方式，提供反馈或改进</text>
+        </view>
+        <view class="about-item">
+          <image class="icon" src="/image/login/love.png"></image>
+          <text>客服常年在线，作息不定，有问题可随时联系😊</text>
+        </view>
+        <view class="about-item">
+          <image class="icon" src="/image/login/love.png"></image>
+          <text>海内存知己，天涯若比邻</text>
+        </view>
+        <view class="about-item">
+          <image class="icon" src="/image/login/love.png"></image>
+          <text>愿你在这里找到志同道合的朋友</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 底部面板 -->
+    <view class="info-footer">
+      <text class="footer-text">愿友谊长存</text>
+    </view>
+  </view>
+</view>

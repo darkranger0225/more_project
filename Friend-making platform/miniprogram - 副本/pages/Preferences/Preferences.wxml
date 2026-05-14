@@ -1,0 +1,88 @@
+<!-- pages/Preferences/Preferences.wxml -->
+<view class="container">
+  <form bindsubmit="onSubmit">
+    <!-- 用户ID（隐藏显示） -->
+    <view class="form-item" style="display: none;">
+      <label>用户ID：</label>
+      <input name="userId" value="{{userId}}" disabled class="disabled-input" />
+    </view>
+
+    <!-- 期望的性别 -->
+    <view class="form-item">
+      <label>期望性别：</label>
+      <picker mode="selector" range="{{sexOptions}}" value="{{sexIndex}}" bindchange="onPreferredSexChange">
+        <view class="picker">{{sexOptions[sexIndex]}}</view>
+      </picker>
+    </view>
+
+    <!-- 期望的年龄范围 -->
+    <view class="form-item">
+      <label>年龄范围：</label>
+      <picker mode="selector" range="{{ageRangeOptions}}" bindchange="onAgeRangeChange">
+        <view class="picker">{{userPreferences.preferredAgeRange || '请选择期望的年龄范围'}}</view>
+      </picker>
+    </view>
+
+    <!-- 期望的地址 -->
+    <view class="form-item">
+      <label>地址：</label>
+      <picker mode="region" bindchange="onAddressChange">
+        <view class="picker">{{userPreferences.preferredAddress || '请选择省/市/区县'}}</view>
+      </picker>
+    </view>
+
+    <!-- 期望的学校 -->
+    <view class="form-item">
+      <label>学校：</label>
+      <input name="preferredSchool" placeholder="请输入期望对象的学校" bindinput="bindPreferredSchoolInput" class="form-input" />
+    </view>
+
+    <!-- 期望的性格特征 -->
+    <view class="form-item">
+      <label>性格：</label>
+      <picker mode="selector" range="{{personalityOptions}}" bindchange="onPersonalityChange">
+        <view class="picker">{{userPreferences.preferredPersonality || '请选择期望的性格特征'}}</view>
+      </picker>
+    </view>
+
+<!-- 兴趣爱好复选框 -->
+<view class="form-item checkbox-section">
+  <label>兴趣爱好：</label>
+  <checkbox-group bindchange="onInterestChange">
+    <view class="interest-container">
+      <block wx:for="{{interestOptions}}" wx:key="index">
+        <view class="interest-item">
+          <view class="interest-checkbox">
+            <checkbox value="{{item}}"/>
+            <text class="interest-text">{{item}}</text>
+          </view>
+          <view class="interest-level-picker" wx:if="{{interestLevelsMap[item] !== undefined}}">
+            <picker mode="selector" range="{{interestLevels}}" value="{{interestLevelsMap[item] || 0}}" 
+                    bindchange="onInterestLevelChange" data-interest="{{item}}">
+              <view class="level-picker">{{interestLevels[interestLevelsMap[item] || 0]}}</view>
+            </picker>
+          </view>
+        </view>
+      </block>
+    </view>
+  </checkbox-group>
+</view>
+
+<!-- 其他偏好复选框 -->
+<view class="form-item checkbox-section">
+  <label>其他偏好：</label>
+  <checkbox-group bindchange="onOtherPreferenceChange">
+    <view class="checkbox-group">
+      <block wx:for="{{otherPreferenceOptions}}" wx:key="index">
+        <label class="checkbox-label">
+          <checkbox value="{{item}}">{{item}}</checkbox>
+        </label>
+      </block>
+    </view>
+  </checkbox-group>
+</view>
+
+    <!-- 提交按钮 -->
+    <button formType="submit" class="submit-btn">提交</button>
+  </form>
+</view>

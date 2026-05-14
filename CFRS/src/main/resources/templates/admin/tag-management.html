@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout ('标签管理', ~{::main})}">
+<main>
+    <div class="container mt-4">
+        <h2 class="mb-4">标签管理</h2>
+        
+        <!-- 添加标签表单 -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5>添加标签</h5>
+            </div>
+            <div class="card-body">
+                <form id="addTagForm">
+                    <div class="mb-3">
+                        <label for="tagName" class="form-label">标签名称</label>
+                        <input type="text" class="form-control" id="tagName" name="name" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">添加标签</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- 标签列表 -->
+        <div class="card">
+            <div class="card-header">
+                <h5>标签列表</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>标签名称</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tagList">
+                            <!-- 标签列表将通过JavaScript动态生成 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 编辑标签模态框 -->
+        <div class="modal fade" id="editTagModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">编辑标签</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="editTagForm">
+                            <input type="hidden" id="editTagId">
+                            <div class="mb-3">
+                                <label for="editTagName" class="form-label">标签名称</label>
+                                <input type="text" class="form-control" id="editTagName" name="name" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary" onclick="updateTag()">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 消息提示框 -->
+    <div class="position-fixed top-50 start-50 translate-middle z-500 d-none" id="messageToast" style="z-index: 9999;">
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 300px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            <div class="toast-header" style="background-color: #f8f9fa; border-bottom: 1px solid #e9ecef; border-radius: 8px 8px 0 0;">
+                <strong class="me-auto" id="messageToastTitle">提示</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="messageToastBody" style="padding: 1rem;">
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 加载标签列表
+        function loadTags() {
+            fetch('/tag/all')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        renderTagList(data.data);
+                    }
+                });
+        }
+        
+        // 渲染标签列表
+        function renderTagList(tags) {
+            const container = document.getElementById('tagList');
+            container.innerHTML = tags.map(tag => `
+                <tr>
+                    <td>${tag.id}</td>
+                    <td>${tag.name}</td>
+                    <td>${formatDateTime(tag.createTime)}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2" onclick="editTag(${tag.id}, '${tag.name}')">编辑</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteTag(${tag.id})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // 格式化日期时间，仅显示到秒
+        function formatDateTime(dateTime) {
+            if (!dateTime) return '';
+            const date = new Date(dateTime);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+        
+        // 编辑标签
+        function editTag(id, name) {
+            document.getElementById('editTagId').value = id;
+            document.getElementById('editTagName').value = name;
+            new bootstrap.Modal(document.getElementById('editTagModal')).show();
+        }
+        
+        // 更新标签
+        function updateTag() {
+            const id = document.getElementById('editTagId').value;
+            const name = document.getElementById('editTagName').value;
+            
+            fetch('/tag/update', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ id: id, name: name })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    showMessage('更新标签成功');
+                    bootstrap.Modal.getInstance(document.getElementById('editTagModal')).hide();
+                    loadTags();
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            });
+        }
+        
+        // 删除标签
+        function deleteTag(id) {
+            if (confirm('确定要删除这个标签吗？')) {
+                fetch(`/tag/delete/${id}`, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        showMessage('删除标签成功');
+                        loadTags();
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                });
+            }
+        }
+        
+        // 显示消息
+        function showMessage(message, type = 'success', title = '提示') {
+            const toast = document.getElementById('messageToast');
+            const toastTitle = document.getElementById('messageToastTitle');
+            const toastBody = document.getElementById('messageToastBody');
+            
+            toastTitle.textContent = title;
+            toastBody.textContent = message;
+            
+            // 清除所有之前的样式类
+            toastBody.className = 'toast-body';
+            
+            // 添加新的样式类
+            if (type === 'success') {
+                toastBody.classList.add('bg-success', 'text-white');
+                toastTitle.textContent = '成功';
+            } else if (type === 'error') {
+                toastBody.classList.add('bg-danger', 'text-white');
+                toastTitle.textContent = '错误';
+            } else if (type === 'warning') {
+                toastBody.classList.add('bg-warning', 'text-dark');
+                toastTitle.textContent = '警告';
+            }
+            
+            // 显示提示框
+            toast.classList.remove('d-none');
+            
+            // 3秒后隐藏提示框
+            setTimeout(() => {
+                toast.classList.add('d-none');
+            }, 3000);
+        }
+        
+        // 页面加载时加载标签列表
+        window.onload = function() {
+            loadTags();
+            
+            // 添加标签表单提交
+            document.getElementById('addTagForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const name = document.getElementById('tagName').value;
+                
+                fetch('/tag/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ name: name })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        showMessage(data.message);
+                        this.reset();
+                        loadTags();
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                });
+            });
+        };
+    </script>
+</main>
+</html>

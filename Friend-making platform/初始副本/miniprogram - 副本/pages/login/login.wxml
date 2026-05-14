@@ -1,0 +1,15 @@
+<view class="container">
+  <view class="form-item">
+    <label>手机号</label>
+    <input type="number" name="phone" placeholder="请输入手机号" bindinput="bindPhoneInput" />
+  </view>
+
+  <view class="form-item">
+    <label>密码</label>
+    <input type="password" name="passWord" placeholder="请输入密码" bindinput="bindPasswordInput" />
+  </view>
+
+  <button class="login-btn" bindtap="onLogin">登录</button>
+  <button class="register-btn" bindtap="toRegisterPage">注册</button>
+  <button class="forgot-btn" bindtap="toForgotPasswordPage">忘记密码</button>
+</view>

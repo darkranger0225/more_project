@@ -1,0 +1,58 @@
+<view class="container">
+  <!-- 教师端：发布作业按钮 -->
+  <view class="action-bar" wx:if="{{role === 'TEACHER'}}">
+    <button class="btn btn-primary" bindtap="publishHomework">+ 布置作业</button>
+  </view>
+
+  <!-- 作业列表 -->
+  <view class="homework-list">
+    <block wx:if="{{homeworkList.length > 0}}">
+      <view 
+        class="homework-item" 
+        wx:for="{{homeworkList}}" 
+        wx:key="id"
+        bindtap="viewHomeworkDetail"
+        data-id="{{item.id}}"
+      >
+        <view class="homework-header">
+          <view class="homework-title-wrap">
+            <text class="subject-tag">{{item.subject}}</text>
+            <text class="homework-title">{{item.title}}</text>
+          </view>
+          <text class="status-badge status-{{item.status}}">
+            {{item.status === 1 ? '进行中' : '已截止'}}
+          </text>
+        </view>
+        
+        <view class="homework-content">
+          <text class="homework-text">{{item.content}}</text>
+        </view>
+        
+        <view class="homework-meta">
+          <text class="meta-item">📚 {{item.className}}</text>
+          <text class="meta-item">👨‍🏫 {{item.teacherName}}</text>
+        </view>
+        
+        <view class="homework-footer">
+          <view class="deadline">
+            <text class="deadline-label">截止时间:</text>
+            <text class="deadline-time {{item.isExpired ? 'expired' : ''}}">{{item.deadline}}</text>
+          </view>
+          <view class="submit-info" wx:if="{{role === 'PARENT'}}">
+            <text class="submit-status {{item.submitStatus === 1 ? 'submitted' : 'unsubmit'}}">
+              {{item.submitStatus === 1 ? '已提交' : '未提交'}}
+            </text>
+          </view>
+          <view class="submit-count" wx:if="{{role === 'TEACHER'}}">
+            <text>已提交: {{item.submitCount}}/{{item.totalCount}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-text">暂无作业</text>
+      </view>
+    </block>
+  </view>
+</view>

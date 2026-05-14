@@ -1,0 +1,37 @@
+<view class="container">
+  <view class="score-card">
+    <view class="score-header">
+      <text class="exam-name">{{score.examName}}</text>
+      <text class="exam-date">{{score.examDate}}</text>
+    </view>
+    
+    <view class="score-main">
+      <text class="subject">{{score.subject}}</text>
+      <text class="score-value {{score.score >= 60 ? 'pass' : 'fail'}}">{{score.score}}分</text>
+    </view>
+    
+    <view class="score-info">
+      <view class="info-item" wx:if="{{score.studentName}}">
+        <text class="info-label">学生:</text>
+        <text class="info-value">{{score.studentName}}</text>
+      </view>
+      <view class="info-item" wx:if="{{score.className}}">
+        <text class="info-label">班级:</text>
+        <text class="info-value">{{score.className}}</text>
+      </view>
+      <view class="info-item" wx:if="{{score.classRank}}">
+        <text class="info-label">班级排名:</text>
+        <text class="info-value">{{score.classRank}}</text>
+      </view>
+      <view class="info-item" wx:if="{{score.gradeRank}}">
+        <text class="info-label">年级排名:</text>
+        <text class="info-value">{{score.gradeRank}}</text>
+      </view>
+    </view>
+    
+    <view class="comment-section" wx:if="{{score.comment}}">
+      <text class="comment-title">教师评语</text>
+      <text class="comment-content">{{score.comment}}</text>
+    </view>
+  </view>
+</view>

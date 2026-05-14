@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout ('菜品列表', ~{::main})}">
+<main>
+    <div class="container mt-4">
+        <h2 class="mb-4">菜品列表</h2>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="searchInput" placeholder="搜索菜品名称...">
+                    <button class="btn btn-primary" onclick="searchDishes()">
+                        <i class="bi bi-search"></i> 搜索
+                    </button>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <select class="form-select" id="categoryFilter" onchange="filterByCategory()">
+                    <option value="">所有分类</option>
+                    <option value="早餐">早餐</option>
+                    <option value="午餐">午餐</option>
+                    <option value="晚餐">晚餐</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row" id="dishesContainer">
+        </div>
+
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center" id="pagination">
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        let currentPage = 1;
+        let currentCategory = '';
+        let currentSearch = '';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDishes();
+        });
+
+        function loadDishes() {
+            const url = `/api/dishes?current=${currentPage}&size=12&name=${currentSearch}&category=${currentCategory}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        renderDishes(data.data.records);
+                        renderPagination(data.data);
+                    }
+                });
+        }
+
+        function renderDishes(dishes) {
+            const container = document.getElementById('dishesContainer');
+            if (dishes.length === 0) {
+                container.innerHTML = '<div class="col-12 text-center"><p class="text-muted">暂无菜品</p></div>';
+                return;
+            }
+            
+            container.innerHTML = dishes.map(dish => `
+                <div class="col-md-3 mb-4">
+                    <div class="card dish-card h-100">
+                        <img src="${dish.image || '/images/0bcf54afa59f479785fece74b89767ae.jpeg'}" 
+                             class="card-img-top" alt="${dish.name}" style="height: 180px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">${dish.name}</h5>
+                            <p class="card-text text-muted small">${dish.category}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-danger fw-bold">¥${dish.price}</span>
+                                <span class="star-rating">
+                                    <i class="bi bi-star-fill"></i> ${dish.averageRating.toFixed(1)}
+                                </span>
+                            </div>
+                            <p class="text-muted small mt-2">${dish.reviewCount} 条评价</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/dish/${dish.id}" class="btn btn-primary btn-sm w-100">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderPagination(pageData) {
+            const pagination = document.getElementById('pagination');
+            let html = '';
+            
+            if (pageData.current > 1) {
+                html += `<li class="page-item"><a class="page-link" href="#" onclick="goToPage(${pageData.current - 1})">上一页</a></li>`;
+            }
+            
+            for (let i = 1; i <= pageData.pages; i++) {
+                html += `<li class="page-item ${i === pageData.current ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+                </li>`;
+            }
+            
+            if (pageData.current < pageData.pages) {
+                html += `<li class="page-item"><a class="page-link" href="#" onclick="goToPage(${pageData.current + 1})">下一页</a></li>`;
+            }
+            
+            pagination.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            currentPage = page;
+            loadDishes();
+        }
+
+        function searchDishes() {
+            currentSearch = document.getElementById('searchInput').value;
+            currentPage = 1;
+            loadDishes();
+        }
+
+        function filterByCategory() {
+            currentCategory = document.getElementById('categoryFilter').value;
+            currentPage = 1;
+            loadDishes();
+        }
+    </script>
+</main>
+</html>

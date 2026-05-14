@@ -1,0 +1,61 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.form-item {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.form-item label {
+  font-size: 16px;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.form-item input {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.login-btn, .register-btn {
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background: linear-gradient(135deg, #5ab9c1, #6ec0b1);
+  color: white;
+  border-radius: 5px;
+  margin-top: 10px;
+  box-shadow: 0 3px 10px rgba(90, 185, 193, 0.3);
+  transition: all 0.3s ease;
+}
+
+.login-btn:active, .register-btn:active {
+  background: linear-gradient(135deg, #4da8af, #5faaa0);
+  transform: translateY(1px);
+}
+
+.register-btn {
+  background: linear-gradient(135deg, #6ec0b1, #7ecfbe);
+}
+.forgot-btn {
+  width: 100%;
+  height: 80rpx;
+  background: linear-gradient(135deg, #f3b2b2, #ee5c87);
+  color: #666;
+  font-size: 33rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  margin-top: 20rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} 

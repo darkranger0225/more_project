@@ -1,0 +1,88 @@
+.container {
+  padding: 20rpx;
+}
+
+.add-btn-container {
+  margin-bottom: 20rpx;
+}
+
+.btn-add {
+  background: #1890ff;
+  color: #fff;
+  border-radius: 40rpx;
+}
+
+.btn-add::after {
+  border: none;
+}
+
+.repair-list {
+  max-height: 1000rpx;
+  overflow-y: auto;
+}
+
+.repair-item {
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.repair-item:last-child {
+  border-bottom: none;
+}
+
+.repair-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.repair-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.repair-status {
+  font-size: 24rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+  margin-left: 20rpx;
+}
+
+.status-0 {
+  color: #ff4d4f;
+  background: #fff1f0;
+}
+
+.status-1 {
+  color: #faad14;
+  background: #fffbe6;
+}
+
+.status-2 {
+  color: #52c41a;
+  background: #f6ffed;
+}
+
+.repair-content {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.repair-time {
+  display: block;
+  font-size: 24rpx;
+  color: #999;
+}

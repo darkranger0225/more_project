@@ -1,0 +1,64 @@
+<view class="container">
+  <view class="form-card">
+    <!-- 选择孩子 -->
+    <view class="form-item">
+      <text class="label">选择孩子 <text class="required">*</text></text>
+      <picker bindchange="onStudentChange" value="{{studentIndex}}" range="{{studentList}}" range-key="studentName">
+        <view class="picker {{selectedStudent ? '' : 'placeholder'}}">
+          {{selectedStudent ? selectedStudent.studentName : '请选择孩子'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 请假类型 -->
+    <view class="form-item">
+      <text class="label">请假类型 <text class="required">*</text></text>
+      <picker bindchange="onLeaveTypeChange" value="{{leaveTypeIndex}}" range="{{leaveTypeArray}}">
+        <view class="picker {{leaveType ? '' : 'placeholder'}}">
+          {{leaveType || '请选择请假类型'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 开始日期 -->
+    <view class="form-item">
+      <text class="label">开始日期 <text class="required">*</text></text>
+      <picker mode="date" bindchange="onStartDateChange" value="{{startDate}}">
+        <view class="picker {{startDate ? '' : 'placeholder'}}">
+          {{startDate || '请选择开始日期'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 结束日期 -->
+    <view class="form-item">
+      <text class="label">结束日期 <text class="required">*</text></text>
+      <picker mode="date" bindchange="onEndDateChange" value="{{endDate}}">
+        <view class="picker {{endDate ? '' : 'placeholder'}}">
+          {{endDate || '请选择结束日期'}}
+        </view>
+      </picker>
+    </view>
+
+    <!-- 请假天数 -->
+    <view class="form-item">
+      <text class="label">请假天数</text>
+      <text class="days-text">{{days}} 天</text>
+    </view>
+
+    <!-- 请假原因 -->
+    <view class="form-item">
+      <text class="label">请假原因 <text class="required">*</text></text>
+      <textarea 
+        placeholder="请输入请假原因..." 
+        value="{{reason}}"
+        bindinput="onReasonInput"
+        class="textarea"
+        maxlength="500"
+      />
+      <text class="word-count">{{reason.length}}/500</text>
+    </view>
+  </view>
+
+  <button class="btn btn-primary submit-btn" bindtap="submitLeave">提交申请</button>
+</view>

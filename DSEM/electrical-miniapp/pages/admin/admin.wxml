@@ -1,0 +1,46 @@
+<view class="container">
+  <view class="admin-header">
+    <text class="admin-title">管理后台</text>
+    <text class="admin-role">{{userInfo.role === 2 ? '系统管理员' : '公寓管理员'}}</text>
+  </view>
+
+  <view class="card">
+    <view class="card-title">数据统计</view>
+    <view class="stats-grid">
+      <view class="stat-item">
+        <text class="stat-value">{{statistics.studentCount || 0}}</text>
+        <text class="stat-label">学生总数</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{statistics.pendingRepairCount || 0}}</text>
+        <text class="stat-label">待处理报修</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-value">{{statistics.floorCount || 0}}</text>
+        <text class="stat-label">楼层数量</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">功能管理</view>
+    <view class="menu-grid">
+      <view class="menu-item" bindtap="goToStudentManage">
+        <text class="menu-icon">👥</text>
+        <text class="menu-text">学生管理</text>
+      </view>
+      <view class="menu-item" bindtap="goToElectricityManage">
+        <text class="menu-icon">⚡</text>
+        <text class="menu-text">用电管理</text>
+      </view>
+      <view class="menu-item" bindtap="goToRepairManage">
+        <text class="menu-icon">🔧</text>
+        <text class="menu-text">报修处理</text>
+      </view>
+      <view class="menu-item" bindtap="goToAnnouncementManage">
+        <text class="menu-icon">📢</text>
+        <text class="menu-text">公告管理</text>
+      </view>
+    </view>
+  </view>
+</view>

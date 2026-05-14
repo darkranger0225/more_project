@@ -1,0 +1,23 @@
+<view class="container">
+  <view class="form-container">
+    <view class="form-item">
+      <text class="form-label">报修标题</text>
+      <input class="form-input" type="text" placeholder="请输入报修标题" bindinput="onTitleInput" value="{{title}}" />
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">报修内容</text>
+      <textarea class="form-textarea" placeholder="请详细描述报修内容" bindinput="onContentInput" value="{{content}}"></textarea>
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">上传图片</text>
+      <view class="image-upload" bindtap="chooseImage">
+        <image wx:if="{{image}}" src="{{image}}" mode="aspectFill"></image>
+        <text wx:else class="upload-text">+ 点击上传图片</text>
+      </view>
+    </view>
+    
+    <button class="btn-submit" bindtap="submitRepair">提交报修</button>
+  </view>
+</view>

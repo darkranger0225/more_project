@@ -1,0 +1,110 @@
+/* pages/Preferences/Preferences.scss */
+.container {
+  padding: 40rpx;
+  background-color: #f9f9f9;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+  display: flex;
+  align-items: center;
+}
+
+.form-item label {
+  width: 130rpx;
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+  white-space: nowrap
+}
+
+.form-input,
+.disabled-input,
+.picker {
+  flex: 1;
+  padding: 15rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  color: #333;
+  background-color: #fff;
+}
+
+.disabled-input {
+  background-color: #f5f5f5;
+  color: #999;
+}
+
+.date-range-picker {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.date-range-picker .picker {
+  flex: 1;
+  margin: 0 10rpx;
+  text-align: center;
+}
+
+.checkbox-group {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10rpx;
+}
+
+.checkbox-label {
+  margin-right: 20rpx;
+  margin-bottom: 10rpx;
+  font-size: 28rpx;
+  color: #555;
+}
+
+.checkbox-label checkbox {
+  margin-right: 10rpx;
+}
+
+.submit-btn {
+  background-color: #14e252;
+  color: #fff;
+  padding: 20rpx 40rpx;
+  border-radius: 8rpx;
+  font-size: 34rpx;
+  text-align: center;
+  margin-top: 40rpx;
+  transition: background-color 0.3s ease;
+}
+
+/* 新增针对复选框的优化 */
+.checkbox-section {
+  flex-direction: column;  /* 纵向排列 */
+  align-items: flex-start; /* 标签左对齐 */
+  margin-bottom: 30rpx;
+}
+
+.checkbox-group {
+  width: 100%;  /* 占满父容器宽度 */
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;   /* 使用 gap 控制间距 */
+  margin-top: 20rpx;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #555;
+  white-space: nowrap;  /* 防止文字换行 */
+  padding: 10rpx 20rpx;
+  background-color: #f5f5f5;
+  border-radius: 8rpx;
+}
+
+.checkbox-label checkbox {
+  margin-right: 10rpx;
+}
+
+.submit-btn:hover {
+  background-color: #12c748;
+}

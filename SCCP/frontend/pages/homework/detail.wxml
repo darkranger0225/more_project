@@ -1,0 +1,85 @@
+<view class="container">
+  <view class="homework-card">
+    <view class="homework-header">
+      <text class="subject-tag">{{homework.subject}}</text>
+      <text class="homework-title">{{homework.title}}</text>
+    </view>
+
+    <view class="homework-meta">
+      <view class="meta-item">
+        <text class="meta-label">班级:</text>
+        <text class="meta-value">{{homework.className}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">教师:</text>
+        <text class="meta-value">{{homework.teacherName}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">截止时间:</text>
+        <text class="meta-value {{isExpired ? 'expired' : ''}}">{{homework.deadline}}</text>
+      </view>
+      <view class="meta-item">
+        <text class="meta-label">状态:</text>
+        <text class="status-text status-{{homework.status}}">
+          {{homework.status === 1 ? '进行中' : '已截止'}}
+        </text>
+      </view>
+    </view>
+
+    <view class="content-section">
+      <text class="section-title">作业内容</text>
+      <text class="homework-content">{{homework.content}}</text>
+    </view>
+
+    <view class="attachment-section" wx:if="{{homework.attachmentUrl}}">
+      <text class="section-title">附件</text>
+      <view class="attachment-item" bindtap="downloadAttachment">
+        <text class="attachment-icon">📎</text>
+        <text class="attachment-name">点击下载附件</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 提交详情：家长和教师都能看到 -->
+  <view class="submit-section" wx:if="{{mySubmit}}">
+    <text class="section-title">{{role === 'PARENT' ? '我的提交' : '学生提交'}}</text>
+    <view class="submit-card">
+      <view class="submit-info">
+        <text class="submit-label">提交时间:</text>
+        <text class="submit-value">{{mySubmit.submitTime}}</text>
+      </view>
+      <view class="submit-info" wx:if="{{mySubmit.content}}">
+        <text class="submit-label">作业说明:</text>
+        <text class="submit-value">{{mySubmit.content}}</text>
+      </view>
+      <view class="submit-images" wx:if="{{mySubmit.imageList && mySubmit.imageList.length > 0}}">
+        <text class="submit-label">提交图片:</text>
+        <view class="image-list">
+          <image wx:for="{{mySubmit.imageList}}" wx:key="index" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-src="{{item}}"></image>
+        </view>
+      </view>
+      <view class="submit-info" wx:if="{{mySubmit.score !== null}}">
+        <text class="submit-label">得分:</text>
+        <text class="submit-score">{{mySubmit.score}}分</text>
+      </view>
+      <view class="submit-info" wx:if="{{mySubmit.comment}}">
+        <text class="submit-label">教师评语:</text>
+        <text class="submit-value">{{mySubmit.comment}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 家长端：提交作业按钮 -->
+  <view class="action-section" wx:if="{{role === 'PARENT' && homework.status === 1}}">
+    <button class="btn btn-primary submit-btn" bindtap="goToSubmit">
+      {{mySubmit ? '重新提交' : '提交作业'}}
+    </button>
+  </view>
+
+  <!-- 教师端：查看提交列表 -->
+  <view class="action-section" wx:if="{{role === 'TEACHER'}}">
+    <button class="btn btn-primary submit-btn" bindtap="viewSubmissions">
+      查看提交情况 ({{homework.submitCount || 0}}/{{homework.totalCount || 0}})
+    </button>
+  </view>
+</view>

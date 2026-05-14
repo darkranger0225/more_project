@@ -1,0 +1,58 @@
+<view class="container">
+  <view class="notice-card" wx:if="{{notice}}">
+    <!-- 标题 -->
+    <view class="notice-header">
+      <text class="priority-tag" wx:if="{{notice.priority === 1}}">重要</text>
+      <text class="notice-title">{{notice.title}}</text>
+    </view>
+
+    <!-- 发布信息 -->
+    <view class="notice-meta">
+      <text class="publisher">发布人：{{notice.publisherName}}</text>
+      <text class="publish-time">{{notice.publishTime || notice.createTime}}</text>
+    </view>
+
+    <!-- 目标对象 -->
+    <view class="target-info">
+      <text class="target-label">发送对象：</text>
+      <text class="target-type">{{notice.targetTypeName}}</text>
+      <text class="target-names" wx:if="{{notice.targetNames}}">{{notice.targetNames}}</text>
+    </view>
+
+    <!-- 内容 -->
+    <view class="notice-content">
+      <text class="content-text">{{notice.content}}</text>
+    </view>
+
+    <!-- 阅读统计 -->
+    <view class="read-info" bindtap="toggleReadList">
+      <text class="read-count">已读：{{notice.readCount || 0}}人</text>
+      <text class="toggle-icon">{{showReadList ? '▼' : '▶'}}</text>
+    </view>
+
+    <!-- 已读人员列表 -->
+    <view class="read-list" wx:if="{{showReadList}}">
+      <view class="read-list-header">
+        <text>已读人员列表</text>
+      </view>
+      <view class="read-item" wx:for="{{readList}}" wx:key="id">
+        <text class="read-user">{{item.user_name || item.userName}}</text>
+        <text class="read-role">({{item.user_role || item.userRole}})</text>
+        <text class="read-time">{{item.readTime}}</text>
+      </view>
+      <view class="read-empty" wx:if="{{readList.length === 0}}">
+        <text>暂无已读记录</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 加载中 -->
+  <view class="loading" wx:else>
+    <text>加载中...</text>
+  </view>
+
+  <!-- 底部按钮 -->
+  <view class="btn-group" wx:if="{{notice && (role === 'ADMIN' || notice.publisherId === userId)}}">
+    <button class="btn btn-danger" bindtap="deleteNotice">删除通知</button>
+  </view>
+</view>

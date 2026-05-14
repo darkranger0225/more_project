@@ -1,0 +1,30 @@
+<view class="container">
+  <view class="form-card">
+    <view class="form-item">
+      <text class="form-label">公告标题</text>
+      <input class="form-input" placeholder="请输入公告标题" value="{{title}}" bindinput="onTitleInput" />
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">公告内容</text>
+      <textarea class="form-textarea" placeholder="请输入公告内容" value="{{content}}" bindinput="onContentInput" maxlength="500"></textarea>
+      <text class="word-count">{{content.length || 0}}/500</text>
+    </view>
+    
+    <view class="form-item">
+      <text class="form-label">配图（可选）</text>
+      <view class="image-upload">
+        <view class="upload-btn" bindtap="chooseImage" wx:if="{{!image}}">
+          <text class="upload-icon">+</text>
+          <text class="upload-text">添加图片</text>
+        </view>
+        <view class="image-preview" wx:if="{{image}}">
+          <image class="preview-img" src="{{image}}" mode="aspectFill"></image>
+          <view class="delete-btn" bindtap="deleteImage">×</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <button class="btn-submit" bindtap="submit">{{isEdit ? '保存修改' : '发布公告'}}</button>
+</view>

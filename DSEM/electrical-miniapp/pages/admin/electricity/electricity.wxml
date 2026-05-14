@@ -1,0 +1,93 @@
+<view class="container">
+  <!-- 电价设置 -->
+  <view class="card">
+    <view class="card-title">电价设置</view>
+    <view class="price-setting">
+      <text class="label">当前电价：</text>
+      <input type="digit" class="price-input" value="{{electricityPrice}}" bindinput="onPriceInput" />
+      <text class="unit">元/度</text>
+      <button class="btn-primary btn-small" bindtap="updatePrice">修改</button>
+    </view>
+  </view>
+
+  <!-- 搜索筛选 -->
+  <view class="card">
+    <view class="card-title">宿舍查询</view>
+    <view class="search-section">
+      <view class="search-item">
+        <text class="label">楼号：</text>
+        <picker mode="selector" range="{{buildingList}}" range-key="buildingName" bindchange="onBuildingChange">
+          <view class="picker">
+            {{selectedBuilding ? selectedBuilding.buildingName : '请选择楼号'}}
+          </view>
+        </picker>
+      </view>
+      <view class="search-item">
+        <text class="label">寝室号：</text>
+        <input type="text" class="search-input" placeholder="请输入寝室号" value="{{dormitoryKeyword}}" bindinput="onDormitoryInput" />
+      </view>
+      <button class="btn-primary" bindtap="searchDormitories">查询</button>
+    </view>
+  </view>
+
+  <!-- 用电信息列表 -->
+  <view class="card">
+    <view class="card-title">用电信息</view>
+    <view class="dormitory-list">
+      <block wx:if="{{dormitoryList.length > 0}}">
+        <view class="dormitory-item" wx:for="{{dormitoryList}}" wx:key="id">
+          <view class="dormitory-header">
+            <text class="dormitory-name">{{item.buildingName}} - {{item.dormitoryNumber}}</text>
+            <view class="status {{item.status === 0 ? 'status-unpaid' : 'status-paid'}}">
+              <text>{{item.status === 0 ? '欠费' : '正常'}}</text>
+            </view>
+          </view>
+          <view class="dormitory-info">
+            <view class="info-row">
+              <text class="info-label">累计用电：</text>
+              <text class="info-value">{{item.totalUsage}} 度</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">累计费用：</text>
+              <text class="info-value">¥{{item.totalCost}}</text>
+            </view>
+            <view class="info-row">
+              <text class="info-label">欠费金额：</text>
+              <text class="info-value {{item.unpaidAmount > 0 ? 'text-danger' : ''}}">¥{{item.unpaidAmount}}</text>
+            </view>
+          </view>
+          <!-- 缴费信息 -->
+          <view class="payment-info" wx:if="{{item.paymentRecords && item.paymentRecords.length > 0}}">
+            <view class="payment-title">缴费记录</view>
+            <view class="payment-list">
+              <view class="payment-item" wx:for="{{item.paymentRecords}}" wx:for-item="payment" wx:key="id">
+                <view class="payment-row">
+                  <text class="payment-label">缴费宿舍：</text>
+                  <text class="payment-value">{{payment.dormitoryInfo || '未知'}}</text>
+                </view>
+                <view class="payment-row">
+                  <text class="payment-label">缴费时间：</text>
+                  <text class="payment-value">{{payment.paymentTime}}</text>
+                </view>
+                <view class="payment-row">
+                  <text class="payment-label">缴费金额：</text>
+                  <text class="payment-value text-success">¥{{payment.amount}}</text>
+                </view>
+                <view class="payment-row">
+                  <text class="payment-label">缴费方式：</text>
+                  <text class="payment-value">{{payment.paymentMethod}}</text>
+                </view>
+              </view>
+            </view>
+          </view>
+          <view class="no-payment" wx:else>
+            <text>暂无缴费记录</text>
+          </view>
+        </view>
+      </block>
+      <view class="empty-tip" wx:else>
+        <text>暂无数据，请选择楼号进行查询</text>
+      </view>
+    </view>
+  </view>
+</view>

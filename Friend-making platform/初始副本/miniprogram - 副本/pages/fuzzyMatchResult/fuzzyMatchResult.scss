@@ -1,0 +1,96 @@
+/* fuzzyMatchResult.scss */
+.container {
+  padding: 30rpx;
+  /* 移除 min-height: 100vh */
+  background-color: #f8f9fa;
+}
+
+/* 卡片整体样式 */
+.card {
+  margin: 48rpx auto;
+  padding: 48rpx;
+  border-radius: 32rpx;
+  box-shadow: 0 16rpx 62rpx rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  max-width: 620rpx;
+  width: 100%;
+}
+
+/* 卡片头部样式 */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32rpx;
+}
+
+.card-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.card-score {
+  font-size: 32rpx;
+  color: #6c757d;
+}
+
+/* 卡片主体样式 */
+.card-body {
+  font-size: 32rpx;
+  line-height: 1.5;
+}
+
+.card-row {
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: center;
+}
+
+.card-label {
+  width: 160rpx;
+  font-weight: bold;
+  color: #495057;
+}
+
+.card-value {
+  flex: 1;
+  color: #212529;
+}
+
+/* 空状态样式 */
+.empty-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  text-align: center;
+  /* 移除 height: 70vh */
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 40rpx;
+}
+
+.empty-title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 24rpx;
+}
+
+.empty-desc {
+  font-size: 32rpx;
+  color: #666;
+  margin-bottom: 16rpx;
+  line-height: 1.5;
+}
+
+.empty-tips {
+  font-size: 28rpx;
+  color: #999;
+  line-height: 1.5;
+  max-width: 90%;
+}

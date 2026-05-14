@@ -1,0 +1,192 @@
+.container {
+  min-height: 100vh;
+  background: #f5f5f5;
+  padding: 30rpx;
+  padding-bottom: 160rpx;
+}
+
+.notice-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 40rpx;
+  margin-bottom: 40rpx;
+}
+
+.notice-header {
+  margin-bottom: 30rpx;
+}
+
+.priority-tag {
+  display: inline-block;
+  background: #ff5252;
+  color: #fff;
+  font-size: 24rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  margin-right: 16rpx;
+  margin-bottom: 16rpx;
+}
+
+.notice-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #333;
+  line-height: 1.4;
+}
+
+.notice-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+  margin-bottom: 30rpx;
+}
+
+.publisher {
+  font-size: 28rpx;
+  color: #666;
+}
+
+.publish-time {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.target-info {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 8rpx;
+  margin-bottom: 30rpx;
+}
+
+.target-label {
+  font-size: 26rpx;
+  color: #666;
+  margin-right: 12rpx;
+}
+
+.target-type {
+  font-size: 26rpx;
+  color: #1976d2;
+  background: #e3f2fd;
+  padding: 6rpx 16rpx;
+  border-radius: 8rpx;
+  margin-right: 12rpx;
+}
+
+.target-names {
+  font-size: 26rpx;
+  color: #666;
+  flex: 1;
+}
+
+.notice-content {
+  margin-bottom: 40rpx;
+}
+
+.content-text {
+  font-size: 30rpx;
+  color: #333;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.read-info {
+  padding-top: 30rpx;
+  border-top: 1rpx solid #f0f0f0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.read-count {
+  font-size: 26rpx;
+  color: #1976d2;
+}
+
+.toggle-icon {
+  font-size: 24rpx;
+  color: #999;
+}
+
+/* 已读人员列表 */
+.read-list {
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background: #f8f9fa;
+  border-radius: 8rpx;
+}
+
+.read-list-header {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #e0e0e0;
+}
+
+.read-item {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.read-item:last-child {
+  border-bottom: none;
+}
+
+.read-user {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+
+.read-role {
+  font-size: 24rpx;
+  color: #666;
+  margin-right: 20rpx;
+}
+
+.read-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.read-empty {
+  text-align: center;
+  padding: 40rpx 0;
+  font-size: 26rpx;
+  color: #999;
+}
+
+.loading {
+  text-align: center;
+  padding: 100rpx 0;
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 底部按钮 */
+.btn-group {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20rpx 30rpx;
+  background: #fff;
+  border-top: 1rpx solid #e0e0e0;
+}
+
+.btn-danger {
+  background: #f44336;
+  color: #fff;
+  width: 100%;
+}

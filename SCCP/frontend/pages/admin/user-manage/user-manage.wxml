@@ -1,0 +1,79 @@
+<view class="container">
+  <!-- 顶部操作栏 -->
+  <view class="header-section">
+    <view class="filter-wrapper">
+      <text class="filter-label">角色筛选：</text>
+      <picker bindchange="onRoleChange" value="{{roleIndex}}" range="{{roleArray}}">
+        <view class="filter-picker">
+          <text class="filter-text">{{roleArray[roleIndex]}}</text>
+          <text class="filter-arrow">▼</text>
+        </view>
+      </picker>
+    </view>
+    <button class="btn btn-primary add-btn" bindtap="addUser">
+      <text class="add-icon">+</text>
+      <text class="add-text">添加用户</text>
+    </button>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="stats-section" wx:if="{{userList.length > 0}}">
+    <view class="stat-item">
+      <text class="stat-value">{{userList.length}}</text>
+      <text class="stat-label">用户总数</text>
+    </view>
+  </view>
+
+  <!-- 用户列表 -->
+  <view class="user-list">
+    <block wx:if="{{userList.length > 0}}">
+      <view class="user-card" wx:for="{{userList}}" wx:key="id">
+        <!-- 用户头像和基本信息 -->
+        <view class="user-left">
+          <image class="user-avatar" src="/images/default-avatar.png" mode="aspectFill"></image>
+          <view class="user-content">
+            <view class="user-top">
+              <text class="user-name">{{item.realName}}</text>
+              <text class="role-tag role-{{item.role}}">{{item.roleText}}</text>
+            </view>
+            <view class="user-info-row">
+              <view class="info-item">
+                <text class="info-icon">👤</text>
+                <text class="info-text">{{item.username}}</text>
+              </view>
+              <view class="info-item" wx:if="{{item.phone}}">
+                <text class="info-icon">📱</text>
+                <text class="info-text">{{item.phone}}</text>
+              </view>
+            </view>
+          </view>
+        </view>
+        
+        <!-- 状态和操作 -->
+        <view class="user-right">
+          <view class="status-badge status-{{item.status}}">
+            {{item.status === 1 ? '启用' : '禁用'}}
+          </view>
+          <view class="action-buttons">
+            <view class="action-btn edit" bindtap="editUser" data-id="{{item.id}}">
+              <text class="action-icon">✏️</text>
+            </view>
+            <view class="action-btn toggle" bindtap="toggleStatus" data-id="{{item.id}}" data-status="{{item.status}}">
+              <text class="action-icon">{{item.status === 1 ? '⏸️' : '▶️'}}</text>
+            </view>
+            <view class="action-btn delete" bindtap="deleteUser" data-id="{{item.id}}">
+              <text class="action-icon">🗑️</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-icon">👥</text>
+        <text class="empty-text">暂无用户</text>
+        <text class="empty-tip">点击上方按钮添加第一个用户</text>
+      </view>
+    </block>
+  </view>
+</view>

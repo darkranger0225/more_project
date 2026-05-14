@@ -1,0 +1,28 @@
+<view class="container">
+  <view class="card">
+    <view class="detail-header">
+      <text class="detail-title">{{repairDetail.title}}</text>
+      <text class="detail-status status-{{repairDetail.status}}">{{statusText[repairDetail.status]}}</text>
+    </view>
+    
+    <view class="detail-content">
+      <text class="content-text">{{repairDetail.content}}</text>
+    </view>
+    
+    <image wx:if="{{repairDetail.image}}" class="detail-image" src="{{repairDetail.image}}" mode="aspectFill"></image>
+    
+    <view class="detail-time">
+      <text>提交时间：{{repairDetail.createTime}}</text>
+    </view>
+  </view>
+  
+  <view class="card" wx:if="{{repairDetail.status !== 0}}">
+    <view class="card-title">处理结果</view>
+    <view class="reply-content">
+      <text class="reply-text">{{repairDetail.reply || '暂无回复'}}</text>
+    </view>
+    <view class="handler-info" wx:if="{{repairDetail.handleTime}}">
+      <text class="handler-time">处理时间：{{repairDetail.handleTime}}</text>
+    </view>
+  </view>
+</view>

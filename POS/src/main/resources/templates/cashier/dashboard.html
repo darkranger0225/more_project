@@ -1,0 +1,110 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>收银台首页 - 餐饮收银系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/cashier/dashboard}" class="active"><i class="bi bi-speedometer2"></i> 收银台首页</a></li>
+            <li><a th:href="@{/cashier/tables}"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/cashier/order}"><i class="bi bi-cart-plus"></i> 点餐下单</a></li>
+            <li><a th:href="@{/cashier/orders}"><i class="bi bi-receipt"></i> 订单查询</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-speedometer2"></i> 收银台首页</h4>
+            <span sec:authorize="isAuthenticated()"><i class="bi bi-person-circle"></i> <span sec:authentication="name"></span></span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px;">
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-grid-3x3-gap" style="color: #667eea;"></i></div>
+                <div class="number" th:text="${freeTables}">0</div>
+                <div class="label">空闲桌台</div>
+            </div>
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-people-fill" style="color: #e74c3c;"></i></div>
+                <div class="number" th:text="${occupiedTables}">0</div>
+                <div class="label">占用桌台</div>
+            </div>
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-currency-yen" style="color: #27ae60;"></i></div>
+                <div class="number" th:text="${#numbers.formatDecimal(todayStats.totalAmount, 0, 2)}">0.00</div>
+                <div class="label">今日营业额</div>
+            </div>
+            <div class="stats-card">
+                <div class="icon"><i class="bi bi-receipt" style="color: #f39c12;"></i></div>
+                <div class="number" th:text="${todayStats.totalOrders}">0</div>
+                <div class="label">今日订单数</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-clock-history"></i> 待处理订单
+            </div>
+            <div class="card-body">
+                <table class="table" th:if="${not #lists.isEmpty(pendingOrders)}">
+                    <thead>
+                        <tr>
+                            <th>订单号</th>
+                            <th>桌台</th>
+                            <th>金额</th>
+                            <th>下单时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="order : ${pendingOrders}">
+                            <td th:text="${order.orderNo}"></td>
+                            <td th:text="${order.table.name} ?: ${order.table.tableNo}"></td>
+                            <td style="color: #e74c3c; font-weight: bold;" th:text="${#numbers.formatDecimal(order.totalAmount, 0, 2)}"></td>
+                            <td th:text="${#temporals.format(order.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+                            <td>
+                                <a th:href="@{/cashier/order/detail/{id}(id=${order.id})}" class="btn btn-primary btn-sm">查看</a>
+                                <a th:href="@{/cashier/checkout/{id}(id=${order.id})}" class="btn btn-success btn-sm">结账</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div th:if="${#lists.isEmpty(pendingOrders)}" style="text-align: center; padding: 40px; color: #666;">
+                    <i class="bi bi-inbox" style="font-size: 48px;"></i>
+                    <p>暂无待处理订单</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+            <a th:href="@{/cashier/order}" class="card" style="text-decoration: none; color: inherit;">
+                <div class="card-body" style="text-align: center; padding: 40px;">
+                    <i class="bi bi-cart-plus" style="font-size: 48px; color: #667eea;"></i>
+                    <h4 style="margin-top: 15px;">点餐下单</h4>
+                    <p style="color: #666;">选择桌台，浏览菜品，快速下单</p>
+                </div>
+            </a>
+            <a th:href="@{/cashier/tables}" class="card" style="text-decoration: none; color: inherit;">
+                <div class="card-body" style="text-align: center; padding: 40px;">
+                    <i class="bi bi-grid-3x3-gap" style="font-size: 48px; color: #27ae60;"></i>
+                    <h4 style="margin-top: 15px;">桌台管理</h4>
+                    <p style="color: #666;">查看桌台状态，管理桌台占用</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+</body>
+</html>

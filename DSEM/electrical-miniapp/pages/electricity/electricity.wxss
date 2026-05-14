@@ -1,0 +1,84 @@
+.container {
+  padding: 20rpx;
+}
+
+.balance-header {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.balance-title {
+  display: block;
+  font-size: 30rpx;
+  color: #666;
+  margin-bottom: 20rpx;
+}
+
+.balance-value {
+  display: block;
+  font-size: 72rpx;
+  font-weight: bold;
+  color: #ff4d4f;
+}
+
+.usage-list {
+  max-height: 800rpx;
+  overflow-y: auto;
+}
+
+.usage-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.usage-item:last-child {
+  border-bottom: none;
+}
+
+.usage-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.usage-time {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.usage-amount {
+  font-size: 26rpx;
+  color: #666;
+}
+
+.usage-price {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.price {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #ff4d4f;
+  margin-bottom: 8rpx;
+}
+
+.status {
+  font-size: 24rpx;
+  padding: 4rpx 16rpx;
+  border-radius: 8rpx;
+}
+
+.status.unpaid {
+  color: #ff4d4f;
+  background: #fff1f0;
+}
+
+.status.paid {
+  color: #52c41a;
+  background: #f6ffed;
+}

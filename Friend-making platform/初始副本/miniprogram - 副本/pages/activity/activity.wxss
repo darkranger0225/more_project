@@ -1,0 +1,288 @@
+/* 页面容器 */
+.activity-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f8f8;
+  position: relative;
+}
+
+/* 导航栏样式 */
+.navbar {
+  padding: 20rpx 30rpx;
+  background: linear-gradient(to right, #ff6b8b, #ff8e8e);
+  color: #fff;
+}
+
+.nav-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-title {
+  font-size: 36rpx;
+  font-weight: bold;
+}
+
+.nav-subtitle {
+  font-size: 20rpx;
+  letter-spacing: 2rpx;
+  margin-top: 4rpx;
+}
+
+/* 主要内容区域 */
+.main-content {
+  flex: 1;
+  padding: 0 30rpx 120rpx;
+}
+
+/* 活动海报 */
+.activity-banner {
+  margin-top: 30rpx;
+  height: 360rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 8rpx 20rpx rgba(0, 0, 0, 0.1);
+}
+
+.banner-image {
+  width: 100%;
+  height: 100%;
+}
+
+.banner-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 30rpx;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+  color: #fff;
+}
+
+.banner-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.banner-date {
+  font-size: 24rpx;
+  opacity: 0.9;
+}
+
+/* 活动详情 */
+.activity-details,
+.activity-intro,
+.activity-agenda,
+.activity-tips {
+  margin-top: 30rpx;
+  padding: 30rpx;
+  background: #fff;
+  border-radius: 16rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+
+.detail-header,
+.intro-header,
+.agenda-header,
+.tips-header {
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.detail-title,
+.intro-title,
+.agenda-title,
+.tips-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  position: relative;
+  padding-left: 20rpx;
+}
+
+.detail-title::before,
+.intro-title::before,
+.agenda-title::before,
+.tips-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6rpx;
+  width: 8rpx;
+  height: 30rpx;
+  background: #ff6b8b;
+  border-radius: 4rpx;
+}
+
+.detail-item {
+  display: flex;
+  padding: 20rpx 0;
+  border-bottom: 1px solid #f8f8f8;
+}
+
+.detail-item:last-child {
+  border-bottom: none;
+}
+
+.item-icon {
+  width: 60rpx;
+  height: 60rpx;
+  margin-right: 20rpx;
+}
+
+.item-icon image {
+  width: 50rpx;
+  height: 50rpx;
+}
+
+.item-content {
+  flex: 1;
+}
+
+.item-label {
+  font-size: 26rpx;
+  color: #999;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.item-text {
+  font-size: 28rpx;
+  color: #333;
+}
+
+/* 活动简介 */
+.intro-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* 活动流程 */
+.agenda-list {
+  padding: 10rpx 0;
+}
+
+.agenda-item {
+  display: flex;
+  margin-bottom: 30rpx;
+}
+
+.agenda-time {
+  width: 140rpx;
+  font-size: 26rpx;
+  color: #666;
+  text-align: right;
+  padding-right: 20rpx;
+  box-sizing: border-box;
+}
+
+.agenda-content {
+  flex: 1;
+  position: relative;
+  padding-left: 30rpx;
+}
+
+.agenda-dot {
+  position: absolute;
+  left: 0;
+  top: 10rpx;
+  width: 16rpx;
+  height: 16rpx;
+  background-color: #ff6b8b;
+  border-radius: 50%;
+}
+
+.agenda-line {
+  position: absolute;
+  left: 7rpx;
+  top: 30rpx;
+  width: 2rpx;
+  bottom: -30rpx;
+  background-color: #f0f0f0;
+}
+
+.agenda-text {
+  font-size: 28rpx;
+  color: #333;
+  padding-bottom: 6rpx;
+}
+
+/* 温馨提示 */
+.tips-list {
+  padding: 10rpx 0;
+}
+
+.tips-item {
+  display: flex;
+  margin-bottom: 10rpx;
+}
+
+.tips-dot {
+  margin-right: 10rpx;
+  color: #ff6b8b;
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+.tips-text {
+  flex: 1;
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* 底部操作区 */
+.footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  padding: 20rpx 30rpx;
+  background: #fff;
+  box-shadow: 0 -2rpx 10rpx rgba(0, 0, 0, 0.05);
+  z-index: 10;
+}
+
+.share-btn,
+.join-btn {
+  flex: 1;
+  height: 80rpx;
+  line-height: 80rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.share-btn {
+  margin-right: 20rpx;
+  background-color: #f8f8f8;
+  color: #666;
+}
+
+.share-btn image {
+  width: 32rpx;
+  height: 32rpx;
+  margin-right: 10rpx;
+}
+
+.join-btn {
+  background: linear-gradient(to right, #ff6b8b, #ff8e8e);
+  color: #fff;
+  box-shadow: 0 4rpx 10rpx rgba(255, 107, 139, 0.3);
+} 

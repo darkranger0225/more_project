@@ -1,0 +1,45 @@
+<view class="container">
+  <!-- 发布按钮 -->
+  <view class="header">
+    <button class="btn-primary" bindtap="goToAdd">发布公告</button>
+  </view>
+
+  <!-- 公告列表 -->
+  <view class="announcement-list">
+    <block wx:if="{{announcementList.length > 0}}">
+      <view class="announcement-item" wx:for="{{announcementList}}" wx:key="id">
+        <view class="announcement-header">
+          <text class="announcement-title">{{item.title}}</text>
+          <view class="status-badge {{item.status === 1 ? 'status-enabled' : 'status-disabled'}}">
+            <text>{{item.status === 1 ? '已发布' : '已下架'}}</text>
+          </view>
+        </view>
+        <view class="announcement-content">
+          <text>{{item.content}}</text>
+        </view>
+        <view class="image-list" wx:if="{{item.image}}">
+          <image class="announcement-image" src="{{item.image}}" mode="aspectFill" bindtap="previewImage" data-url="{{item.image}}"></image>
+        </view>
+        <view class="announcement-info">
+          <view class="info-row">
+            <text class="info-label">发布时间：</text>
+            <text class="info-value">{{item.createTime}}</text>
+          </view>
+          <view class="info-row" wx:if="{{item.publisherName}}">
+            <text class="info-label">发布人：</text>
+            <text class="info-value">{{item.publisherName}}</text>
+          </view>
+        </view>
+        <!-- 操作按钮 -->
+        <view class="action-buttons">
+          <button class="btn-edit" bindtap="goToEdit" data-id="{{item.id}}">编辑</button>
+          <button class="btn-delete" bindtap="deleteAnnouncement" data-id="{{item.id}}">删除</button>
+        </view>
+      </view>
+    </block>
+    <view class="empty-tip" wx:else>
+      <text>暂无公告</text>
+      <text class="sub-text">点击上方按钮发布公告</text>
+    </view>
+  </view>
+</view>

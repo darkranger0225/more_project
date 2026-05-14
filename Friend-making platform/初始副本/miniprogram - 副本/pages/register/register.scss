@@ -1,0 +1,104 @@
+/* 容器 */
+.container {
+  padding: 40rpx;
+  background-color: #f9f9f9;
+}
+
+/* 表单项 */
+.form-item {
+  margin-bottom: 30rpx;
+  display: flex;
+  align-items: center;
+}
+
+.form-item label {
+  width: 160rpx; /* 统一宽度，确保对齐 */
+  font-size: 32rpx;
+  color: #333;
+  font-weight: bold;
+  text-align: right; /* 标签右对齐 */
+  margin-right: 20rpx; /* 标签与输入框之间的间距 */
+  white-space: nowrap; /* 防止字段名换行 */
+  overflow: hidden; /* 超出部分隐藏 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+
+.form-input,
+.form-picker {
+  flex: 1;
+  padding: 15rpx;
+  border: 1rpx solid #ddd;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+  color: #333;
+  background-color: #fff;
+  min-width: 400rpx; /* 设置最小宽度，防止内容过短时宽度变化 */
+}
+
+.picker {
+  color: #666; /* 提示文字颜色 */
+  text-align: left; /* 内容左对齐 */
+  white-space: nowrap; /* 防止内容换行 */
+  overflow: hidden; /* 超出部分隐藏 */
+  text-overflow: ellipsis; /* 超出部分显示省略号 */
+}
+
+/* 错误提示容器 */
+.error-container {
+  margin-left: 1rpx; /* 与标签宽度对齐 */
+  margin-top: 5rpx; /* 与输入框的间距 */
+}
+
+/* 错误提示文本样式 */
+.error-message {
+  color: red; /* 错误提示颜色 */
+  font-size: 24rpx; /* 字体大小 */
+}
+
+/* 复选框区域 */
+.checkbox-section {
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 30rpx;
+}
+
+.checkbox-group {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20rpx;
+  margin-top: 20rpx;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  font-size: 28rpx;
+  color: #555;
+  white-space: nowrap;
+  padding: 10rpx 20rpx;
+  background-color: #f5f5f5;
+  border-radius: 8rpx;
+  box-shadow: 0 2rpx 4rpx rgba(0, 0, 0, 0.1); /* 增加阴影效果 */
+}
+
+.checkbox-label checkbox {
+  margin-right: 10rpx;
+}
+
+/* 提交按钮 */
+.submit-btn {
+  background-color: #14e252;
+  color: #fff;
+  padding: 20rpx 40rpx;
+  border-radius: 8rpx;
+  font-size: 34rpx;
+  text-align: center;
+  margin-top: 40rpx;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4rpx 8rpx rgba(0, 0, 0, 0.2); /* 增加阴影效果 */
+}
+
+.submit-btn:hover {
+  background-color: #12c748;
+}

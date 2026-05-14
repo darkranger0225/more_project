@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>会员管理 - 餐饮收银系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/cashier/dashboard}"><i class="bi bi-speedometer2"></i> 收银台首页</a></li>
+            <li><a th:href="@{/cashier/tables}"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/cashier/order}"><i class="bi bi-cart-plus"></i> 点餐下单</a></li>
+            <li><a th:href="@{/cashier/orders}"><i class="bi bi-receipt"></i> 订单查询</a></li>
+            <li><a th:href="@{/cashier/members}" class="active"><i class="bi bi-people"></i> 会员管理</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-people"></i> 会员管理</h4>
+            <a th:href="@{/cashier/members/add}" class="btn btn-primary"><i class="bi bi-plus"></i> 添加会员</a>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><i class="bi bi-list"></i> 会员列表</div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>姓名</th>
+                            <th>手机号</th>
+                            <th>积分</th>
+                            <th>状态</th>
+                            <th>注册时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="member : ${members}">
+                            <td th:text="${member.id}"></td>
+                            <td th:text="${member.name}"></td>
+                            <td th:text="${member.phone}"></td>
+                            <td th:text="${member.points}"></td>
+                            <td>
+                                <span th:class="'badge ' + ${member.status.name() == 'ENABLED' ? 'badge-success' : 'badge-warning'}"
+                                      th:text="${member.status.name() == 'ENABLED' ? '启用' : '禁用'}"></span>
+                            </td>
+                            <td th:text="${#temporals.format(member.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+                            <td>
+                                <a th:href="@{/cashier/members/edit/{id}(id=${member.id})}" class="btn btn-primary btn-sm">编辑</a>
+                                <button th:if="${member.status.name() == 'ENABLED'}" 
+                                        th:onclick="disableMember([[${member.id}]])" 
+                                        class="btn btn-warning btn-sm">禁用</button>
+                                <button th:if="${member.status.name() == 'DISABLED'}" 
+                                        th:onclick="enableMember([[${member.id}]])" 
+                                        class="btn btn-success btn-sm">启用</button>
+                                <button th:onclick="deleteMember([[${member.id}]])" class="btn btn-danger btn-sm">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        function enableMember(id) {
+            showConfirm('确定要启用该会员吗?', async () => {
+                const result = await apiPost('/api/members/' + id + '/enable', {});
+                if (result.code === 200) {
+                    showAlert('启用成功', 'success');
+                    location.reload();
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            });
+        }
+
+        function disableMember(id) {
+            showConfirm('确定要禁用该会员吗?', async () => {
+                const result = await apiPost('/api/members/' + id + '/disable', {});
+                if (result.code === 200) {
+                    showAlert('禁用成功', 'success');
+                    location.reload();
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            });
+        }
+
+        function deleteMember(id) {
+            showConfirm('确定要删除该会员吗?此操作不可恢复!', async () => {
+                const result = await apiDelete('/api/members/' + id);
+                if (result.code === 200) {
+                    showAlert('删除成功', 'success');
+                    location.reload();
+                } else {
+                    showAlert(result.message, 'error');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<view class="container">
+  <view class="class-list">
+    <block wx:if="{{classList.length > 0}}">
+      <view class="class-card" wx:for="{{classList}}" wx:key="id" bindtap="viewClassDetail" data-id="{{item.id}}">
+        <view class="class-header">
+          <text class="class-name">{{item.className}}</text>
+          <text class="grade-tag">{{item.grade}}</text>
+        </view>
+        <view class="class-info">
+          <text class="info-item" wx:if="{{item.headTeacherName}}">班主任: {{item.headTeacherName}}</text>
+          <text class="info-item" wx:if="{{item.description}}">{{item.description}}</text>
+        </view>
+        <view class="class-stats">
+          <text class="stats-item">学生: {{item.studentCount || 0}}人</text>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-icon">🏫</text>
+        <text class="empty-text">暂无班级</text>
+        <text class="empty-tip">请联系管理员分配班级</text>
+      </view>
+    </block>
+  </view>
+</view>

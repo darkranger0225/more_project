@@ -1,0 +1,83 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>桌台管理 - 餐饮收银系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/admin/dashboard}"><i class="bi bi-speedometer2"></i> 管理后台</a></li>
+            <li><a th:href="@{/admin/users}"><i class="bi bi-people"></i> 员工管理</a></li>
+            <li><a th:href="@{/admin/categories}"><i class="bi bi-tags"></i> 分类管理</a></li>
+            <li><a th:href="@{/admin/dishes}"><i class="bi bi-cup-hot"></i> 菜品管理</a></li>
+            <li><a th:href="@{/admin/tables}" class="active"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/admin/orders}"><i class="bi bi-receipt"></i> 订单管理</a></li>
+            <li><a th:href="@{/admin/statistics}"><i class="bi bi-graph-up"></i> 营业统计</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-grid-3x3-gap"></i> 桌台管理</h4>
+            <a th:href="@{/admin/tables/add}" class="btn btn-primary"><i class="bi bi-plus"></i> 添加桌台</a>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><i class="bi bi-list"></i> 桌台列表</div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>桌号</th>
+                            <th>名称</th>
+                            <th>容纳人数</th>
+                            <th>区域</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="table : ${tables}">
+                            <td th:text="${table.id}"></td>
+                            <td th:text="${table.tableNo}"></td>
+                            <td th:text="${table.name} ?: '-' "></td>
+                            <td th:text="${table.capacity}"></td>
+                            <td th:text="${table.area} ?: '-' "></td>
+                            <td>
+                                <span th:class="'badge ' + ${table.status.name() == 'FREE' ? 'badge-success' : 'badge-danger'}"
+                                      th:text="${table.status.name() == 'FREE' ? '空闲' : '占用'}"></span>
+                            </td>
+                            <td>
+                                <a th:href="@{/admin/tables/edit/{id}(id=${table.id})}" class="btn btn-primary btn-sm">编辑</a>
+                                <button th:onclick="deleteTable([[${table.id}]])" class="btn btn-danger btn-sm">删除</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        function deleteTable(id) {
+            confirmAction('确定要删除该桌台吗？', async () => {
+                const result = await apiDelete('/api/admin/tables/' + id);
+                if (result.code === 200) { showAlert('删除成功', 'success'); location.reload(); }
+                else { showAlert(result.message, 'error'); }
+            });
+        }
+    </script>
+</body>
+</html>

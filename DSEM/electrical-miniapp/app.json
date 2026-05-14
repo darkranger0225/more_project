@@ -1,0 +1,72 @@
+{
+  "pages": [
+    "pages/login/login",
+    "pages/login/forgot-password/forgot-password",
+    "pages/register/register",
+    "pages/index/index",
+    "pages/electricity/electricity",
+    "pages/electricity/detail/detail",
+    "pages/payment/payment",
+    "pages/payment/history/history",
+    "pages/account/recharge/recharge",
+    "pages/repair/repair",
+    "pages/repair/add/add",
+    "pages/repair/detail/detail",
+    "pages/announcement/detail/detail",
+    "pages/user/user",
+    "pages/user/info/info",
+    "pages/user/password/password",
+    "pages/admin/admin",
+    "pages/admin/student/student",
+    "pages/admin/student/edit/edit",
+    "pages/admin/electricity/electricity",
+    "pages/admin/repair/repair",
+    "pages/admin/announcement/announcement",
+    "pages/admin/announcement/edit/edit"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#1890ff",
+    "navigationBarTitleText": "电费管理系统",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#1890ff",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页",
+        "iconPath": "images/home.png",
+        "selectedIconPath": "images/home-active.png"
+      },
+      {
+        "pagePath": "pages/electricity/electricity",
+        "text": "用电",
+        "iconPath": "images/electricity.png",
+        "selectedIconPath": "images/electricity-active.png"
+      },
+      {
+        "pagePath": "pages/payment/payment",
+        "text": "缴费",
+        "iconPath": "images/payment.png",
+        "selectedIconPath": "images/payment-active.png"
+      },
+      {
+        "pagePath": "pages/repair/repair",
+        "text": "报修",
+        "iconPath": "images/repair.png",
+        "selectedIconPath": "images/repair-active.png"
+      },
+      {
+        "pagePath": "pages/user/user",
+        "text": "我的",
+        "iconPath": "images/user.png",
+        "selectedIconPath": "images/user-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

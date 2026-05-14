@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout ('窗口详情', ~{::main})}">
+<main>
+    <div class="container mt-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">首页</a></li>
+                <li class="breadcrumb-item"><a href="/windows">窗口</a></li>
+                <li class="breadcrumb-item active" th:text="${windowObj.name}">窗口名称</li>
+            </ol>
+        </nav>
+
+        <div class="card mb-4">
+            <img th:src="@{/images/image_834149526092132.png}" class="card-img-top" alt="窗口图片" style="height: 300px; object-fit: cover;">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2 th:text="${windowObj.name}">窗口名称</h2>
+                        <p class="text-muted">
+                            <span th:text="${windowObj.floor}">1</span>楼 - 
+                            <span th:text="${windowObj.windowNumber}">1</span>号窗口
+                        </p>
+                        <p th:text="${windowObj.description}">窗口描述</p>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge" th:classappend="${windowObj.status == 1} ? 'bg-success' : 'bg-secondary'"
+                                  th:text="${windowObj.status == 1} ? '营业中' : '休息中'">状态</span>
+                            <button class="btn btn-outline-secondary" id="favoriteBtn" onclick="toggleFavorite()">
+                                <i class="bi bi-heart"></i> 收藏
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="mb-4">窗口菜品</h3>
+        <div class="row" id="dishesContainer">
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        const windowId = [[${windowObj.id}]];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDishes();
+            checkFavoriteStatus();
+        });
+
+        function loadDishes() {
+            fetch(`/api/dishes/window/${windowId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        renderDishes(data.data);
+                    }
+                });
+        }
+
+        function renderDishes(dishes) {
+            const container = document.getElementById('dishesContainer');
+            if (!dishes || dishes.length === 0) {
+                container.innerHTML = '<div class="col-12 text-center"><p class="text-muted">该窗口暂无菜品</p></div>';
+                return;
+            }
+
+            container.innerHTML = dishes.map(dish => `
+                <div class="col-md-3 mb-4">
+                    <div class="card dish-card h-100">
+                        <img src="${dish.image || '/images/0bcf54afa59f479785fece74b89767ae.jpeg'}"
+                             class="card-img-top" alt="菜品图片" style="height: 180px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title">${dish.name || '未知菜品'}</h5>
+                            <p class="card-text text-muted small">${dish.category || ''}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="text-danger fw-bold">¥${dish.price || 0}</span>
+                                <span class="star-rating">
+                                    <i class="bi bi-star-fill"></i> ${dish.averageRating ? dish.averageRating.toFixed(1) : '0.0'}
+                                </span>
+                            </div>
+                            <p class="text-muted small mt-2">${dish.reviewCount || 0} 条评价</p>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/dish/${dish.id}" class="btn btn-primary btn-sm w-100">查看详情</a>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkFavoriteStatus() {
+            fetch(`/favorite/check?targetType=2&targetId=${windowId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        const isFavorite = data.data;
+                        updateFavoriteButton(isFavorite);
+                    }
+                });
+        }
+
+        function toggleFavorite() {
+            const favoriteBtn = document.getElementById('favoriteBtn');
+            const isFavorite = favoriteBtn.classList.contains('btn-danger');
+            
+            const url = isFavorite ? '/favorite/remove' : '/favorite/add';
+            
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `targetType=2&targetId=${windowId}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    showMessage(data.message);
+                    updateFavoriteButton(!isFavorite);
+                } else if (data.code === 401) {
+                    showMessage('请先登录', 'warning');
+                    setTimeout(() => {
+                        window.location.href = '/login';
+                    }, 1500);
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            });
+        }
+
+        function updateFavoriteButton(isFavorite) {
+            const favoriteBtn = document.getElementById('favoriteBtn');
+            
+            if (isFavorite) {
+                favoriteBtn.classList.remove('btn-outline-secondary');
+                favoriteBtn.classList.add('btn-danger');
+                favoriteBtn.innerHTML = '<i class="bi bi-heart-fill"></i> 已收藏';
+            } else {
+                favoriteBtn.classList.remove('btn-danger');
+                favoriteBtn.classList.add('btn-outline-secondary');
+                favoriteBtn.innerHTML = '<i class="bi bi-heart"></i> 收藏';
+            }
+        }
+
+        function showMessage(message, type = 'success') {
+            // 创建消息提示框
+            const toast = document.createElement('div');
+            toast.className = 'toast show position-fixed top-50 start-50 translate-middle z-50';
+            toast.role = 'alert';
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+            
+            const toastBody = document.createElement('div');
+            toastBody.className = 'toast-body';
+            toastBody.textContent = message;
+            
+            if (type === 'success') {
+                toastBody.classList.add('bg-success', 'text-white');
+            } else if (type === 'error') {
+                toastBody.classList.add('bg-danger', 'text-white');
+            } else if (type === 'warning') {
+                toastBody.classList.add('bg-warning', 'text-dark');
+            }
+            
+            toast.appendChild(toastBody);
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</main>
+</html>

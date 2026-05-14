@@ -1,0 +1,70 @@
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-info">
+      <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+      <view class="user-detail">
+        <text class="user-name">{{userInfo.realName || '用户'}}</text>
+        <text class="user-role">{{roleText}}</text>
+      </view>
+    </view>
+    <view class="quick-actions">
+      <view class="action-item" bindtap="goToHomework">
+        <text class="action-icon">📝</text>
+        <text class="action-text">作业</text>
+      </view>
+      <view class="action-item" bindtap="goToScore">
+        <text class="action-icon">📊</text>
+        <text class="action-text">成绩</text>
+      </view>
+      <view class="action-item" bindtap="goToLeave">
+        <text class="action-icon">📋</text>
+        <text class="action-text">请假</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 通知列表 -->
+  <view class="notice-section">
+    <view class="section-header">
+      <text class="section-title">最新通知</text>
+      <text class="view-all" bindtap="viewAllNotices">查看全部 ></text>
+    </view>
+
+    <view class="notice-list">
+      <block wx:if="{{noticeList.length > 0}}">
+        <view 
+          class="notice-item {{item.isRead ? 'read' : 'unread'}}" 
+          wx:for="{{noticeList}}" 
+          wx:key="id"
+          bindtap="viewNoticeDetail"
+          data-id="{{item.id}}"
+        >
+          <view class="notice-header">
+            <view class="notice-title-wrap">
+              <text class="priority-tag priority-{{item.priority}}" wx:if="{{item.priority > 0}}">
+                {{item.priority === 2 ? '紧急' : '重要'}}
+              </text>
+              <text class="notice-title">{{item.title}}</text>
+            </view>
+            <text class="notice-time">{{item.createTime}}</text>
+          </view>
+          <view class="notice-content">
+            <text class="notice-text">{{item.content}}</text>
+          </view>
+          <view class="notice-footer">
+            <text class="notice-publisher">发布人: {{item.publisherName}}</text>
+            <text class="read-status {{item.isRead ? 'read' : 'unread'}}">
+              {{item.isRead ? '已读' : '未读'}}
+            </text>
+          </view>
+        </view>
+      </block>
+      <block wx:else>
+        <view class="empty-state">
+          <text class="empty-text">暂无通知</text>
+        </view>
+      </block>
+    </view>
+  </view>
+</view>

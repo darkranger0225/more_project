@@ -1,0 +1,54 @@
+<view class="container">
+  <view class="card">
+    <view class="balance-header">
+      <text class="balance-title">账户余额</text>
+      <text class="balance-value" style="{{accountBalance < 0 ? 'color: #ff4d4f;' : 'color: #52c41a;'}}">¥{{accountBalance}}</text>
+    </view>
+    <view class="balance-header" style="margin-top: 20rpx;">
+      <text class="balance-title">待缴费总额</text>
+      <text class="balance-value" style="{{totalAmount > 0 ? 'color: #ff4d4f;' : ''}}">¥{{totalAmount}}</text>
+    </view>
+    <button class="btn-pay-all" bindtap="payAll" wx:if="{{unpaidList.length > 0}}">一键缴费</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">待缴费账单</view>
+    <view class="bill-list">
+      <view class="bill-item" wx:for="{{unpaidList}}" wx:key="id">
+        <view class="bill-info">
+          <text class="bill-time">{{item.recordTime}}</text>
+          <text class="bill-usage" wx:if="{{item.usageAmount > 0}}">用电量: {{item.usageAmount}}度</text>
+          <text class="bill-usage" wx:if="{{item.usageAmount === 0}}">类型: 用电扣费</text>
+          <text class="bill-status" style="{{item.balance < 0 ? 'color: #ff4d4f;' : 'color: #faad14;'}}">
+            {{item.balance < 0 ? '欠费' : '待缴费'}}
+          </text>
+        </view>
+        <view class="bill-action">
+          <text class="bill-amount" wx:if="{{item.balance >= 0}}">¥{{item.amount}}</text>
+          <text class="bill-amount" wx:if="{{item.balance < 0}}" style="color: #ff4d4f;">¥{{item.balance}}</text>
+          <button class="btn-pay" size="mini" bindtap="payBill" data-id="{{item.id}}">缴费</button>
+        </view>
+      </view>
+      <view class="empty-state" wx:if="{{unpaidList.length === 0}}">
+        <text class="empty-text">暂无待缴费账单</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">缴费历史</view>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{historyList}}" wx:key="id">
+        <view class="history-info">
+          <text class="history-no">{{item.billNo}}</text>
+          <text class="history-time">{{item.paymentTime}}</text>
+          <text class="history-method">{{item.paymentMethod}}</text>
+        </view>
+        <text class="history-amount">¥{{item.amount}}</text>
+      </view>
+      <view class="empty-state" wx:if="{{historyList.length === 0}}">
+        <text class="empty-text">暂无缴费记录</text>
+      </view>
+    </view>
+  </view>
+</view>

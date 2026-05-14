@@ -1,0 +1,118 @@
+.container {
+  padding: 30rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.form-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.label {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 16rpx;
+  font-weight: 500;
+}
+
+.required {
+  color: #f44336;
+}
+
+.input {
+  font-size: 30rpx;
+  color: #333;
+  height: 60rpx;
+  text-align: center;
+}
+
+.picker {
+  font-size: 30rpx;
+  color: #333;
+  height: 60rpx;
+  line-height: 60rpx;
+  text-align: center;
+}
+
+.picker.placeholder {
+  color: #999;
+}
+
+.student-scores-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.card-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+}
+
+.card-subtitle {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.student-score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.student-score-item:last-child {
+  border-bottom: none;
+}
+
+.student-name {
+  font-size: 28rpx;
+  color: #333;
+  flex: 1;
+}
+
+.score-input {
+  width: 160rpx;
+  height: 60rpx;
+  border: 1rpx solid #e0e0e0;
+  border-radius: 8rpx;
+  text-align: center;
+  font-size: 28rpx;
+}
+
+.empty-tip {
+  text-align: center;
+  padding: 60rpx 0;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.save-btn {
+  width: 100%;
+}

@@ -1,0 +1,73 @@
+.container {
+  padding: 20rpx;
+}
+
+.form-container {
+  background: #fff;
+  border-radius: 20rpx;
+  padding: 40rpx;
+}
+
+.form-item {
+  margin-bottom: 40rpx;
+}
+
+.form-label {
+  display: block;
+  font-size: 30rpx;
+  color: #333;
+  margin-bottom: 20rpx;
+  font-weight: bold;
+}
+
+.form-input {
+  width: 100%;
+  height: 80rpx;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 12rpx;
+  padding: 0 20rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.form-textarea {
+  width: 100%;
+  height: 200rpx;
+  border: 2rpx solid #e8e8e8;
+  border-radius: 12rpx;
+  padding: 20rpx;
+  font-size: 30rpx;
+  box-sizing: border-box;
+}
+
+.image-upload {
+  width: 200rpx;
+  height: 200rpx;
+  border: 2rpx dashed #d9d9d9;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.image-upload image {
+  width: 100%;
+  height: 100%;
+}
+
+.upload-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.btn-submit {
+  background: #1890ff;
+  color: #fff;
+  border-radius: 40rpx;
+  margin-top: 60rpx;
+}
+
+.btn-submit::after {
+  border: none;
+}

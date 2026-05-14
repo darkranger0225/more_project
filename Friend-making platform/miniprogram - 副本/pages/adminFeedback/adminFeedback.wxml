@@ -1,0 +1,58 @@
+<!-- pages/adminFeedback/adminFeedback.wxml -->
+<view class="container">
+  <view class="title">用户反馈管理</view>
+  
+  <!-- 过滤器 -->
+  <view class="filter">
+    <view class="filter-item {{filter === 'all' ? 'active' : ''}}" bindtap="setFilter" data-filter="all">全部</view>
+    <view class="filter-item {{filter === 'PENDING' ? 'active' : ''}}" bindtap="setFilter" data-filter="PENDING">待处理</view>
+    <view class="filter-item {{filter === 'PROCESSING' ? 'active' : ''}}" bindtap="setFilter" data-filter="PROCESSING">处理中</view>
+    <view class="filter-item {{filter === 'RESOLVED' ? 'active' : ''}}" bindtap="setFilter" data-filter="RESOLVED">已解决</view>
+  </view>
+  
+  <!-- 反馈列表 -->
+  <view class="feedback-list">
+    <view class="feedback-item" wx:for="{{filteredFeedbacks}}" wx:key="feedbackId">
+      <view class="feedback-header">
+        <view class="user-info">用户ID: {{item.user.userId}} ({{item.user.name}})</view>
+        <view class="feedback-type">{{item.feedbackType}}</view>
+        <view class="feedback-status {{item.status === 'RESOLVED' ? 'status-resolved' : item.status === 'PROCESSING' ? 'status-processing' : 'status-pending'}}">
+          {{item.status === 'RESOLVED' ? '已解决' : item.status === 'PROCESSING' ? '处理中' : '待处理'}}
+        </view>
+      </view>
+      <view class="feedback-content">{{item.feedbackContent}}</view>
+      <view class="feedback-time">提交时间: {{item.feedbackTime}}</view>
+      
+      <!-- 已有回复内容 -->
+      <view class="admin-response" wx:if="{{item.adminResponse}}">
+        <view class="response-header">管理员回复:</view>
+        <view class="response-content">{{item.adminResponse}}</view>
+        <view class="response-time">回复时间: {{item.responseTime}}</view>
+      </view>
+      
+      <!-- 回复表单 -->
+      <view class="reply-form" wx:if="{{!item.adminResponse}}">
+        <textarea class="reply-input" placeholder="请输入回复内容" bindinput="inputReply" data-id="{{item.feedbackId}}"></textarea>
+        <view class="btn-group">
+          <button size="mini" type="primary" bindtap="replyFeedback" data-id="{{item.feedbackId}}">回复</button>
+          <button size="mini" type="default" bindtap="updateStatus" data-id="{{item.feedbackId}}" data-status="PROCESSING">标记处理中</button>
+        </view>
+      </view>
+      
+      <!-- 回复后的操作按钮 -->
+      <view class="btn-group" wx:if="{{item.adminResponse && item.status !== 'RESOLVED'}}">
+        <button size="mini" type="primary" bindtap="updateStatus" data-id="{{item.feedbackId}}" data-status="RESOLVED">标记已解决</button>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 无数据提示 -->
+  <view class="no-data" wx:if="{{filteredFeedbacks.length === 0}}">
+    <view>暂无{{filter === 'all' ? '' : filter === 'PENDING' ? '待处理' : filter === 'PROCESSING' ? '处理中' : '已解决'}}反馈</view>
+  </view>
+  
+  <!-- 操作结果提示 -->
+  <view class="toast" wx:if="{{toast.show}}">
+    <view class="toast-content {{toast.type}}">{{toast.message}}</view>
+  </view>
+</view> 

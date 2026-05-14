@@ -1,0 +1,327 @@
+﻿﻿<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title>点餐下单 - 餐饮收银系统</title>
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/bootstrap-icons/1.10.0/font/bootstrap-icons.css">
+</head>
+<body>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="bi bi-shop"></i> 餐饮收银系统</h3>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a th:href="@{/cashier/dashboard}"><i class="bi bi-speedometer2"></i> 收银台</a></li>
+            <li><a th:href="@{/cashier/tables}"><i class="bi bi-grid-3x3-gap"></i> 桌台管理</a></li>
+            <li><a th:href="@{/cashier/order}" class="active"><i class="bi bi-cart-plus"></i> 点餐下单</a></li>
+            <li><a th:href="@{/cashier/orders}"><i class="bi bi-receipt"></i> 订单查询</a></li>
+            <li><a th:href="@{/cashier/members}"><i class="bi bi-people"></i> 会员管理</a></li>
+            <li><a href="javascript:void(0)" onclick="logout()"><i class="bi bi-box-arrow-right"></i> 退出登录</a></li>
+        </ul>
+    </div>
+
+    <div class="main-content">
+        <div class="navbar">
+            <h4><i class="bi bi-cart-plus"></i> 点餐下单</h4>
+            <span sec:authorize="isAuthenticated()"><i class="bi bi-person-circle"></i> <span sec:authentication="name"></span></span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 350px; gap: 20px;">
+            <div>
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header">
+                        <i class="bi bi-grid-3x3-gap"></i> 选择桌台
+                    </div>
+                    <div class="card-body">
+                        <select id="tableSelect" class="form-control">
+                            <option value="">请选择桌台</option>
+                            <option th:each="t : ${tables}" 
+                                    th:value="${t.id}" 
+                                    th:text="${t.tableNo} + ' - ' + (${t.name} ?: '未命名') + ' (' + ${t.capacity} + '人)'"
+                                    th:selected="${selectedTable != null && selectedTable.id == t.id}"
+                                    th:disabled="${t.status.name() == 'OCCUPIED'}">
+                            </option>
+                        </select>
+                        <div style="margin-top: 15px; display: flex; gap: 15px; align-items: center;">
+                            <div style="flex: 0 0 150px;">
+                                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #666;">用餐人数</label>
+                                <input type="number" id="personCount" class="form-control" placeholder="请输入人数" min="1" style="width: 100%;">
+                            </div>
+                            <div style="flex: 1;">
+                                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #666;">备注信息（可选）</label>
+                                <input type="text" id="remark" class="form-control" placeholder="请输入备注">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-bottom: 20px;">
+                    <div class="card-header">
+                        <i class="bi bi-person-badge"></i> 会员选择（可选）
+                    </div>
+                    <div class="card-body">
+                        <div style="display: flex; gap: 10px; align-items: flex-end;">
+                            <div style="flex: 1;">
+                                <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #666;">会员手机号</label>
+                                <input type="text" id="memberPhone" class="form-control" placeholder="输入手机号查找会员">
+                            </div>
+                            <button onclick="searchMember()" class="btn btn-primary" style="padding: 10px 20px;">查找</button>
+                            <button onclick="clearMember()" class="btn" style="padding: 10px 20px; background: #95a5a6; color: white;">清除</button>
+                        </div>
+                        <div id="memberInfo" style="margin-top: 15px; padding: 15px; background: #f8f9fa; border-radius: 5px; display: none;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div>
+                                    <div style="font-weight: bold; font-size: 16px;" id="memberName"></div>
+                                    <div style="color: #666; font-size: 14px;">手机号: <span id="memberPhoneDisplay"></span></div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="color: #f39c12; font-size: 24px; font-weight: bold;" id="memberPoints"></div>
+                                    <div style="color: #666; font-size: 12px;">可用积分</div>
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ddd;">
+                                <label style="display: flex; align-items: center; cursor: pointer;">
+                                    <input type="checkbox" id="usePoints" onchange="togglePointsInput()" style="margin-right: 10px; width: 18px; height: 18px;">
+                                    <span>使用积分抵扣 (100积分 = 1元)</span>
+                                </label>
+                                <div id="pointsInputDiv" style="margin-top: 10px; display: none;">
+                                    <input type="number" id="pointsToUse" class="form-control" placeholder="输入积分数量" min="0" onchange="calculatePointsDiscount()">
+                                    <div style="margin-top: 5px; color: #e74c3c; font-size: 14px;">
+                                        可抵扣: ¥<span id="pointsDiscount">0.00</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-menu-button-wide"></i> 菜品分类
+                    </div>
+                    <div class="card-body">
+                        <div class="category-tabs">
+                            <div class="category-tab active" onclick="filterDishes(null, this)">全部</div>
+                            <div th:each="cat : ${categories}" 
+                                 class="category-tab" 
+                                 th:text="${cat.name}"
+                                 th:onclick="filterDishes([[${cat.id}]], this)">
+                            </div>
+                        </div>
+
+                        <div class="dish-grid" id="dishGrid">
+                            <div th:each="dish : ${dishes}" 
+                                 class="dish-item" 
+                                 th:data-category="${dish.category.id}"
+                                 th:onclick="addToCart([[${dish.id}]], [[${dish.name}]], [[${dish.price}]])">
+                                <img th:if="${dish.image}" th:src="${dish.image}" th:alt="${dish.name}">
+                                <img th:unless="${dish.image}" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='120'%3E%3Crect width='200' height='120' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' font-size='14' fill='%23999' text-anchor='middle' dy='.3em'%3E暂无图片%3C/text%3E%3C/svg%3E" th:alt="${dish.name}">
+                                <div class="dish-info">
+                                    <div class="dish-name" th:text="${dish.name}"></div>
+                                    <div class="dish-price" th:text="'¥' + ${#numbers.formatDecimal(dish.price, 0, 2)}"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="cart-panel">
+                    <h4><i class="bi bi-cart3"></i> 购物车</h4>
+                    <div id="cartItems" style="max-height: 400px; overflow-y: auto; margin: 15px 0;">
+                        <div style="text-align: center; color: #999; padding: 40px 0;">
+                            <i class="bi bi-cart" style="font-size: 48px;"></i>
+                            <p>购物车是空的</p>
+                        </div>
+                    </div>
+                    <div class="cart-total">
+                        合计：<span id="cartTotal">¥0.00</span>
+                    </div>
+                    <button class="btn btn-success" onclick="submitOrder()" style="width: 100%; padding: 12px;">
+                        <i class="bi bi-check-circle"></i> 确认下单
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/js/common.js}"></script>
+    <script>
+        let cart = [];
+        let selectedMember = null;
+
+        function filterDishes(categoryId, element) {
+            document.querySelectorAll('.category-tab').forEach(tab => tab.classList.remove('active'));
+            element.classList.add('active');
+
+            const dishes = document.querySelectorAll('.dish-item');
+            dishes.forEach(dish => {
+                if (categoryId === null || dish.dataset.category == categoryId) {
+                    dish.style.display = 'block';
+                } else {
+                    dish.style.display = 'none';
+                }
+            });
+        }
+
+        function addToCart(dishId, dishName, dishPrice) {
+            const existingItem = cart.find(item => item.dishId === dishId);
+            if (existingItem) {
+                existingItem.quantity++;
+            } else {
+                cart.push({ dishId, dishName, dishPrice: parseFloat(dishPrice), quantity: 1 });
+            }
+            updateCartUI();
+            showAlert('已添加到购物车', 'success');
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateQuantity(index, delta) {
+            cart[index].quantity += delta;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div style="text-align: center; color: #999; padding: 40px 0;"><i class="bi bi-cart" style="font-size: 48px;"></i><p>购物车是空的</p></div>';
+                cartTotal.textContent = '¥0.00';
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+            cart.forEach((item, index) => {
+                const subtotal = item.dishPrice * item.quantity;
+                total += subtotal;
+                html += '<div class="cart-item"><div><div style="font-weight: 600;">' + item.dishName + '</div><div style="color: #e74c3c;">¥' + item.dishPrice.toFixed(2) + '</div></div><div style="display: flex; align-items: center; gap: 10px;"><button onclick="updateQuantity(' + index + ', -1)" class="btn btn-sm" style="padding: 2px 8px;">-</button><span>' + item.quantity + '</span><button onclick="updateQuantity(' + index + ', 1)" class="btn btn-sm" style="padding: 2px 8px;">+</button><button onclick="removeFromCart(' + index + ')" class="btn btn-danger btn-sm"><i class="bi bi-trash"></i></button></div></div>';
+            });
+            cartItems.innerHTML = html;
+            cartTotal.textContent = '¥' + total.toFixed(2);
+        }
+
+        async function searchMember() {
+            const phone = document.getElementById('memberPhone').value;
+            if (!phone) {
+                showAlert('请输入会员手机号', 'error');
+                return;
+            }
+            if (!/^1[3-9]\d{9}$/.test(phone)) {
+                showAlert('手机号格式不正确', 'error');
+                return;
+            }
+            try {
+                const result = await apiGet('/api/members/phone/' + phone);
+                if (result.code === 200) {
+                    selectedMember = result.data;
+                    document.getElementById('memberName').textContent = selectedMember.name;
+                    document.getElementById('memberPhoneDisplay').textContent = selectedMember.phone;
+                    document.getElementById('memberPoints').textContent = selectedMember.points;
+                    document.getElementById('memberInfo').style.display = 'block';
+                    document.getElementById('pointsToUse').max = selectedMember.points;
+                    showAlert('会员查找成功', 'success');
+                } else {
+                    showAlert(result.message || '未找到该会员', 'error');
+                }
+            } catch (error) {
+                showAlert('网络错误，请重试', 'error');
+            }
+        }
+
+        function clearMember() {
+            selectedMember = null;
+            document.getElementById('memberPhone').value = '';
+            document.getElementById('memberInfo').style.display = 'none';
+            document.getElementById('usePoints').checked = false;
+            document.getElementById('pointsInputDiv').style.display = 'none';
+            document.getElementById('pointsToUse').value = '';
+        }
+
+        function togglePointsInput() {
+            const usePoints = document.getElementById('usePoints').checked;
+            document.getElementById('pointsInputDiv').style.display = usePoints ? 'block' : 'none';
+            if (!usePoints) {
+                document.getElementById('pointsToUse').value = '';
+                document.getElementById('pointsDiscount').textContent = '0.00';
+            }
+        }
+
+        function calculatePointsDiscount() {
+            const points = parseInt(document.getElementById('pointsToUse').value) || 0;
+            const discount = (points / 100).toFixed(2);
+            document.getElementById('pointsDiscount').textContent = discount;
+        }
+
+        async function submitOrder() {
+            const tableId = document.getElementById('tableSelect').value;
+            const personCount = document.getElementById('personCount').value;
+            const remark = document.getElementById('remark').value;
+
+            if (!tableId) {
+                showAlert('请选择桌台', 'error');
+                return;
+            }
+            if (!personCount || personCount < 1) {
+                showAlert('请输入用餐人数', 'error');
+                return;
+            }
+            if (cart.length === 0) {
+                showAlert('购物车是空的', 'error');
+                return;
+            }
+
+            const orderData = {
+                tableId: parseInt(tableId),
+                personCount: parseInt(personCount),
+                remark: remark,
+                items: cart.map(item => ({
+                    dishId: item.dishId,
+                    quantity: item.quantity
+                }))
+            };
+
+            if (selectedMember) {
+                orderData.memberId = selectedMember.id;
+                if (document.getElementById('usePoints').checked) {
+                    const pointsToUse = parseInt(document.getElementById('pointsToUse').value) || 0;
+                    if (pointsToUse > 0) {
+                        if (pointsToUse > selectedMember.points) {
+                            showAlert('积分不足', 'error');
+                            return;
+                        }
+                        orderData.pointsUsed = pointsToUse;
+                    }
+                }
+            }
+
+            try {
+                const result = await apiPost('/api/orders', orderData);
+                if (result.code === 200) {
+                    showAlert('下单成功！已推送后厨', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/cashier/dashboard';
+                    }, 1500);
+                } else {
+                    showAlert(result.message || '下单失败', 'error');
+                }
+            } catch (error) {
+                showAlert('网络错误，请重试', 'error');
+            }
+        }
+    </script>
+</body>
+</html>

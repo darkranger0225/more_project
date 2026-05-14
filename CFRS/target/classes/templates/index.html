@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout ('首页', ~{::main})}">
+<main>
+    <div class="container mt-4">
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold">校园食堂菜品评价系统</h1>
+                <p class="col-md-8 fs-4">为学生提供便捷的菜品评价平台，帮助食堂管理者了解学生需求，提升校园餐饮服务整体满意度。</p>
+                <a href="/dishes" class="btn btn-primary btn-lg">浏览菜品</a>
+                <a href="/windows" class="btn btn-outline-primary btn-lg">查看窗口</a>
+            </div>
+        </div>
+
+        <h2 class="mb-4"><i class="bi bi-star-fill text-warning"></i> 热门推荐</h2>
+        <div class="row">
+            <div class="col-md-4 mb-4" th:each="dish : ${topDishes}">
+                <div class="card dish-card h-100">
+                    <img th:src="${dish.image != null ? dish.image : '/images/0bcf54afa59f479785fece74b89767ae.jpeg'}" 
+                         class="card-img-top" alt="菜品图片" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${dish.name}">菜品名称</h5>
+                        <p class="card-text text-muted" th:text="${dish.category}">分类</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="text-danger fw-bold">¥<span th:text="${dish.price}">0</span></span>
+                            <span class="star-rating">
+                                <i class="bi bi-star-fill"></i>
+                                <span th:text="${#numbers.formatDecimal(dish.averageRating, 1, 1)}">0.0</span>
+                            </span>
+                        </div>
+                        <p class="text-muted small mt-2">
+                            <span th:text="${dish.reviewCount}">0</span> 条评价
+                        </p>
+                    </div>
+                    <div class="card-footer">
+                        <a th:href="@{/dish/{id}(id=${dish.id})}" class="btn btn-primary w-100">查看详情</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="mb-4 mt-5"><i class="bi bi-shop"></i> 营业中窗口</h2>
+        <div class="row">
+            <div class="col-md-3 mb-3" th:each="window : ${openWindows}">
+                <div class="card window-card" th:onclick="'location.href=\'/window/' + ${window.id} + '\''">
+                    <img th:src="@{/images/image_834149526092132.png}" class="card-img-top" alt="窗口图片" style="height: 150px; object-fit: cover;">
+                    <div class="card-body">
+                        <h6 class="card-title" th:text="${window.name}">窗口名称</h6>
+                        <p class="card-text small text-muted">
+                            <span th:text="${window.floor}">1</span>楼 - 
+                            <span th:text="${window.windowNumber}">1</span>号窗口
+                        </p>
+                        <span class="badge bg-success">营业中</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="mb-4 mt-5"><i class="bi bi-bell"></i> 最新通知</h2>
+        <div class="card">
+            <div class="card-body">
+                <div class="list-group" th:if="${not #lists.isEmpty(notifications)}">
+                    <div class="list-group-item" th:each="notification : ${notifications}">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h6 class="mb-1" th:text="${notification.type == 1 ? '系统通知' : '活动通知'}">通知类型</h6>
+                                <p class="mb-1" th:text="${notification.content}">通知内容</p>
+                            </div>
+                            <small class="text-muted" th:text="${#temporals.format(notification.createTime, 'yyyy-MM-dd HH:mm')}">2026-01-01 12:00</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center text-muted" th:unless="${not #lists.isEmpty(notifications)}">
+                    <p>暂无通知</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</html>

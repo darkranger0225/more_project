@@ -1,0 +1,40 @@
+<view class="container">
+  <!-- 申请请假按钮（家长端） -->
+  <view class="action-bar" wx:if="{{role === 'PARENT'}}">
+    <button class="btn btn-primary" bindtap="applyLeave">+ 申请请假</button>
+  </view>
+
+  <!-- 请假列表 -->
+  <view class="leave-list">
+    <block wx:if="{{leaveList.length > 0}}">
+      <view class="leave-item" wx:for="{{leaveList}}" wx:key="id" bindtap="viewLeaveDetail" data-id="{{item.id}}" data-status="{{item.status}}">
+        <view class="leave-header">
+          <text class="student-name">{{item.studentName}}</text>
+          <text class="status-badge status-{{item.status}}">
+            {{item.status === 'PENDING' ? '待审批' : (item.status === 'APPROVED' ? '已通过' : '已拒绝')}}
+          </text>
+        </view>
+        <view class="leave-content">
+          <text class="leave-type">请假类型: {{item.leaveType === 'SICK' ? '病假' : (item.leaveType === 'PERSONAL' ? '事假' : '其他')}}</text>
+          <text class="leave-date">{{item.startDate}} 至 {{item.endDate}} ({{item.days}}天)</text>
+          <text class="leave-reason">{{item.reason}}</text>
+        </view>
+        <view class="leave-footer" wx:if="{{item.status !== 'PENDING'}}">
+          <text>审批人: {{item.approverName || '-'}}</text>
+          <text wx:if="{{item.approveRemark}}">备注: {{item.approveRemark}}</text>
+        </view>
+        <!-- 教师审批按钮 -->
+        <view class="leave-actions" wx:if="{{role === 'TEACHER' && item.status === 'PENDING'}}">
+          <button class="btn btn-success action-btn" bindtap="approveLeave" data-id="{{item.id}}">通过</button>
+          <view class="action-btn-spacer"></view>
+          <button class="btn btn-danger action-btn" bindtap="rejectLeave" data-id="{{item.id}}">拒绝</button>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-text">暂无请假记录</text>
+      </view>
+    </block>
+  </view>
+</view>

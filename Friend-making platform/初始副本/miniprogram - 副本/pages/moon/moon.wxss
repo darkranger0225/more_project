@@ -1,0 +1,264 @@
+/* pages/moon/moon.wxss */
+.container {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.title {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.focus-btn {
+  background-color: #ff6600;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  border: none;
+}
+
+.moon-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.moon-header {
+  position: fixed;
+  top: 40px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 100;
+}
+
+.moon-tip {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 12px 24px;
+  border-radius: 30px;
+  color: #ffffff;
+  font-size: 16px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  animation: fadeInDown 0.8s ease-out;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.focus-timer {
+  width: 100%;
+  max-width: 600rpx;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+.timer-main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.timer-circle {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  margin: 20px 0;
+}
+
+.progress-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.progress-ring__bg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-ring__progress {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #ff6600;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  transition: transform 0.1s linear;
+  clip-path: polygon(50% 0, 100% 0, 100% 100%, 50% 100%);
+}
+
+.progress-ring__mask {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+}
+
+.progress-ring__progress--rest {
+  background: #4CAF50;
+}
+
+.progress-ring__progress--completed {
+  background: #ff6600;
+  animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.timer-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #ffffff;
+  z-index: 1;
+}
+
+.timer-time {
+  font-size: 48px;
+  font-weight: bold;
+  display: block;
+  margin-bottom: 10px;
+}
+
+.timer-status {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.timer-input {
+  width: 80%;
+  height: 44px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 0 20px;
+  color: #ffffff;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.timer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.timer-btn {
+  min-width: 120px;
+  height: 44px;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #ffffff;
+  transition: all 0.3s;
+}
+
+.work-btn {
+  background: #ff6600;
+}
+
+.rest-btn {
+  background: #4CAF50;
+}
+
+.stop-btn {
+  background: #f44336;
+}
+
+.reset-btn {
+  background: #2196F3;
+}
+
+.timer-btn:active {
+  transform: scale(0.95);
+  opacity: 0.9;
+}
+
+.timer--running .timer-circle {
+  transform: scale(1.1);
+  transition: transform 0.3s;
+}
+
+.timer--running .timer-time {
+  font-size: 56px;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+}
+
+.moon-settings-btn {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 12px 24px;
+  border-radius: 30px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+}
+
+.moon-settings-btn:active {
+  transform: translateX(-50%) scale(0.95);
+  opacity: 0.9;
+}
+
+.settings-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 8px;
+}
+
+.moon-settings-btn text {
+  color: #ffffff;
+  font-size: 16px;
+}

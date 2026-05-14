@@ -1,0 +1,136 @@
+<view class="guide-container">
+  <!-- 顶部导航区 -->
+  <view class="navbar">
+    <view class="nav-content">
+      <view class="nav-title-wrapper">
+        <text class="nav-title">使用说明</text>
+        <text class="nav-subtitle">USER GUIDE</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主要内容区 -->
+  <view class="main-content">
+    <!-- 欢迎语 -->
+    <view class="welcome-section">
+      <image class="welcome-image" src="/image/login/guide.png" mode="aspectFit"/>
+      <text class="welcome-text">欢迎加入寻爱之旅</text>
+      <text class="welcome-desc">让我们一起开启美好的邂逅</text>
+    </view>
+
+    <!-- 功能说明区域 -->
+    <view class="guide-sections">
+      <!-- 首页功能说明 -->
+      <view class="guide-section">
+        <view class="section-header">
+          <image class="section-icon" src="/icon/guide/home.png" mode="aspectFit"/>
+          <text class="section-title">首页</text>
+        </view>
+        <view class="section-content">
+          <view class="guide-item">
+            <text class="item-title">精准匹配</text>
+            <text class="item-desc">根据您的个人信息和偏好，寻找隐藏的爱情</text>
+          </view>
+          <view class="guide-item">
+            <text class="item-title">散落匹配</text>
+            <text class="item-desc">根据爱好匹配其他用户，带来意想不到的惊喜</text>
+          </view>
+          <view class="guide-item">
+            <text class="item-title">推荐用户</text>
+            <text class="item-desc">展示系统为您匹配的合适用户，点击卡片可查看联系方式</text>
+          </view>
+          <view class="guide-item">
+            <text class="item-title">最新活动</text>
+            <text class="item-desc">定期举办线下交友活动，增加面对面交流的机会</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 月球功能说明 -->
+      <view class="guide-section">
+        <view class="section-header">
+          <image class="section-icon" src="/icon/guide/moon.png" mode="aspectFit"/>
+          <text class="section-title">月球</text>
+        </view>
+        <view class="section-content">
+          <view class="guide-item">
+            <text class="item-title">基础功能</text>
+            <text class="item-desc">一个专注时钟，带你飞上月球，远离喧嚣</text>
+          </view>
+          <view class="guide-item">
+            <text class="item-title">月球配置</text>
+            <text class="item-desc">可自由调节工作休息时长，开关背景音乐</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 我的功能说明 -->
+      <view class="guide-section">
+        <view class="section-header">
+          <image class="section-icon" src="/icon/guide/me.png" mode="aspectFit"/>
+          <text class="section-title">我的</text>
+        </view>
+        <view class="section-content">
+          <view class="guide-item">
+            <text class="item-title">个人中心</text>
+            <text class="item-desc">填写期望对象信息，越详细越好哦</text>
+          </view>
+          <view class="guide-item">
+            <text class="item-title">账号管理</text>
+            <text class="item-desc">修改密码、爱好等个人相关信息，完善账户信息</text>
+          </view>
+          <view class="guide-item">
+            <text class="item-title">修改索引权限</text>
+            <text class="item-desc">若您不希望自己的联系方式被他人获知或不希望自己被他人检索可在账号管理中设置禁止被索引</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 使用提示 -->
+      <view class="guide-section">
+        <view class="section-header">
+          <image class="section-icon" src="/icon/guide/tips.png" mode="aspectFit"/>
+          <text class="section-title">温馨提示</text>
+        </view>
+        <view class="section-content">
+          <view class="tips-list">
+            <view class="tip-item">
+              <text class="tip-dot">•</text>
+              <text class="tip-text">请如实填写个人信息，提高匹配准确度</text>
+            </view>
+            <view class="tip-item">
+              <text class="tip-dot">•</text>
+              <text class="tip-text">注意保护个人隐私，不要轻易向他人透露敏感信息</text>
+            </view>
+            <view class="tip-item">
+              <text class="tip-dot">•</text>
+              <text class="tip-text">参与线下活动时注意人身财产安全，谨防诈骗</text>
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="guide-section">
+        <view class="section-header">
+          <image class="section-icon" src="/icon/guide/note.png" mode="aspectFit"/>
+          <text class="section-title">注意事项</text>
+        </view>
+        <view class="section-content">
+          <view class="tips-list">
+            <view class="tip-item">
+              <text class="tip-dot">•</text>
+              <text class="tip-text">修改个人账户信息时，可部分修改，对于未修改的字段将不做改变</text>
+            </view>
+            <view class="tip-item">
+              <text class="tip-dot">•</text>
+              <text class="tip-text">修改期望对象信息时要求完全修改，即数据库中仅保存本次存入的信息</text>
+            </view>
+            <view class="tip-item">
+              <text class="tip-dot">•</text>
+              <text class="tip-text">您的账号可能涉及隐私信息，请勿将账密告知任何人！</text>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view> 

@@ -1,0 +1,41 @@
+<view class="container">
+  <view class="header-section">
+    <text class="page-title">学生管理</text>
+    <button class="btn btn-primary add-btn" bindtap="addStudent">
+      <text class="add-icon">+</text>
+      <text>添加学生</text>
+    </button>
+  </view>
+
+  <view class="student-list">
+    <block wx:if="{{studentList.length > 0}}">
+      <view class="student-card" wx:for="{{studentList}}" wx:key="id">
+        <view class="student-left">
+          <image class="student-avatar" src="/images/default-avatar.png" mode="aspectFill"></image>
+          <view class="student-content">
+            <view class="student-top">
+              <text class="student-name">{{item.studentName}}</text>
+              <text class="gender-tag gender-{{item.gender}}" wx:if="{{item.gender !== null}}">{{item.gender === 1 ? '男' : '女'}}</text>
+            </view>
+            <view class="student-info-row">
+              <text class="info-item" wx:if="{{item.studentNo}}">学号: {{item.studentNo}}</text>
+              <text class="info-item" wx:if="{{item.className}}">班级: {{item.className}}</text>
+              <text class="info-item" wx:if="{{item.parentName}}">家长: {{item.parentName}}</text>
+            </view>
+          </view>
+        </view>
+        <view class="student-actions">
+          <text class="action-btn edit" bindtap="editStudent" data-id="{{item.id}}">编辑</text>
+          <text class="action-btn delete" bindtap="deleteStudent" data-id="{{item.id}}">删除</text>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-icon">👨‍🎓</text>
+        <text class="empty-text">暂无学生</text>
+        <text class="empty-tip">点击上方按钮添加学生</text>
+      </view>
+    </block>
+  </view>
+</view>

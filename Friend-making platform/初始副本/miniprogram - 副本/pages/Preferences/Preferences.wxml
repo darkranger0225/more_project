@@ -1,0 +1,107 @@
+<!-- pages/Preferences/Preferences.wxml -->
+<view class="container">
+  <form bindsubmit="onSubmit">
+    <!-- 用户ID（可隐藏或自动生成） -->
+    <view class="form-item">
+      <label>用户ID：</label>
+      <input name="userID" value="{{userPreferences.userID}}" disabled class="disabled-input" />
+    </view>
+
+    <!-- 希望的名字 -->
+    <view class="form-item">
+      <label>姓名：</label>
+      <input name="preferredName" placeholder="请输入期望对象的姓名（必填）" bindinput="bindPreferredNameInput" class="form-input" />
+    </view>
+
+    <!-- 希望的生日范围 -->
+    <view class="form-item">
+      <label>生日：</label>
+      <view class="date-range-picker">
+        <picker mode="date" value="{{userPreferences.preferredBirthdayRangeStart}}" start="1900-01-01" end="2023-12-31" bindchange="bindPreferredBirthdayRangeStart">
+          <view class="picker">{{userPreferences.preferredBirthdayRangeStart || '开始日期'}}</view>
+        </picker>
+        <text>至</text>
+        <picker mode="date" value="{{userPreferences.preferredBirthdayRangeEnd}}" start="1900-01-01" end="2023-12-31" bindchange="bindPreferredBirthdayRangeEnd">
+          <view class="picker">{{userPreferences.preferredBirthdayRangeEnd || '结束日期'}}</view>
+        </picker>
+      </view>
+    </view>
+
+    <!-- 希望的地址 -->
+    <view class="form-item">
+      <label>地址：</label>
+      <picker mode="region" value="{{userPreferences.preferredAddress}}" bindchange="onAddressChange">
+        <view class="picker">{{userPreferences.preferredAddress || '请选择省/市/区县'}}</view>
+      </picker>
+    </view>
+
+    <!-- 希望的电话 -->
+    <view class="form-item">
+      <label>电话：</label>
+      <input name="preferredPhone" placeholder="请输入期望对象的电话" bindinput="bindPreferredPhoneInput" class="form-input" />
+    </view>
+
+    <!-- 希望的学校 -->
+    <view class="form-item">
+      <label>学校：</label>
+      <input name="preferredSchool" placeholder="请输入期望对象的学校" bindinput="bindPreferredSchoolInput" class="form-input" />
+    </view>
+
+    <!-- 希望的性格特征 -->
+    <view class="form-item">
+      <label>性格：</label>
+      <picker mode="selector" range="{{personalityOptions}}" value="{{personalityIndex}}" bindchange="onPersonalityChange">
+        <view class="picker">{{userPreferences.preferredPersonalityTraits || '请选择期望的性格特征（必填）'}}</view>
+      </picker>
+    </view>
+
+    <!-- 希望的 QQ -->
+    <view class="form-item">
+      <label>QQ：</label>
+      <input name="preferredQQ" placeholder="请输入期望对象的 QQ" bindinput="bindPreferredQQInput" class="form-input" />
+    </view>
+
+    <!-- 希望的微信 -->
+    <view class="form-item">
+      <label>微信：</label>
+      <input name="preferredWeChat" placeholder="请输入期望对象的微信" bindinput="bindPreferredWeChatInput" class="form-input" />
+    </view>
+
+<!-- 兴趣爱好复选框 -->
+<view class="form-item checkbox-section">
+  <label>兴趣爱好：</label>
+  <checkbox-group bindchange="onInterestChange" value="{{userPreferences.preferredInterests}}">
+    <view class="checkbox-group">
+      <block wx:for="{{interestOptions}}" wx:key="index">
+        <label class="checkbox-label">
+          <checkbox 
+            value="{{item}}">
+            {{item}}
+          </checkbox>
+        </label>
+      </block>
+    </view>
+  </checkbox-group>
+</view>
+
+<!-- 其他偏好复选框 -->
+<view class="form-item checkbox-section">
+  <label>其他偏好：</label>
+  <checkbox-group bindchange="onOtherPreferenceChange" value="{{userPreferences.otherPreferences}}">
+    <view class="checkbox-group">
+      <block wx:for="{{otherPreferenceOptions}}" wx:key="index">
+        <label class="checkbox-label">
+          <checkbox 
+            value="{{item}}">
+            {{item}}
+          </checkbox>
+        </label>
+      </block>
+    </view>
+  </checkbox-group>
+</view>
+
+    <!-- 提交按钮 -->
+    <button formType="submit" class="submit-btn">提交</button>
+  </form>
+</view>

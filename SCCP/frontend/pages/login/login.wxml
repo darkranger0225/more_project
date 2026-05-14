@@ -1,0 +1,42 @@
+<view class="login-container">
+  <view class="login-header">
+    <image class="logo" src="/images/logo.png" mode="aspectFit"></image>
+    <text class="title">家校沟通平台</text>
+    <text class="subtitle">连接学校与家庭</text>
+  </view>
+
+  <view class="login-form">
+    <view class="form-item">
+      <text class="icon">👤</text>
+      <input 
+        type="text" 
+        placeholder="请输入用户名" 
+        value="{{username}}"
+        bindinput="onUsernameInput"
+        class="form-input"
+      />
+    </view>
+
+    <view class="form-item">
+      <text class="icon">🔒</text>
+      <input 
+        type="password" 
+        placeholder="请输入密码" 
+        value="{{password}}"
+        bindinput="onPasswordInput"
+        class="form-input"
+      />
+    </view>
+
+    <button class="btn btn-primary login-btn" bindtap="onLogin">登录</button>
+
+    <view class="login-options">
+      <text class="text-muted" bindtap="goToRegister">注册账号</text>
+      <text class="text-muted" bindtap="goToForgotPassword">忘记密码?</text>
+    </view>
+  </view>
+
+  <view class="login-footer">
+    <text class="text-muted text-sm">© 2026 家校沟通平台</text>
+  </view>
+</view>

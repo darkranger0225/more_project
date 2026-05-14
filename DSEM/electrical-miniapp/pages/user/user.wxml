@@ -1,0 +1,32 @@
+<view class="container">
+  <view class="user-card">
+    <view class="avatar-placeholder">{{userInfo.name ? userInfo.name[0] : '用'}}</view>
+    <text class="user-name">{{userInfo.name}}</text>
+    <text class="user-role">{{roleText[userInfo.role]}}</text>
+  </view>
+
+  <view class="account-card" bindtap="goToRecharge">
+    <view class="account-info">
+      <text class="account-label">账户余额</text>
+      <text class="account-amount">¥{{accountBalance}}</text>
+    </view>
+    <view class="recharge-btn">立即充值</view>
+  </view>
+
+  <view class="menu-list">
+    <view class="menu-item" bindtap="goToUserInfo">
+      <text class="menu-text">个人信息</text>
+      <text class="menu-arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="goToPassword">
+      <text class="menu-text">修改密码</text>
+      <text class="menu-arrow">></text>
+    </view>
+    <view class="menu-item" bindtap="goToAdmin" wx:if="{{userInfo.role === 1 || userInfo.role === 2}}">
+      <text class="menu-text">管理后台</text>
+      <text class="menu-arrow">></text>
+    </view>
+  </view>
+
+  <button class="btn-logout" bindtap="handleLogout">退出登录</button>
+</view>

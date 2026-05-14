@@ -1,0 +1,77 @@
+<view class="settings-container">
+  <view class="settings-header">
+    <text class="settings-title">月球配置</text>
+  </view>
+  
+  <view class="settings-content">
+    <view class="settings-item time-settings">
+      <view class="time-header">
+        <text class="settings-label">工作时长</text>
+        <text class="time-display">{{workTime}}分钟</text>
+      </view>
+      <view class="slider-container">
+        <slider 
+          class="custom-slider" 
+          min="1" 
+          max="180" 
+          value="{{workTime}}" 
+          activeColor="#ff6600" 
+          backgroundColor="rgba(255, 255, 255, 0.1)"
+          block-size="24"
+          bindchange="onWorkTimeChange"
+        />
+        <view class="time-markers">
+          <text>1分钟</text>
+          <text>3小时</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="settings-item time-settings">
+      <view class="time-header">
+        <text class="settings-label">休息时长</text>
+        <text class="time-display">{{restTime}}分钟</text>
+      </view>
+      <view class="slider-container">
+        <slider 
+          class="custom-slider" 
+          min="1" 
+          max="180" 
+          value="{{restTime}}" 
+          activeColor="#4CAF50" 
+          backgroundColor="rgba(255, 255, 255, 0.1)"
+          block-size="24"
+          bindchange="onRestTimeChange"
+        />
+        <view class="time-markers">
+          <text>1分钟</text>
+          <text>3小时</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="settings-item">
+      <text class="settings-label">声音提醒</text>
+      <switch checked="{{soundEnabled}}" bindchange="onSoundChange" color="#ff6600"/>
+    </view>
+
+    <view class="settings-item">
+      <text class="settings-label">震动提醒</text>
+      <switch checked="{{vibrationEnabled}}" bindchange="onVibrationChange" color="#ff6600"/>
+    </view>
+
+    <view class="settings-item">
+      <text class="settings-label">背景音乐</text>
+      <switch checked="{{bgMusicEnabled}}" bindchange="onBgMusicChange" color="#ff6600"/>
+    </view>
+
+    <view class="settings-item" wx:if="{{bgMusicEnabled}}">
+      <text class="settings-label">随机播放</text>
+      <switch checked="{{bgMusicRandom}}" bindchange="onBgMusicRandomChange" color="#ff6600"/>
+    </view>
+  </view>
+
+  <view class="settings-footer">
+    <button class="save-btn" bindtap="saveSettings">保存设置</button>
+  </view>
+</view> 

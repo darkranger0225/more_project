@@ -1,0 +1,59 @@
+<!-- pages/feedback/feedback.wxml -->
+<view class="container">
+  <view class="title">意见反馈</view>
+  
+  <view class="form-item">
+    <view class="label">反馈类型：</view>
+    <radio-group bindchange="radioChange">
+      <label class="radio" wx:for="{{feedbackTypes}}" wx:key="value">
+        <radio value="{{item.value}}" checked="{{item.checked}}"/>{{item.name}}
+      </label>
+    </radio-group>
+  </view>
+  
+  <view class="form-item">
+    <view class="label">反馈内容：</view>
+    <textarea class="content" placeholder="请详细描述您的问题或建议（最多500字）" 
+              maxlength="500" bindinput="inputContent" value="{{content}}"></textarea>
+    <view class="word-count">{{contentLength}}/500</view>
+  </view>
+  
+  <button class="submit-btn" type="primary" bindtap="submitFeedback" loading="{{loading}}">提交反馈</button>
+  
+  <!-- 提交成功后显示 -->
+  <view class="success-tips" wx:if="{{showSuccess}}">
+    <icon type="success" size="64"></icon>
+    <view class="success-text">反馈提交成功</view>
+    <view class="success-desc">感谢您的反馈，我们会尽快处理</view>
+    <button class="back-btn" bindtap="backToMe">返回"我的"</button>
+  </view>
+  
+  <!-- 错误提示 -->
+  <view class="error-tips" wx:if="{{errorMsg}}">{{errorMsg}}</view>
+  
+  <!-- 历史反馈列表 -->
+  <view class="history" wx:if="{{showHistory && feedbacks.length > 0}}">
+    <view class="history-title">历史反馈</view>
+    <view class="history-list">
+      <view class="history-item" wx:for="{{feedbacks}}" wx:key="feedbackId">
+        <view class="history-header">
+          <view class="history-type">{{item.feedbackType}}</view>
+          <view class="history-status {{item.status === 'RESOLVED' ? 'status-resolved' : item.status === 'PROCESSING' ? 'status-processing' : 'status-pending'}}">
+            {{item.status === 'RESOLVED' ? '已解决' : item.status === 'PROCESSING' ? '处理中' : '待处理'}}
+          </view>
+        </view>
+        <view class="history-content">{{item.feedbackContent}}</view>
+        <view class="history-time">提交时间：{{item.feedbackTime}}</view>
+        <view class="history-response" wx:if="{{item.adminResponse}}">
+          <view class="response-title">管理员回复：</view>
+          <view class="response-content">{{item.adminResponse}}</view>
+          <view class="response-time">回复时间：{{item.responseTime}}</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <button class="history-btn" bindtap="toggleHistory" wx:if="{{!showSuccess}}">
+    {{showHistory ? '隐藏历史反馈' : '查看历史反馈'}}
+  </button>
+</view> 

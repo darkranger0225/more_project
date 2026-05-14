@@ -1,0 +1,20 @@
+<view class="container">
+  <view class="card">
+    <view class="detail-item">
+      <text class="label">记录时间</text>
+      <text class="value">{{usageDetail.recordTime}}</text>
+    </view>
+    <view class="detail-item">
+      <text class="label">用电量</text>
+      <text class="value">{{usageDetail.usageAmount}} 度</text>
+    </view>
+    <view class="detail-item">
+      <text class="label">应缴金额</text>
+      <text class="value amount">¥{{usageDetail.amount}}</text>
+    </view>
+    <view class="detail-item">
+      <text class="label">缴费状态</text>
+      <text class="value {{usageDetail.status === 0 ? 'unpaid' : 'paid'}}">{{usageDetail.status === 0 ? '未缴费' : '已缴费'}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,118 @@
+.container {
+  padding: 30rpx;
+  background: #f5f5f5;
+  min-height: 100vh;
+}
+
+.leave-card {
+  background: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+}
+
+.status-section {
+  text-align: center;
+  margin-bottom: 30rpx;
+  padding-bottom: 30rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.status-badge {
+  font-size: 32rpx;
+  font-weight: 600;
+  padding: 12rpx 32rpx;
+  border-radius: 8rpx;
+  display: inline-block;
+  line-height: 1.2;
+}
+
+.status-PENDING {
+  background: #fff3e0;
+  color: #ff9800;
+}
+
+.status-APPROVED {
+  background: #e8f5e9;
+  color: #4CAF50;
+}
+
+.status-REJECTED {
+  background: #ffebee;
+  color: #f44336;
+}
+
+.info-section {
+  margin-bottom: 30rpx;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f5f5f5;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+}
+
+.info-label {
+  font-size: 28rpx;
+  color: #999;
+}
+
+.info-value {
+  font-size: 28rpx;
+  color: #333;
+  font-weight: 500;
+}
+
+.reason-section {
+  margin-bottom: 30rpx;
+  padding: 24rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16rpx;
+  display: block;
+}
+
+.reason-content {
+  font-size: 28rpx;
+  color: #666;
+  line-height: 1.6;
+}
+
+.approve-section {
+  margin-bottom: 30rpx;
+  padding: 24rpx;
+  background: #f8f9fa;
+  border-radius: 12rpx;
+}
+
+.time-section {
+  text-align: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.time-text {
+  font-size: 26rpx;
+  color: #999;
+}
+
+.action-section {
+  margin-top: 40rpx;
+}
+
+.cancel-btn {
+  width: 100%;
+  background: #f44336;
+  color: #fff;
+}

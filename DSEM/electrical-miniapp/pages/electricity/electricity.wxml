@@ -1,0 +1,27 @@
+<view class="container">
+  <view class="card">
+    <view class="balance-header">
+      <text class="balance-title">当前待缴电费</text>
+      <text class="balance-value">¥{{balance}}</text>
+    </view>
+  </view>
+
+  <view class="card">
+    <view class="card-title">用电记录</view>
+    <view class="usage-list">
+      <view class="usage-item" wx:for="{{usageList}}" wx:key="id">
+        <view class="usage-info">
+          <text class="usage-time">{{item.recordTime}}</text>
+          <text class="usage-amount">{{item.usageAmount}}度</text>
+        </view>
+        <view class="usage-price">
+          <text class="price">¥{{item.amount}}</text>
+          <text class="status {{item.status === 0 ? 'unpaid' : 'paid'}}">{{item.status === 0 ? '未缴费' : '已缴费'}}</text>
+        </view>
+      </view>
+      <view class="empty-state" wx:if="{{usageList.length === 0}}">
+        <text class="empty-text">暂无用电记录</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,6 @@
+user_actions (行为记录)
+user_interests (用户兴趣)
+user_preferences (用户偏好)
+user_index_permission (索引权限)
+user_privacy_settings (隐私设置)
+users (用户主表)

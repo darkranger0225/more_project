@@ -1,0 +1,59 @@
+<view class="container">
+  <!-- 背景图片容器添加渐变遮罩 -->
+  <view class="top-show">
+    <image
+      mode="widthFix"
+      class="top-show-img"
+      src="/image/login/topshow.png"
+    ></image>
+    <view class="gradient-overlay"></view>
+  </view>
+
+  <!-- 内容区域 -->
+  <view class="content">
+    <!-- 标题添加装饰性样式 -->
+    <view class="title">
+      <text class="title-text">账号管理</text>
+      <view class="title-line"></view>
+    </view>
+
+    <!-- 卡片列表区域 -->
+    <view class="card-list">
+      <!-- 修改用户信息 -->
+      <view class="item card-item" bindtap="handleModifyUserInfo" hover-class="item-hover">
+        <view class="item-left">
+          <icon class="item-icon" type="info" size="18" color="#1890ff"></icon>
+          <text class="item-text">修改用户信息</text>
+        </view>
+        <icon class="arrow-right" type="right" size="18" color="#999"></icon>
+      </view>
+
+      <!-- 修改索引权限 -->
+      <view class="item card-item" bindtap="handleIndexingChange" hover-class="item-hover">
+        <view class="item-left">
+          <icon class="item-icon" type="info" size="18" color="#52c41a"></icon>
+          <text class="item-text">修改索引权限</text>
+        </view>
+        <icon class="arrow-right" type="right" size="18" color="#999"></icon>
+      </view>
+
+      <!-- 退出登录 -->
+      <view class="item card-item" bindtap="handleLogOut" hover-class="item-hover">
+        <view class="item-left">
+          <icon class="item-icon" type="cancel" size="18" color="#ff4d4f"></icon>
+          <text class="item-text logout-text">退出登录</text>
+        </view>
+        <icon class="arrow-right" type="right" size="18" color="#999"></icon>
+      </view>
+
+      <!-- 注销账户 -->
+      <view class="item card-item deactivate-item" bindtap="handleDeactivateAccount" hover-class="item-hover">
+        <view class="item-left">
+          <icon class="item-icon" type="warn" size="18" color="#ff4d4f"></icon>
+          <text class="item-text deactivate-text">注销账户</text>
+        </view>
+        <icon class="arrow-right" type="right" size="18" color="#999"></icon>
+      </view>
+    </view>
+  </view>
+</view>

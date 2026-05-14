@@ -1,0 +1,119 @@
+<view class="activity-container">
+  <!-- 顶部导航区 -->
+  <view class="navbar">
+    <view class="nav-content">
+      <view class="nav-title-wrapper">
+        <text class="nav-title">心动活动</text>
+        <text class="nav-subtitle">LOVE EVENTS</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 主要内容区 -->
+  <view class="main-content">
+    <!-- 活动海报 -->
+    <view class="activity-banner">
+      <image class="banner-image" src="/image/login/spring.png" mode="aspectFill" />
+      <view class="banner-overlay">
+        <text class="banner-title">{{activity.title}}</text>
+        <text class="banner-date">{{activity.date}}</text>
+      </view>
+    </view>
+
+    <!-- 活动详情 -->
+    <view class="activity-details">
+      <view class="detail-header">
+        <text class="detail-title">活动详情</text>
+      </view>
+      
+      <view class="detail-item">
+        <view class="item-icon">
+          <image src="/image/activity/time.png" mode="aspectFit" />
+        </view>
+        <view class="item-content">
+          <text class="item-label">活动时间</text>
+          <text class="item-text">{{activity.time}}</text>
+        </view>
+      </view>
+      
+      <view class="detail-item">
+        <view class="item-icon">
+          <image src="/image/activity/location.png" mode="aspectFit" />
+        </view>
+        <view class="item-content">
+          <text class="item-label">活动地点</text>
+          <text class="item-text">{{activity.location}}</text>
+        </view>
+      </view>
+      
+      <view class="detail-item">
+        <view class="item-icon">
+          <image src="/image/activity/quota.png" mode="aspectFit" />
+        </view>
+        <view class="item-content">
+          <text class="item-label">参与名额</text>
+          <text class="item-text">{{activity.quota}}</text>
+        </view>
+      </view>
+      
+      <view class="detail-item">
+        <view class="item-icon">
+          <image src="/image/activity/fee.png" mode="aspectFit" />
+        </view>
+        <view class="item-content">
+          <text class="item-label">活动费用</text>
+          <text class="item-text">{{activity.fee}}</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 活动简介 -->
+    <view class="activity-intro">
+      <view class="intro-header">
+        <text class="intro-title">活动简介</text>
+      </view>
+      <view class="intro-content">
+        <text>{{activity.description}}</text>
+      </view>
+    </view>
+
+    <!-- 活动流程 -->
+    <view class="activity-agenda">
+      <view class="agenda-header">
+        <text class="agenda-title">活动流程</text>
+      </view>
+      <view class="agenda-list">
+        <view class="agenda-item" wx:for="{{activity.agenda}}" wx:key="index">
+          <view class="agenda-time">{{item.time}}</view>
+          <view class="agenda-content">
+            <view class="agenda-dot"></view>
+            <view class="agenda-line" wx:if="{{index !== activity.agenda.length-1}}"></view>
+            <view class="agenda-text">{{item.content}}</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- 温馨提示 -->
+    <view class="activity-tips">
+      <view class="tips-header">
+        <text class="tips-title">温馨提示</text>
+      </view>
+      <view class="tips-list">
+        <view class="tips-item" wx:for="{{activity.tips}}" wx:key="index">
+          <text class="tips-dot">•</text>
+          <text class="tips-text">{{item}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作区 -->
+  <view class="footer">
+    <button class="share-btn" open-type="share">
+      <image src="/image/login/love.png" mode="aspectFit" />
+      分享活动
+    </button>
+    <button class="join-btn" bindtap="joinActivity">立即报名</button>
+  </view>
+</view> 

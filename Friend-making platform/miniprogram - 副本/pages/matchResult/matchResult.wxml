@@ -1,0 +1,41 @@
+<view class="container">
+  <!-- 匹配结果 -->
+  <view class="section">
+    <text class="section-title">双向匹配结果</text>
+    <view class="section-content">
+      <block wx:if="{{matches && matches.length > 0}}">
+        <block wx:for="{{matches}}" wx:key="index">
+          <view class="result-box">
+            <text>{{item}}</text>
+          </view>
+          <view wx:if="{{index !== matches.length - 1}}" class="divider"></view>
+        </block>
+      </block>
+      <view wx:else class="empty-state">
+        <view class="empty-icon">✨</view>
+        <text class="empty-text">期待美好相遇</text>
+        <text class="empty-subtext">永远相信美好即将发生</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 关注关系 -->
+  <view class="section">
+    <text class="section-title">单向关注关系</text>
+    <view class="section-content">
+      <block wx:if="{{attentions && attentions.length > 0}}">
+        <block wx:for="{{attentions}}" wx:key="index">
+          <view class="result-box">
+            <text>{{item}}</text>
+          </view>
+          <view wx:if="{{index !== attentions.length - 1}}" class="divider"></view>
+        </block>
+      </block>
+      <view wx:else class="empty-state">
+        <view class="empty-icon">🔍</view>
+        <text class="empty-text">暂无单向关注</text>
+        <text class="empty-subtext">保持真诚，友谊自会到来</text>
+      </view>
+    </view>
+  </view>
+</view>

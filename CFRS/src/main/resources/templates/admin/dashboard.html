@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout ('管理后台', ~{::main})}">
+<main>
+    <div class="container mt-4">
+        <h2 class="mb-4">管理后台</h2>
+        
+        <div class="row">
+            <div class="col-md-3">
+                <div class="list-group">
+                    <a href="#" class="list-group-item list-group-item-action active" onclick="showSection('dishes')">
+                        <i class="bi bi-egg-fried"></i> 菜品管理
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('windows')">
+                        <i class="bi bi-shop"></i> 窗口管理
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('reviews')">
+                        <i class="bi bi-chat-square-text"></i> 评价管理
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('users')">
+                        <i class="bi bi-people"></i> 用户管理
+                    </a>
+                    <a href="/tag/admin" class="list-group-item list-group-item-action">
+                        <i class="bi bi-tags"></i> 标签管理
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action" onclick="showSection('notifications')">
+                        <i class="bi bi-bell"></i> 通知管理
+                    </a>
+                </div>
+            </div>
+            
+            <div class="col-md-9">
+                <div id="dishesSection" class="admin-section">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>菜品管理</h4>
+                        <button class="btn btn-primary" onclick="showDishModal()">
+                            <i class="bi bi-plus"></i> 添加菜品
+                        </button>
+                    </div>
+                    <table class="table table-striped" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 20%;">名称</th>
+                                <th style="width: 10%;">分类</th>
+                                <th style="width: 10%;">价格</th>
+                                <th style="width: 10%;">评分</th>
+                                <th style="width: 15%;">状态</th>
+                                <th style="width: 30%; text-align: right;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dishesTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="windowsSection" class="admin-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>窗口管理</h4>
+                        <button class="btn btn-primary" onclick="showWindowModal()">
+                            <i class="bi bi-plus"></i> 添加窗口
+                        </button>
+                    </div>
+                    <table class="table table-striped" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 25%;">名称</th>
+                                <th style="width: 10%;">楼层</th>
+                                <th style="width: 15%;">窗口号</th>
+                                <th style="width: 15%;">状态</th>
+                                <th style="width: 30%; text-align: right;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="windowsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="reviewsSection" class="admin-section d-none">
+                    <h4>评价管理</h4>
+                    <table class="table table-striped" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 10%;">用户</th>
+                                <th style="width: 15%;">菜品</th>
+                                <th style="width: 8%;">评分</th>
+                                <th style="width: 22%;">内容</th>
+                                <th style="width: 10%;">评价时间</th>
+                                <th style="width: 10%;">状态</th>
+                                <th style="width: 20%; text-align: right;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reviewsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="usersSection" class="admin-section d-none">
+                    <h4>用户管理</h4>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>学号</th>
+                                <th>用户名</th>
+                                <th>角色</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="notificationsSection" class="admin-section d-none">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4>通知管理</h4>
+                        <button class="btn btn-primary" onclick="showNotificationModal()">
+                            <i class="bi bi-plus-circle"></i> 发布通知
+                        </button>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">ID</th>
+                                <th style="width: 10%;">发布者</th>
+                                <th style="width: 10%;">类型</th>
+                                <th style="width: 40%;">内容</th>
+                                <th style="width: 15%;">发布时间</th>
+                                <th style="width: 20%; text-align: right;">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="notificationsTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="dishModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">菜品信息</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="dishForm">
+                        <input type="hidden" id="dishId">
+                        <div class="mb-3">
+                            <label class="form-label">名称</label>
+                            <input type="text" class="form-control" id="dishName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">所属窗口</label>
+                            <select class="form-select" id="dishWindowId" required>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">分类</label>
+                            <select class="form-select" id="dishCategory" required>
+                                <option value="早餐">早餐</option>
+                                <option value="午餐">午餐</option>
+                                <option value="晚餐">晚餐</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">价格</label>
+                            <input type="number" class="form-control" id="dishPrice" step="0.01" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">描述</label>
+                            <textarea class="form-control" id="dishDescription" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">图片</label>
+                            <input type="file" class="form-control" id="dishImage" accept="image/*">
+                            <div class="form-text">选择一张图片上传，或留空使用默认图片</div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">标签</label>
+                            <div id="tagSelector" class="d-flex flex-wrap gap-2">
+                                <!-- 标签选择器将通过JavaScript动态生成 -->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="saveDish()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="windowModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">窗口信息</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="windowForm">
+                        <input type="hidden" id="windowId">
+                        <div class="mb-3">
+                            <label class="form-label">名称</label>
+                            <input type="text" class="form-control" id="windowName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">楼层</label>
+                            <select class="form-select" id="windowFloor" required>
+                                <option value="1">一楼</option>
+                                <option value="2">二楼</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">窗口号</label>
+                            <input type="number" class="form-control" id="windowNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">描述</label>
+                            <textarea class="form-control" id="windowDescription" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="saveWindow()">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 消息提示框 -->
+    <div class="position-fixed top-50 start-50 translate-middle z-500 d-none" id="messageToast" style="z-index: 9999;">
+        <div class="toast show" role="alert" aria-live="assertive" aria-atomic="true" style="min-width: 300px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+            <div class="toast-header" style="background-color: #f8f9fa; border-bottom: 1px solid #e9ecef; border-radius: 8px 8px 0 0;">
+                <strong class="me-auto" id="messageToastTitle">提示</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body" id="messageToastBody" style="padding: 1rem;">
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认模态框 -->
+    <div class="modal fade" id="deleteConfirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">确认删除</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="deleteConfirmMessage">确定要删除吗？</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmDelete()">删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 通知模态框 -->
+    <div class="modal fade" id="notificationModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">发布通知</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="notificationForm">
+                        <div class="mb-3">
+                            <label for="notificationType" class="form-label">通知类型</label>
+                            <select class="form-select" id="notificationType" required>
+                                <option value="1">系统通知</option>
+                                <option value="2">促销活动</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="notificationContent" class="form-label">通知内容</label>
+                            <textarea class="form-control" id="notificationContent" rows="4" required></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="saveNotification()">发布</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentSection = 'dishes';
+        let currentDeleteId = null;
+        let currentDeleteType = '';
+
+        let allTags = [];
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDishes();
+            loadWindows();
+            loadReviews();
+            loadUsers();
+            loadTags();
+        });
+        
+        function loadTags() {
+            fetch('/tag/all')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        allTags = data.data;
+                    }
+                });
+        }
+        
+        function renderTagSelector(selectedTagIds = []) {
+            const container = document.getElementById('tagSelector');
+            container.innerHTML = allTags.map(tag => `
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="tag${tag.id}" value="${tag.id}" ${selectedTagIds.includes(tag.id) ? 'checked' : ''}>
+                    <label class="form-check-label" for="tag${tag.id}">${tag.name}</label>
+                </div>
+            `).join('');
+        }
+        
+        function getSelectedTagIds() {
+            const checkboxes = document.querySelectorAll('#tagSelector input[type="checkbox"]:checked');
+            return Array.from(checkboxes).map(cb => parseInt(cb.value));
+        }
+
+        function showMessage(message, type = 'success', title = '提示') {
+            const toast = document.getElementById('messageToast');
+            const toastTitle = document.getElementById('messageToastTitle');
+            const toastBody = document.getElementById('messageToastBody');
+            
+            toastTitle.textContent = title;
+            toastBody.textContent = message;
+            
+            // 清除所有之前的样式类
+            toastBody.className = 'toast-body';
+            
+            // 添加新的样式类
+            if (type === 'success') {
+                toastBody.classList.add('bg-success', 'text-white');
+                toastTitle.textContent = '成功';
+            } else if (type === 'error') {
+                toastBody.classList.add('bg-danger', 'text-white');
+                toastTitle.textContent = '错误';
+            } else if (type === 'warning') {
+                toastBody.classList.add('bg-warning', 'text-dark');
+                toastTitle.textContent = '警告';
+            }
+            
+            // 显示提示框
+            toast.classList.remove('d-none');
+            
+            // 3秒后隐藏提示框
+            setTimeout(() => {
+                toast.classList.add('d-none');
+            }, 3000);
+        }
+
+        function formatDateTime(dateTime) {
+            if (!dateTime) return '';
+            const date = new Date(dateTime);
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            const hours = String(date.getHours()).padStart(2, '0');
+            const minutes = String(date.getMinutes()).padStart(2, '0');
+            const seconds = String(date.getSeconds()).padStart(2, '0');
+            return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        }
+
+        function showDeleteConfirm(id, type) {
+            currentDeleteId = id;
+            currentDeleteType = type;
+            
+            let message = '确定要删除吗？';
+            if (type === 'dish') {
+                message = '确定要删除这个菜品吗？';
+            } else if (type === 'window') {
+                message = '确定要删除这个窗口吗？';
+            } else if (type === 'review') {
+                message = '确定要删除这条评价吗？';
+            }
+            
+            document.getElementById('deleteConfirmMessage').textContent = message;
+            const modal = new bootstrap.Modal(document.getElementById('deleteConfirmModal'));
+            modal.show();
+        }
+
+        function confirmDelete() {
+            if (!currentDeleteId) return;
+            
+            let url = '';
+            let loadFunction = null;
+            
+            if (currentDeleteType === 'dish') {
+                url = `/api/admin/dishes/${currentDeleteId}`;
+                loadFunction = loadDishes;
+            } else if (currentDeleteType === 'window') {
+                url = `/api/admin/windows/${currentDeleteId}`;
+                loadFunction = loadWindows;
+            } else if (currentDeleteType === 'review') {
+                url = `/api/reviews/${currentDeleteId}`;
+                loadFunction = loadReviews;
+            }
+            
+            fetch(url, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        loadFunction();
+                        showMessage('删除成功');
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                });
+            
+            const modal = bootstrap.Modal.getInstance(document.getElementById('deleteConfirmModal'));
+            modal.hide();
+        }
+
+        function showSection(section) {
+            document.querySelectorAll('.admin-section').forEach(el => el.classList.add('d-none'));
+            document.getElementById(section + 'Section').classList.remove('d-none');
+            document.querySelectorAll('.list-group-item').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            currentSection = section;
+            
+            if (section === 'notifications') {
+                loadNotifications();
+            }
+        }
+
+        function loadDishes() {
+            fetch('/api/dishes?current=1&size=100')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        renderDishes(data.data.records);
+                    }
+                });
+        }
+
+        function renderDishes(dishes) {
+            const tbody = document.getElementById('dishesTableBody');
+            tbody.innerHTML = dishes.map(dish => `
+                <tr>
+                    <td>${dish.id}</td>
+                    <td>${dish.name}</td>
+                    <td>${dish.category}</td>
+                    <td>¥${dish.price}</td>
+                    <td>${dish.averageRating.toFixed(1)}</td>
+                    <td><span class="badge ${dish.status === 1 ? 'bg-success' : 'bg-secondary'}">${dish.status === 1 ? '上架' : '下架'}</span></td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-sm btn-primary" onclick="editDish(${dish.id})">编辑</button>
+                        <button class="btn btn-sm btn-warning" onclick="toggleDishStatus(${dish.id}, ${dish.status})">${dish.status === 1 ? '下架' : '上架'}</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteDish(${dish.id})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadWindows() {
+            fetch('/api/windows')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        renderWindows(data.data);
+                        populateWindowSelect(data.data);
+                    }
+                });
+        }
+
+        function renderWindows(windows) {
+            const tbody = document.getElementById('windowsTableBody');
+            tbody.innerHTML = windows.map(window => `
+                <tr>
+                    <td>${window.id}</td>
+                    <td>${window.name}</td>
+                    <td>${window.floor}楼</td>
+                    <td>${window.windowNumber}号</td>
+                    <td><span class="badge ${window.status === 1 ? 'bg-success' : 'bg-secondary'}">${window.status === 1 ? '营业中' : '休息中'}</span></td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-sm btn-primary" onclick="editWindow(${window.id})">编辑</button>
+                        <button class="btn btn-sm btn-warning" onclick="toggleWindowStatus(${window.id}, ${window.status})">${window.status === 1 ? '停业' : '营业'}</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteWindow(${window.id})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function populateWindowSelect(windows) {
+            const select = document.getElementById('dishWindowId');
+            select.innerHTML = windows.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
+        }
+
+        function loadReviews() {
+            fetch('/api/reviews/details')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        renderReviews(data.data);
+                    }
+                });
+        }
+
+        function renderReviews(reviews) {
+            const tbody = document.getElementById('reviewsTableBody');
+            tbody.innerHTML = reviews.map(review => `
+                <tr>
+                    <td>${review.id}</td>
+                    <td>${review.isAnonymous === 1 ? '匿名' : (review.username || '未知')}</td>
+                    <td>${review.dishName || review.dishId}</td>
+                    <td>${review.rating}</td>
+                    <td>${review.content ? review.content.substring(0, 30) + '...' : ''}</td>
+                    <td>${review.createTime ? new Date(review.createTime).toLocaleDateString() : ''}</td>
+                    <td><span class="badge ${review.status === 1 ? 'bg-success' : 'bg-warning'}">${review.status === 1 ? '已通过' : '待审核'}</span></td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-sm btn-warning" onclick="toggleReviewStatus(${review.id}, ${review.status})">${review.status === 1 ? '隐藏' : '显示'}</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteReview(${review.id})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function loadUsers() {
+            fetch('/api/user/list')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        renderUsers(data.data);
+                    }
+                });
+        }
+
+        function showNotificationModal() {
+            document.getElementById('notificationForm').reset();
+            new bootstrap.Modal(document.getElementById('notificationModal')).show();
+        }
+
+        function saveNotification() {
+            const type = document.getElementById('notificationType').value;
+            const content = document.getElementById('notificationContent').value;
+            
+            if (!content.trim()) {
+                showMessage('请输入通知内容', 'error');
+                return;
+            }
+            
+            fetch('/notification/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: 'type=' + type + '&content=' + encodeURIComponent(content)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    bootstrap.Modal.getInstance(document.getElementById('notificationModal')).hide();
+                    loadNotifications();
+                    showMessage('通知发布成功');
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            });
+        }
+
+        function loadNotifications() {
+            fetch('/notification/all')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('通知数据:', data);
+                    if (data.code === 200) {
+                        renderNotifications(data.data);
+                    }
+                });
+        }
+
+        function renderNotifications(notifications) {
+            console.log('渲染通知:', notifications);
+            const tbody = document.getElementById('notificationsTableBody');
+            tbody.innerHTML = notifications.map(notification => `
+                <tr>
+                    <td>${notification.id}</td>
+                    <td>${notification.username || '未知'}</td>
+                    <td>${notification.type === 1 ? '系统通知' : '促销活动'}</td>
+                    <td>${notification.content}</td>
+                    <td>${formatDateTime(notification.createTime)}</td>
+                    <td style="text-align: right;">
+                        <button class="btn btn-sm btn-danger" onclick="deleteNotification(${notification.id})">删除</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function deleteNotification(id) {
+            if (confirm('确定要删除这条通知吗？')) {
+                fetch('/notification/delete/' + id, {
+                    method: 'DELETE'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        showMessage('删除成功');
+                        loadNotifications();
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                });
+            }
+        }
+
+        function renderUsers(users) {
+            const tbody = document.getElementById('usersTableBody');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.id}</td>
+                    <td>${user.studentId}</td>
+                    <td>${user.username}</td>
+                    <td>${user.role === 1 ? '管理员' : '学生'}</td>
+                    <td><span class="badge ${user.status === 1 ? 'bg-success' : 'bg-danger'}">${user.status === 1 ? '正常' : '禁用'}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning" onclick="toggleUserStatus(${user.id}, ${user.status})">${user.status === 1 ? '禁用' : '启用'}</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function showDishModal() {
+            document.getElementById('dishForm').reset();
+            document.getElementById('dishId').value = '';
+            renderTagSelector();
+            new bootstrap.Modal(document.getElementById('dishModal')).show();
+        }
+
+        function showWindowModal() {
+            document.getElementById('windowForm').reset();
+            document.getElementById('windowId').value = '';
+            new bootstrap.Modal(document.getElementById('windowModal')).show();
+        }
+
+        function saveDish() {
+            const dishName = document.getElementById('dishName').value;
+            const dishWindowId = document.getElementById('dishWindowId').value;
+            const dishCategory = document.getElementById('dishCategory').value;
+            const dishPrice = document.getElementById('dishPrice').value;
+            
+            if (!dishName.trim()) {
+                showMessage('请输入菜品名称', 'error');
+                return;
+            }
+            if (!dishWindowId) {
+                showMessage('请选择所属窗口', 'error');
+                return;
+            }
+            if (!dishCategory) {
+                showMessage('请选择菜品分类', 'error');
+                return;
+            }
+            if (!dishPrice || parseFloat(dishPrice) <= 0) {
+                showMessage('请输入有效的价格', 'error');
+                return;
+            }
+            
+            const id = document.getElementById('dishId').value;
+            const formData = new FormData();
+            
+            formData.append('name', dishName);
+            formData.append('windowId', dishWindowId);
+            formData.append('category', dishCategory);
+            formData.append('price', dishPrice);
+            formData.append('description', document.getElementById('dishDescription').value);
+            
+            const dishImage = document.getElementById('dishImage').files[0];
+            if (dishImage) {
+                formData.append('image', dishImage);
+            }
+
+            const url = id ? `/api/admin/dishes/${id}` : '/api/admin/dishes';
+            const method = id ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    // 保存标签关联
+                    const dishId = id || data.data;
+                    const selectedTagIds = getSelectedTagIds();
+                    
+                    fetch('/api/admin/dishes/' + dishId + '/tags', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(selectedTagIds)
+                    })
+                    .then(() => {
+                        bootstrap.Modal.getInstance(document.getElementById('dishModal')).hide();
+                        loadDishes();
+                        showMessage('保存成功');
+                    });
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            });
+        }
+
+        function saveWindow() {
+            const windowName = document.getElementById('windowName').value;
+            const windowFloor = document.getElementById('windowFloor').value;
+            const windowNumber = document.getElementById('windowNumber').value;
+            
+            if (!windowName.trim()) {
+                showMessage('请输入窗口名称', 'error');
+                return;
+            }
+            if (!windowFloor) {
+                showMessage('请选择楼层', 'error');
+                return;
+            }
+            if (!windowNumber || parseInt(windowNumber) <= 0) {
+                showMessage('请输入有效的窗口号', 'error');
+                return;
+            }
+            
+            const id = document.getElementById('windowId').value;
+            const window = {
+                name: windowName,
+                floor: windowFloor,
+                windowNumber: windowNumber,
+                description: document.getElementById('windowDescription').value
+            };
+
+            const url = id ? `/api/admin/windows/${id}` : '/api/admin/windows';
+            const method = id ? 'PUT' : 'POST';
+
+            fetch(url, {
+                method: method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(window)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.code === 200) {
+                    bootstrap.Modal.getInstance(document.getElementById('windowModal')).hide();
+                    loadWindows();
+                    showMessage('保存成功');
+                } else {
+                    showMessage(data.message, 'error');
+                }
+            });
+        }
+
+        function editDish(id) {
+            Promise.all([
+                fetch(`/api/dishes/${id}`).then(r => r.json()),
+                fetch(`/tag/dish/${id}`).then(r => r.json())
+            ])
+            .then(([dishResponse, tagsResponse]) => {
+                if (dishResponse.code === 200) {
+                    const dish = dishResponse.data;
+                    document.getElementById('dishId').value = dish.id;
+                    document.getElementById('dishName').value = dish.name;
+                    document.getElementById('dishWindowId').value = dish.windowId;
+                    document.getElementById('dishCategory').value = dish.category;
+                    document.getElementById('dishPrice').value = dish.price;
+                    document.getElementById('dishDescription').value = dish.description;
+                    
+                    // 加载菜品的标签
+                    const selectedTagIds = tagsResponse.code === 200 ? tagsResponse.data.map(tag => tag.id) : [];
+                    renderTagSelector(selectedTagIds);
+                    
+                    new bootstrap.Modal(document.getElementById('dishModal')).show();
+                }
+            });
+        }
+
+        function editWindow(id) {
+            fetch(`/api/windows/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        const window = data.data;
+                        document.getElementById('windowId').value = window.id;
+                        document.getElementById('windowName').value = window.name;
+                        document.getElementById('windowFloor').value = window.floor;
+                        document.getElementById('windowNumber').value = window.windowNumber;
+                        document.getElementById('windowDescription').value = window.description;
+                        new bootstrap.Modal(document.getElementById('windowModal')).show();
+                    }
+                });
+        }
+
+        function toggleDishStatus(id, currentStatus) {
+            const newStatus = currentStatus === 1 ? 0 : 1;
+            fetch(`/api/admin/dishes/${id}/status?status=${newStatus}`, { method: 'POST' })
+                .then(() => loadDishes());
+        }
+
+        function toggleWindowStatus(id, currentStatus) {
+            const newStatus = currentStatus === 1 ? 0 : 1;
+            fetch(`/api/admin/windows/${id}/status?status=${newStatus}`, { method: 'POST' })
+                .then(() => loadWindows());
+        }
+
+        function deleteDish(id) {
+            showDeleteConfirm(id, 'dish');
+        }
+
+        function deleteWindow(id) {
+            showDeleteConfirm(id, 'window');
+        }
+
+        function deleteReview(id) {
+            showDeleteConfirm(id, 'review');
+        }
+
+        function toggleReviewStatus(id, currentStatus) {
+            const newStatus = currentStatus === 1 ? 0 : 1;
+            fetch(`/api/admin/reviews/${id}/audit?status=${newStatus}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        loadReviews();
+                        showMessage('状态更新成功');
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                });
+        }
+
+        function toggleUserStatus(id, currentStatus) {
+            const newStatus = currentStatus === 1 ? 0 : 1;
+            fetch(`/api/admin/users/${id}/status?status=${newStatus}`, { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.code === 200) {
+                        loadUsers();
+                        showMessage('状态更新成功');
+                    } else {
+                        showMessage(data.message, 'error');
+                    }
+                });
+        }
+    </script>
+</main>
+</html>

@@ -1,0 +1,9 @@
+{
+  "usingComponents": {
+    "van-empty": "@vant/weapp/empty/index",
+    "van-button": "@vant/weapp/button/index"
+  },
+  "navigationBarTitleText": "为友谊而生",
+  "navigationBarBackgroundColor": "#7BBEFB",
+  "navigationBarTextStyle": "white"
+}

@@ -1,0 +1,35 @@
+<view class="container">
+  <!-- 教师端：录入成绩按钮 -->
+  <view class="action-bar" wx:if="{{role === 'TEACHER'}}">
+    <button class="btn btn-primary" bindtap="goToAddScore">+ 录入成绩</button>
+  </view>
+
+  <!-- 成绩列表 -->
+  <view class="score-list">
+    <block wx:if="{{scoreList.length > 0}}">
+      <view class="score-item" wx:for="{{scoreList}}" wx:key="id" bindtap="viewScoreDetail" data-id="{{item.id}}">
+        <view class="score-header">
+          <text class="exam-name">{{item.examName}}</text>
+          <text class="exam-date">{{item.examDate}}</text>
+        </view>
+        <view class="score-content">
+          <view class="subject-score">
+            <text class="subject">{{item.subject}}</text>
+            <text class="score {{item.score >= 60 ? 'pass' : 'fail'}}">{{item.score}}分</text>
+          </view>
+          <view class="student-info" wx:if="{{item.studentName}}">
+            <text>学生: {{item.studentName}}</text>
+          </view>
+          <view class="rank-info" wx:if="{{item.classRank}}">
+            <text>班级排名: {{item.classRank}}</text>
+          </view>
+        </view>
+      </view>
+    </block>
+    <block wx:else>
+      <view class="empty-state">
+        <text class="empty-text">暂无成绩记录</text>
+      </view>
+    </block>
+  </view>
+</view>

@@ -1,0 +1,76 @@
+<view class="container">
+  <view class="form-card">
+    <!-- 通知标题 -->
+    <view class="form-item">
+      <text class="label">通知标题 <text class="required">*</text></text>
+      <input type="text" placeholder="请输入通知标题" value="{{title}}" bindinput="onTitleInput" class="input" />
+    </view>
+    
+    <!-- 通知内容 -->
+    <view class="form-item">
+      <text class="label">通知内容 <text class="required">*</text></text>
+      <textarea placeholder="请输入通知内容" value="{{content}}" bindinput="onContentInput" class="textarea" maxlength="1000" />
+      <text class="word-count">{{content.length}}/1000</text>
+    </view>
+    
+    <!-- 优先级 -->
+    <view class="form-item">
+      <text class="label">优先级</text>
+      <picker bindchange="onPriorityChange" value="{{priorityIndex}}" range="{{priorityArray}}" range-key="name">
+        <view class="picker {{priority === 1 ? 'priority-high' : ''}}">
+          {{priorityArray[priorityIndex].name}}
+        </view>
+      </picker>
+    </view>
+    
+    <!-- 发送对象 -->
+    <view class="form-item">
+      <text class="label">发送对象</text>
+      <picker bindchange="onTargetTypeChange" value="{{targetTypeIndex}}" range="{{targetTypeArray}}" range-key="name">
+        <view class="picker">{{targetTypeArray[targetTypeIndex].name}}</view>
+      </picker>
+    </view>
+    
+    <!-- 选择班级（当发送对象为指定班级时显示） -->
+    <view class="form-item" wx:if="{{targetType === 'CLASS'}}">
+      <text class="label">选择班级 <text class="required">*</text></text>
+      <view class="select-list">
+        <view class="select-item {{selectedClassIds.includes(item.id) ? 'selected' : ''}}" 
+              wx:for="{{classList}}" 
+              wx:key="id"
+              bindtap="onClassSelect"
+              data-id="{{item.id}}">
+          <text class="item-name">{{item.className}}</text>
+          <text class="check-icon" wx:if="{{selectedClassIds.includes(item.id)}}">✓</text>
+        </view>
+      </view>
+      <view class="selected-count" wx:if="{{selectedClassIds.length > 0}}">
+        已选择 {{selectedClassIds.length}} 个班级
+      </view>
+    </view>
+    
+    <!-- 选择家长（当发送对象为指定家长时显示） -->
+    <view class="form-item" wx:if="{{targetType === 'PARENT'}}">
+      <text class="label">选择家长 <text class="required">*</text></text>
+      <view class="select-list">
+        <view class="select-item {{selectedParentIds.includes(item.id) ? 'selected' : ''}}" 
+              wx:for="{{parentList}}" 
+              wx:key="id"
+              bindtap="onParentSelect"
+              data-id="{{item.id}}">
+          <text class="item-name">{{item.realName}} ({{item.phone}})</text>
+          <text class="check-icon" wx:if="{{selectedParentIds.includes(item.id)}}">✓</text>
+        </view>
+      </view>
+      <view class="selected-count" wx:if="{{selectedParentIds.length > 0}}">
+        已选择 {{selectedParentIds.length}} 位家长
+      </view>
+    </view>
+  </view>
+  
+  <!-- 底部按钮 -->
+  <view class="btn-group">
+    <button class="btn btn-default" bindtap="cancelPublish">取消</button>
+    <button class="btn btn-primary" bindtap="publishNotice">发布通知</button>
+  </view>
+</view>

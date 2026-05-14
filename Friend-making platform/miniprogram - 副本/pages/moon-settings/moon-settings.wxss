@@ -1,0 +1,104 @@
+.settings-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a1a 0%, #4a4a4a 100%);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-header {
+  padding: 20px 0;
+  text-align: center;
+}
+
+.settings-title {
+  color: #ffffff;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.settings-content {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+}
+
+.settings-item {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.settings-item:last-child {
+  border-bottom: none;
+}
+
+.settings-label {
+  color: #ffffff;
+  font-size: 16px;
+}
+
+.time-settings {
+  padding: 30px 0;
+}
+
+.time-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.time-display {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 15px;
+}
+
+.slider-container {
+  padding: 0 10px;
+}
+
+.custom-slider {
+  margin: 20px 0;
+}
+
+.time-markers {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  margin-top: 10px;
+}
+
+.time-markers text {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+}
+
+.settings-footer {
+  padding: 20px 0;
+}
+
+.save-btn {
+  width: 100%;
+  height: 50px;
+  background: #ff6600;
+  color: #ffffff;
+  border-radius: 25px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  box-shadow: 0 4px 12px rgba(255, 102, 0, 0.3);
+}
+
+.save-btn:active {
+  opacity: 0.9;
+  transform: scale(0.98);
+} 

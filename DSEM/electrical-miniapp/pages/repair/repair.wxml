@@ -1,0 +1,22 @@
+<view class="container">
+  <view class="add-btn-container">
+    <button class="btn-add" bindtap="goToAddRepair">+ 提交报修</button>
+  </view>
+
+  <view class="card">
+    <view class="card-title">我的报修记录</view>
+    <view class="repair-list">
+      <view class="repair-item" wx:for="{{repairList}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+        <view class="repair-header">
+          <text class="repair-title">{{item.title}}</text>
+          <text class="repair-status status-{{item.status}}">{{statusText[item.status]}}</text>
+        </view>
+        <text class="repair-content">{{item.content}}</text>
+        <text class="repair-time">{{item.createTime}}</text>
+      </view>
+      <view class="empty-state" wx:if="{{repairList.length === 0}}">
+        <text class="empty-text">暂无报修记录</text>
+      </view>
+    </view>
+  </view>
+</view>

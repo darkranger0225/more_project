@@ -1,0 +1,42 @@
+.container {
+  padding: 20rpx;
+}
+
+.history-list {
+  max-height: 1000rpx;
+  overflow-y: auto;
+}
+
+.history-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+.history-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-no {
+  font-size: 28rpx;
+  color: #333;
+  margin-bottom: 8rpx;
+}
+
+.history-time {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.history-amount {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #52c41a;
+}

@@ -1,0 +1,68 @@
+<view class="container">
+  <!-- 用户信息卡片 -->
+  <view class="user-card">
+    <view class="user-info">
+      <view class="avatar-placeholder">{{userInfo.name ? userInfo.name[0] : '用'}}</view>
+      <view class="user-detail">
+        <text class="user-name">{{userInfo.name || '未登录'}}</text>
+        <text class="user-dormitory">{{userInfo.buildingInfo ? userInfo.buildingInfo + userInfo.dormitoryNumber : ''}}</text>
+      </view>
+    </view>
+    <view class="balance-info">
+      <text class="balance-label">待缴电费</text>
+      <text class="balance-amount">¥{{balance}}</text>
+    </view>
+  </view>
+
+  <!-- 公告栏 -->
+  <view class="card">
+    <view class="card-title">最新公告</view>
+    <view class="announcement-list">
+      <view class="announcement-item" wx:for="{{announcements}}" wx:key="id" bindtap="goToAnnouncement" data-id="{{item.id}}">
+        <text class="announcement-title">{{item.title}}</text>
+        <text class="announcement-time">{{item.createTime}}</text>
+      </view>
+      <view class="empty-state" wx:if="{{announcements.length === 0}}">
+        <text class="empty-text">暂无公告</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 用电趋势图 -->
+  <view class="card">
+    <view class="card-header">
+      <view class="card-title">用电趋势</view>
+      <view class="trend-tabs">
+        <view class="tab {{trendType === 'day' ? 'active' : ''}}" bindtap="switchTrendType" data-type="day">日</view>
+        <view class="tab {{trendType === 'hour' ? 'active' : ''}}" bindtap="switchTrendType" data-type="hour">时</view>
+        <view class="tab {{trendType === 'month' ? 'active' : ''}}" bindtap="switchTrendType" data-type="month">月</view>
+      </view>
+    </view>
+    
+    <!-- 统计摘要 -->
+    <view class="trend-summary">
+      <view class="summary-item">
+        <text class="summary-value">{{trendData.totalUsage || 0}}</text>
+        <text class="summary-label">总用电(度)</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value">{{trendData.totalCost || 0}}</text>
+        <text class="summary-label">总费用(元)</text>
+      </view>
+      <view class="summary-item">
+        <text class="summary-value">{{trendData.averageUsage || 0}}</text>
+        <text class="summary-label">平均(度)</text>
+      </view>
+    </view>
+    
+    <!-- 图表区域 -->
+    <view class="chart-container">
+      <canvas type="2d" id="trendChart" class="trend-chart" bindtouchstart="onChartTouch"></canvas>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{!trendData.labels || trendData.labels.length === 0}}">
+      <text class="empty-text">暂无用电数据</text>
+    </view>
+  </view>
+</view>
